@@ -18,6 +18,6 @@ Route::get('/', function () {
 
 
 Route::get('/daemon', function () {
-    require_once '../daemon/demon.php';
+    require_once '../daemon/daemon.php';
     return ;
 });
