@@ -14,10 +14,3 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
-
-
-Route::get('/daemon', function () {
-    require_once '../daemon/daemon.php';
-    return ;
-});

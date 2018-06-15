@@ -1,4 +1,5 @@
 <?
+
 class Secom
 {
     private $url = '';
