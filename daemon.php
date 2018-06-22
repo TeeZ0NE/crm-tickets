@@ -16,6 +16,5 @@ $secom = new Secom();
 
 //while (true) {
     print_r($secom->getListTikets());
-
 //    sleep(10);
 //}
