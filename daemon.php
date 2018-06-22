@@ -1,6 +1,5 @@
 <?php
 define('LARAVEL_START', microtime(true));
-
 require __DIR__ . '/vendor/autoload.php';
 
 $app = require_once __DIR__ . '/bootstrap/app.php';
@@ -12,12 +11,11 @@ $response = $kernel->handle(
     $request = Illuminate\Http\Request::capture()
 );
 
-require_once 'daemon/Secom.php';
-
+use App\Http\TicketBags\Secom;
 $secom = new Secom();
 
-while (true) {
+//while (true) {
     print_r($secom->getListTikets());
 
-    sleep(10);
-}
+//    sleep(10);
+//}

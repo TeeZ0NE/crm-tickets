@@ -1,4 +1,5 @@
 <?php
+namespace App\Http\TicketBags;
 class Secom
 {
     private $url = '';
