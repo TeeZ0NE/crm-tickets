@@ -26,21 +26,31 @@ $pathOfTicketBags = config('services_arr.path');
 $service_model = new Service();
 # getting all Services which are equivalents 2 classes in app/Http/TicketBags/
 try {
-	$services = count($service_model->getServices())?$service_model->getServices():array('Secom');
+	$services = count($service_model->getServices()) ? $service_model->getServices() : array('Secom');
 } catch (ModelNotFoundException $mnf) {
 	$services = array('Secom');
 	Log::error('Services not found!. Using default->Secom');
 }
 # concatenate path to class and service class
-$serviceClass = $pathOfTicketBags . $services[0];
-/*
-$Daemon = new Daemon($services[0]);
-$tickets = $Daemon->getTicketsFromService();
-$Daemon->storeData($tickets);
-*/
 
+for ($i = 0; $i < count($services); $i++) {
+	$Daemon = new Daemon($services[$i]);
+	$tickets = $Daemon->getTicketsFromService();
+	$Daemon->storeData($tickets);
+}
+
+/*
+ * 	$serviceClass = $pathOfTicketBags . $services[0];
 $secom = new $serviceClass;
-print_r($secom->getListTikets());
-$ticket = $secom->getTiket(8530);
-print_r($ticket);
+try {
+	$tickets = $secom->getListTikets();
+	if($tickets['result']=='error') throw new Exception($tickets['message']);
+	print_r($tickets);
+//	$ticket = $secom->getTiket(8530);
+//	print_r($ticket);
+}
+catch(Exception $e) {
+	echo "error ".$e->getMessage();
+}
+*/
 

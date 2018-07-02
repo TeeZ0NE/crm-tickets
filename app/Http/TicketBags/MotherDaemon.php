@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\{
 	AdminNik, Priority, Service, SysadminActivity, Ticket, Client, Status
 };
+use Exception;
 
 trait MotherDaemon
 {
@@ -36,18 +37,44 @@ trait MotherDaemon
 	public function getTicketsFromService()
 	{
 		$serv = new $this->serviceClass;
-		$tickets = (array)$serv->getListTikets()['tickets']['ticket'] ?? Null;
-		Log::info("Get tickets from $this->service");
-		echo "==TICKETS==";print_r($tickets);echo"==/Tickets==\n";
-		return $tickets;
+		try{
+			Log::info("Get tickets from $this->service");
+			# try 2 get tickets if error read message
+			$tickets = (array_key_exists('tickets',$serv->getListTikets()))
+				? (array)$serv->getListTikets()['tickets']['ticket']
+				: '';//Null;
+			if($tickets=='') throw new Exception($tickets['message']);
+			return $tickets;
+		}
+		catch(Exception $e) {
+			Log::error("Get tickets from $this->service ",["msg"=>$e->getMessage()]);
+			die("Get tickets error!");
+		}
 	}
 
+	/**
+	 * Getting ticket from service
+	 *
+	 * Get just one ticket 4 getting replies and who answered
+	 *
+	 * @param int $ticketId
+	 * @return array|null
+	 */
 	public function getTicketFromService(int $ticketId)
 	{
 		$serv = new $this->serviceClass;
-		$ticket = (array)$serv->getTiket($ticketId)['replies']['reply'];
-		Log::info("Get ticket $ticketId from $this->service");
-		return $ticket;
+		try{
+			Log::info("Get ticket $ticketId from $this->service");
+			$ticket = (array_key_exists('replies',$serv->getTiket($ticketId)))
+			? (array)$serv->getTiket($ticketId)['replies']['reply']
+			: Null;
+			if($ticket==Null) throw new Exception($ticket['message']);
+			return $ticket;
+		}
+		catch(Exception $e) {
+			Log::error("Get ticket $ticketId from $this->service ",["msg"=>$e->getMessage()]);
+			die("Get ticket error!");
+		}
 	}
 
 	/**
@@ -67,7 +94,6 @@ trait MotherDaemon
 				echo "no absent\n";
 			}
 			# storin' or updating existing
-			echo "new tickets\n";
 			foreach ($tickets as $ticket) {
 				$ticketID = $ticket['id'];
 				# get client's ID
@@ -255,21 +281,36 @@ trait MotherDaemon
 		return $replies;
 	}
 
+	/**
+	 * storing admin_niks and getting back own id's
+	 *
+	 * IReturning array where [admin_nik_id] = count his replies on this ticket and client
+	 * @param int $clientId
+	 * @param array $adminNiks
+	 * @return array
+	 */
 	private function storeSysadminNiks(int $clientId, array  $adminNiks)	{
 		$adminNikIdsWithReplies = array();
 		foreach ($adminNiks as $adminNik =>$replies) {
-			$sysadminNik = AdminNik::firstOrNew(array('admin_nik'=>$adminNik,'c_id'=>$clientId));
-			$sysadminNik->save();
-			$adminNikIdsWithReplies[$sysadminNik->admin_nik_id] = $replies;
+			$sysadminNik = AdminNik::firstOrCreate(array('admin_nik'=>$adminNik,'c_id'=>$clientId));
+			$adminNikId = $sysadminNik->id??$sysadminNik->admin_nik_id;
+			$adminNikIdsWithReplies[$adminNikId] = $replies;
 		}
-		print_r($adminNikIdsWithReplies);
 		return $adminNikIdsWithReplies;
 	}
 
+	/**
+	 * Storing activity in specific ticket and client with lastreply dateTime
+	 *
+	 * replies are count of admin reply
+	 * @param array $adminNikIds
+	 * @param int $ticketID
+	 * @param int $clientId
+	 * @param $lastreply
+	 */
 	private function storeAdminActivities(array $adminNikIds, int $ticketID,  int $clientId, $lastreply)
 	: void{
 		foreach ($adminNikIds as $adminNikId => $reply){
-			echo "adminNikId is $adminNikId $ticketID\n";
 			$systemadminActivity  = SysadminActivity::updateOrCreate(array(
 				'admin_nik_id' =>$adminNikId,
 				'ticketid'=>$ticketID,
@@ -278,8 +319,9 @@ trait MotherDaemon
 				'replies'=>$reply,
 				'lastreply'=>$lastreply
 			));
-			if($systemadminActivity->admin_nik_id)
+			if($systemadminActivity->admin_nik_id) {
 				Log::info("Admin nik id $adminNikId stored in ticket id $ticketID on client $clientId");
+			}
 			else
 				Log::error("Admin nik id $adminNikId not stored in ticket id $ticketID on client $clientId");
 		}
