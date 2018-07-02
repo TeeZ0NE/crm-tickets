@@ -38,7 +38,7 @@ trait MotherDaemon
 	{
 		$serv = new $this->serviceClass;
 		try{
-			Log::info("Get tickets from $this->service");
+			Log::info("==Get tickets from $this->service==");
 			# try 2 get tickets if error read message
 			$tickets = (array_key_exists('tickets',$serv->getListTikets()))
 				? (array)$serv->getListTikets()['tickets']['ticket']
@@ -47,7 +47,7 @@ trait MotherDaemon
 			return $tickets;
 		}
 		catch(Exception $e) {
-			Log::error("Get tickets from $this->service ",["msg"=>$e->getMessage()]);
+			Log::error("==Get tickets error from $this->service==",["msg"=>$e->getMessage()]);
 			die("Get tickets error!");
 		}
 	}
@@ -90,9 +90,8 @@ trait MotherDaemon
 			# not empty
 			# before compare what we have and what income in $tickets array
 			$checkedIds = $this->checkId($tickets);
-			if (count($checkedIds)) $this->checkAbsentIds($checkedIds); else {
-				echo "no absent\n";
-			}
+			if (count($checkedIds)) $this->checkAbsentIds($checkedIds);
+			else Log::info("Absent tickets not found. Continue...");
 			# storin' or updating existing
 			foreach ($tickets as $ticket) {
 				$ticketID = $ticket['id'];
@@ -132,6 +131,7 @@ trait MotherDaemon
 				}
 				if ($ticket_id) Log::info('Store ticket', ['ticket_id' => $ticket_id, 'real ticket id' => $ticket['id']]);
 			}
+			Log::info("==/Get tickets from $this->service==");
 		} else {
 			# empty
 			Log::warning('Tickets are empty');
