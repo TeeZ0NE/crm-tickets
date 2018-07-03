@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{App::getLocale()}}">
+<html lang="ru">
 <head>
 	<meta charset="UTF-8">
 	<title>@yield('title')</title>
@@ -7,9 +7,9 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<style type="text/css"
 	       href="{{ mix('css/app.css') }}"></style>{{-- styles --}}
+</head>
 <body>
-@section('main_content')@show
-	<div>@include('admin.parts.footer')</div>
-</div>
+<div>@section('main_content')@show</div>
+<div>@include('admin.parts.footer')</div>
 </body>
 </html>
