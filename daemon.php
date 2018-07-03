@@ -32,15 +32,18 @@ try {
 	Log::error('Services not found!. Using default->Secom');
 }
 # concatenate path to class and service class
-
+/*
 for ($i = 0; $i < count($services); $i++) {
 	$Daemon = new Daemon($services[$i]);
 	$tickets = $Daemon->getTicketsFromService();
 	$Daemon->storeData($tickets);
 }
-
+*/
+$Daemon = new Daemon($services[0]);
+$tickets = $Daemon->getTicketsFromService();
+$Daemon->storeData($tickets);
 /*
- * 	$serviceClass = $pathOfTicketBags . $services[0];
+ 	$serviceClass = $pathOfTicketBags . $services[0];
 $secom = new $serviceClass;
 try {
 	$tickets = $secom->getListTikets();

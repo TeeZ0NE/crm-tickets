@@ -10,7 +10,7 @@ namespace App\Http\TicketBags;
 
 use Illuminate\Support\Facades\Log;
 use App\Models\{
-	AdminNik, Priority, Service, SysadminActivity, Ticket, Client, Status
+	AdminNik, Priority, Service, SysadminActivity, Ticket, Status
 };
 use Exception;
 
@@ -81,6 +81,8 @@ trait MotherDaemon
 	 * Storing data
 	 *
 	 * Storing data from tickets array into own tables and logging it
+	 * ticketID is ticketid which comes from service
+	 * ticket_id is AI from DB after storing ticket data in DB
 	 * if tickets array is empty logging warn
 	 * @param array $tickets
 	 */
@@ -95,24 +97,20 @@ trait MotherDaemon
 			# storin' or updating existing
 			foreach ($tickets as $ticket) {
 				$ticketID = $ticket['id'];
-				# get client's ID
-				$clientId = $this->getClientId(array(
-						'name' => $ticket['name'],
-						'userid' => $ticket['userid'])
-				);
+
 				# get priority ID
 				$priorityId = $this->getPriorityId(array(
 					'priority' => $ticket['priority']
 				));
 				# get replies count of this ticket
 				$replies = (array)$this->getRepliesCount($ticketID);
+				$service_id = $this->getServiceId();
 				# storing ticket and get own ID
 				$ticket_id = $this->storeTicket([
-						'c_id' => $clientId,
 						'ticketid' => $ticketID,
 					],[
 						'subject' => $ticket['subject'],
-						'service_id' => $service_id = $this->getServiceId(),
+						'service_id' => $service_id,
 						'status_id' => $this->getStatusId($ticket['status']),
 						'priority_id' => $priorityId,
 
@@ -125,11 +123,11 @@ trait MotherDaemon
 				);
 				# get admin nik ids if applicable
 				if(count($replies['adminNiks'])) {
-					$adminNikIdsWithReplies = (array)$this->storeSysadminNiks($clientId, $replies['adminNiks']);
+					$adminNikIdsWithReplies = (array)$this->storeSysadminNiks($service_id, $replies['adminNiks']);
 					# storing admin activities in current ticket
-					$this->storeAdminActivities($adminNikIdsWithReplies, $ticketID, $clientId, $ticket['lastreply']);
+					$this->storeAdminActivities($adminNikIdsWithReplies, $ticket_id, $ticket['lastreply']);
 				}
-				if ($ticket_id) Log::info('Store ticket', ['ticket_id' => $ticket_id, 'real ticket id' => $ticket['id']]);
+				if ($ticket_id) Log::info('Store ticket', ['ticket_id' => $ticket_id, 'real ticket id' => $ticketID]);
 			}
 			Log::info("==/Get tickets from $this->service==");
 		} else {
@@ -166,26 +164,17 @@ trait MotherDaemon
 	}
 
 	/**
-	 * getting client inner id
-	 *
-	 * if client not exist create new storing him
-	 * @param array $clientData
-	 * @return int ID client
-	 */
-	private function getClientId(Array $clientData)
-	{
-		$client = Client::firstOrNew($clientData);
-		$client->save();
-		return $client->id;
-	}
-
-	/**
 	 * get service id
 	 * @return int ID
 	 */
 	private function getServiceId()
 	{
-		return Service::where('name', $this->service)->first()->id;
+		try {
+			return Service::where('name', $this->service)->first()->id;
+		}catch(Exception $e){
+			Log::error("Service not found. Please add it first");
+			die('Service id error. See log');
+		}
 	}
 
 	private function getPriorityId(array $data)
@@ -200,6 +189,7 @@ trait MotherDaemon
 	 *
 	 * if not exist save it
 	 * @param array $ticketData
+	 * @param  array $updates
 	 * @return int ID ticket
 	 */
 	private function storeTicket(Array $ticketData, array $updates)
@@ -236,13 +226,13 @@ trait MotherDaemon
 	{
 		$result_arr = $temp_arr = array();
 		$serv = new $this->serviceClass;
-		$service_id = Service::where('name', $this->service)->first()->id;
+		$service_id = $this->getServiceId();
 		foreach ($absentIds as $absentId) {
 			array_push($temp_arr, $serv->getTiket($absentId));
 			$result_arr[] = array('absentId' => $absentId, 'service_id' => $service_id, 'status' => strtolower($temp_arr[0]['result']));
 		}
 		# push them into model and remove if error or move
-		$t = new Ticket();
+		$t = new Ticket;
 		return $t->moveRemoveTicketsDecision($result_arr);
 	}
 
@@ -285,14 +275,14 @@ trait MotherDaemon
 	 * storing admin_niks and getting back own id's
 	 *
 	 * IReturning array where [admin_nik_id] = count his replies on this ticket and client
-	 * @param int $clientId
-	 * @param array $adminNiks
+	 * @param int $service_id
+	 * @param array $adminNiks and replies
 	 * @return array
 	 */
-	private function storeSysadminNiks(int $clientId, array  $adminNiks)	{
+	private function storeSysadminNiks(int $service_id, array  $adminNiks)	{
 		$adminNikIdsWithReplies = array();
 		foreach ($adminNiks as $adminNik =>$replies) {
-			$sysadminNik = AdminNik::firstOrCreate(array('admin_nik'=>$adminNik,'c_id'=>$clientId));
+			$sysadminNik = AdminNik::firstOrCreate(array('admin_nik'=>$adminNik,'service_id'=>$service_id));
 			$adminNikId = $sysadminNik->id??$sysadminNik->admin_nik_id;
 			$adminNikIdsWithReplies[$adminNikId] = $replies;
 		}
@@ -304,26 +294,24 @@ trait MotherDaemon
 	 *
 	 * replies are count of admin reply
 	 * @param array $adminNikIds
-	 * @param int $ticketID
-	 * @param int $clientId
+	 * @param int $ticket_id
 	 * @param $lastreply
 	 */
-	private function storeAdminActivities(array $adminNikIds, int $ticketID,  int $clientId, $lastreply)
+	private function storeAdminActivities(array $adminNikIds, int $ticket_id,  $lastreply)
 	: void{
 		foreach ($adminNikIds as $adminNikId => $reply){
 			$systemadminActivity  = SysadminActivity::updateOrCreate(array(
 				'admin_nik_id' =>$adminNikId,
-				'ticketid'=>$ticketID,
-				'c_id'=>$clientId
+				'ticket_id'=>$ticket_id,
 			), array(
 				'replies'=>$reply,
 				'lastreply'=>$lastreply
 			));
 			if($systemadminActivity->admin_nik_id) {
-				Log::info("Admin nik id $adminNikId stored in ticket id $ticketID on client $clientId");
+				Log::info("Admin nik id $adminNikId stored in ticket id $ticket_id on service $this->service");
 			}
 			else
-				Log::error("Admin nik id $adminNikId not stored in ticket id $ticketID on client $clientId");
+				Log::error("Admin nik id $adminNikId not stored in ticket id $ticket_id on service $this->service");
 		}
 	}
 }

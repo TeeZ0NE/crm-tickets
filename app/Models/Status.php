@@ -11,21 +11,6 @@ class Status extends Model
     protected $fillable = array('name');
 
 	/**
-	 * @param string $status
-	 * @return int|Null ID
-	 */
-	/*public function getId(string $status)
-	{
-		try{
-			$res = $this->where('name',strtolower($status))->firstOrfail();
-			return $res->id;
-		}
-		catch (ModelNotFoundException $mnf){
-			return Null;
-		}
-    }*/
-
-	/**
 	 * @param $value
 	 * @return string in lower case
 	 */

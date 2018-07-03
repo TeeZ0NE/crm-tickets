@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Service extends Model
 {
     public $timestamps = False;
-    protected $fillable = array('name');
+    protected $fillable = array('name','compl');
 
 	/**
 	 * get all existing services

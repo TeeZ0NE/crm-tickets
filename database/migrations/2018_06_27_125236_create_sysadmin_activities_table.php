@@ -14,14 +14,14 @@ class CreateSysadminActivitiesTable extends Migration
     public function up()
     {
         Schema::create('sysadmin_activities', function (Blueprint $table) {
+        	$table->increments('id');
         	$table->unsignedSmallInteger('admin_nik_id');
-        	$table->unsignedInteger('ticketid')->comment('outer ticket id');
+        	$table->unsignedInteger('ticket_id')->comment('outer ticket id');
         	$table->unsignedMediumInteger('replies')->default(0)->comment('count of replies on this ticket');
-        	$table->unsignedInteger('c_id');
         	$table->dateTime('lastreply')->comment('when last reply admin');
 
         	$table->foreign('admin_nik_id')->references('admin_nik_id')->on('sysadmin_niks')->onUpdate('cascade')->onDelete('cascade');
-        	$table->foreign('c_id')->references('id')->on('clients')->onUpdate('cascade');
+        	$table->foreign('ticket_id')->references('id')->on('tickets')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

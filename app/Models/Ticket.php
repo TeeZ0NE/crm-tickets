@@ -9,18 +9,8 @@ use Illuminate\Support\Facades\Log;
 
 class Ticket extends Model
 {
-	protected $fillable = array('c_id', 'ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'reply_count', 'lastreply', 'lastreply_is_admin', 'deadline_id');
+	protected $fillable = array('ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'reply_count','compl', 'lastreply', 'lastreply_is_admin', 'is_closed', 'deadline_id');
 
-	/**
-	 * get' ticket's owner
-	 *
-	 * get' id and name of client of current ticket
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
-	 */
-	public function getClient()
-	{
-		return $this->hasOne(Client::class, 'id', 'c_id')->select('id', 'name');
-	}
 
 	/**
 	 * get status
@@ -105,7 +95,7 @@ class Ticket extends Model
 	}
 
 	public function getAdminNiks()
-	{                           return $this->hasManyThrough(AdminNik::class,SysadminActivity::class, 'ticketid','admin_nik_id','ticketid', 'admin_nik_id');
+	{                           return $this->hasManyThrough(AdminNik::class,SysadminActivity::class, 'ticket_id','admin_nik_id','id', 'admin_nik_id');
 
 	}
 	/**
@@ -136,10 +126,8 @@ class Ticket extends Model
 		$service_id = key($absentTicket);
 		$id = $this->getTicketIdFromDb($absentTicket[$service_id], $service_id);
 		if ($id) {
-			$copy = $this::select(['c_id', 'ticketid', 'subject', 'priority_id', 'service_id', 'reply_count', 'compl', 'lastreply'])->find($id)->toArray();
-			$res = ClosedTicket::insert($copy);
-			if ($res) $this::find($id)->delete();
-			Log::info("Ticket id $absentTicket[$service_id] (service id is $service_id) moved to closed", ["result" => $res]);
+			$res = $this::find($id)->update(['is_closed'=>1]);
+			Log::info("Ticket id $absentTicket[$service_id] (service id is $service_id) checked as closed", ['result'=>$res]);
 		}
 		else Log::error("Ticket id $absentTicket[$service_id] (service id is $service_id) checked to moved but error occurs, real id $id is not found");
 	}
