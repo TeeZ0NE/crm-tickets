@@ -9,5 +9,4 @@ class Sysadmin extends Model
     public $timestamps = False;
     protected $fillable = array('name');
 
-    
 }

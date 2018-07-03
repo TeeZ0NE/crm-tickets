@@ -104,6 +104,10 @@ class Ticket extends Model
 		}
 	}
 
+	public function getAdminNiks()
+	{                           return $this->hasManyThrough(AdminNik::class,SysadminActivity::class, 'ticketid','admin_nik_id','ticketid', 'admin_nik_id');
+
+	}
 	/**
 	 * Remove ticket from DB (ticket table) and Log it
 	 *
