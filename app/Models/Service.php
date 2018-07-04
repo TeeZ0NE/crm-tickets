@@ -10,11 +10,20 @@ class Service extends Model
     protected $fillable = array('name','compl');
 
 	/**
-	 * get all existing services
+	 * get all name of  existing services
+	 * using in daemon when getting all services 4 recursion
 	 * @return array
 	 */
-    public function getServices(){
+    public function getServicesNames(){
     	return $this->pluck('name')->toArray();
     }
 
+	/**
+	 * getting all services Ids
+	 * @return array
+	 */
+	public function getServicesIds()
+	{
+		return $this->pluck('id')->toArray();
+    }
 }

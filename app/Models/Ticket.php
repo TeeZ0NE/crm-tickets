@@ -33,12 +33,29 @@ class Ticket extends Model
 	}
 
 	/**
-	 * getting Service
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
 	 */
 	public function getService()
 	{
-		return $this->hasOne(Service::class, 'id', 'service_id');
+		return $this->belongsTo(Service::class, 'service_id', 'id');
+	}
+
+	/**
+	 * getting count of closed tickets
+	 * @return int
+	 */
+	public function getCountClosedTickets($service_id)
+	{
+		return $this::with('getService')->where(['is_closed'=>1,'service_id'=>$service_id])->get()->count();
+	}
+
+	/**
+	 * getting count of open tickets on service
+	 * @return int
+	 */
+	public function getCountOpenTickets($service_id)
+	{
+		return $this::with('getService')->where(['is_closed'=>0,'service_id'=>$service_id])->get()->count();
 	}
 
 	/**

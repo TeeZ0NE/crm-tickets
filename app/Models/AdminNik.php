@@ -12,11 +12,11 @@ class AdminNik extends Model
 
 	public function getService()
 	{
-		return $this->hasOne(Service::class, 'id', 'service_id');
+		return $this->belongsTo(Service::class, 'service_id', 'id');
 	}
 
 	public function getRealAdmin()
 	{
-		return $this->hasOne(Sysadmin::class,'id','admin_id');
+		return $this->belongsTo(Sysadmin::class,'admin_id','id');
 	}
 }

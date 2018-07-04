@@ -26,7 +26,7 @@ $pathOfTicketBags = config('services_arr.path');
 $service_model = new Service();
 # getting all Services which are equivalents 2 classes in app/Http/TicketBags/
 try {
-	$services = count($service_model->getServices()) ? $service_model->getServices() : array('Secom');
+	$services = count($service_model->getServicesNames()) ? $service_model->getServicesNames() : array('Secom');
 } catch (ModelNotFoundException $mnf) {
 	$services = array('Secom');
 	Log::error('Services not found!. Using default->Secom');
@@ -39,9 +39,11 @@ for ($i = 0; $i < count($services); $i++) {
 	$Daemon->storeData($tickets);
 }
 */
+
 $Daemon = new Daemon($services[0]);
 $tickets = $Daemon->getTicketsFromService();
 $Daemon->storeData($tickets);
+
 /*
  	$serviceClass = $pathOfTicketBags . $services[0];
 $secom = new $serviceClass;
