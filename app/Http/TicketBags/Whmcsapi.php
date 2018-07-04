@@ -1,5 +1,7 @@
 <?php
-class Secom
+namespace App\Http\TicketBags;
+
+class Whmcsapi
 {
     private $url = '';
     private $identifier = '';
@@ -7,11 +9,11 @@ class Secom
 
     private $arr = [];
 
-    function __construct()
+    function __construct($service)
     {
-        $this->url = config('curl-connection.secom.url');
-        $this->identifier = config('curl-connection.secom.identifier');
-        $this->secret = config('curl-connection.secom.secret');
+        $this->url = config('curl-connection.' . $service . '.url');
+        $this->identifier = config('curl-connection.' . $service . '.identifier');
+        $this->secret = config('curl-connection.' . $service . '.secret');
     }
 
     public function getTiket($id)
