@@ -13,6 +13,7 @@ $response = $kernel->handle(
 
 
 use App\Http\TicketBags\Secom;
+use App\Http\TicketBags\Whmcsapi;
 use App\Models\Service;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
@@ -59,3 +60,14 @@ catch(Exception $e) {
 }
 */
 
+//$secom = new Whmcsapi('secom');
+//print_r($secom->getListTikets());
+//
+//$adminvps = new Whmcsapi('adminvps');
+//print_r($adminvps->getListTikets());
+
+//$hostiman = new Whmcsapi('hostiman');
+//print_r($hostiman->getListTikets());
+//
+//$uahosting = new Whmcsapi('ua-hosting');
+//print_r($uahosting->getListTikets());

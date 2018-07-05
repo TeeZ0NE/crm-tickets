@@ -8,8 +8,8 @@ return [
     ],
     'adminvps' => [
         'url' => 'https://my.adminvps.ru/includes/api.php',
-        'identifier' => 'secom_vm',
-        'secret' => 'asw4rtyh45',
+        'identifier' => 'FVZXOH8VNAY5jF0scWH71GMakwQJVYDz',
+        'secret' => 'ZfpQgCvDsVAP5igHeWM5xgX1slpzXzmg',
     ],
     'hostiman' => [
         'url' => 'https://cp.hostiman.ru/includes/api.php',
