@@ -12,3 +12,5 @@
 */
 
 Route::resource('/', 'IndexController');
+
+Route::view('/table', 'table');
