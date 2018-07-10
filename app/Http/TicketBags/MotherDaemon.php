@@ -89,6 +89,7 @@ trait MotherDaemon
 	public function storeData(Array $tickets)
 	{
 		if (!$this->isTicketsEmpty($tickets)) {
+			$adminNikIdsWithReplies = array();
 			# not empty
 			# before compare what we have and what income in $tickets array
 			$checkedIds = $this->checkId($tickets);
@@ -105,6 +106,10 @@ trait MotherDaemon
 				# get replies count of this ticket
 				$replies = (array)$this->getRepliesCount($ticketID);
 				$service_id = $this->getServiceId();
+				# get admin nik ids if applicable
+				if(count($replies['adminNiks'])) {
+					$adminNikIdsWithReplies = (array)$this->storeSysadminNiks($service_id, $replies['adminNiks'], $replies['dates'], $replies['lastReplyAdmin']);
+				}
 				# storing ticket and get own ID
 				$ticket_id = $this->storeTicket([
 						'ticketid' => $ticketID,
@@ -115,18 +120,14 @@ trait MotherDaemon
 						'priority_id' => $priorityId,
 
 						'reply_count' => $replies['reply_count'],
-						'lastreply_is_admin' => $replies['lastreplyIsAdmin'],
+						'last_replier_nik_id' => $adminNikIdsWithReplies['last_replier_nik_id'],
 
 						'lastreply' => $ticket['lastreply'],
 
 					]
 				);
-				# get admin nik ids if applicable
-				if(count($replies['adminNiks'])) {
-					$adminNikIdsWithReplies = (array)$this->storeSysadminNiks($service_id, $replies['adminNiks']);
-					# storing admin activities in current ticket
-					$this->storeAdminActivities($adminNikIdsWithReplies, $ticket_id, $ticket['lastreply']);
-				}
+				# storing admin activities in current ticket
+				$this->storeAdminActivities($adminNikIdsWithReplies, $ticket_id);
 				if ($ticket_id) Log::info('Store ticket', ['ticket_id' => $ticket_id, 'real ticket id' => $ticketID]);
 			}
 			Log::info("==/Get tickets from $this->service==");
@@ -239,34 +240,43 @@ trait MotherDaemon
 	/**
 	 * getting reply count and repliers
 	 *
-	 *
-	* [adminNiks] => Array	(
-	* [Roman Korolov] => 5
-	* [Dmitry Zavertany] => 1
-	* )
-	*[lastreplyIsAdmin] => 0
-	* [reply_count] => 12
-	* )
+	 *Array
+	(
+	[adminNiks] => Array
+	(
+	[Roman Korolov] => 3
+	[Yuri Kurulyuk] => 1
+	)
+	[dates] => Array
+	(
+	[Roman Korolov] => 2018-07-03 23:22:47
+	[Yuri Kurulyuk] => 2018-07-05 10:18:12
+	)
+	[lastreplyIsAdmin] => 0
+	[reply_count] => 10
+	)
+
 	 * @param int $ticketID
 	 * @return array
 	 */
 	private function getRepliesCount(int $ticketID)
 	{
-		$lastreplyIsAdmin = 0;
-		$all_replies = $replies = array();
-		$ticket_full_data = $this->getTicketFromService($ticketID);;
+		$adminName='';
+		$all_replies = $replies = $dates = array();
+		$ticket_full_data = $this->getTicketFromService($ticketID);
 		foreach ($ticket_full_data as $reply) {
 			if ($reply['name']==='' AND  $reply['admin'] !== '') {
 				$adminName=($reply['admin']!=='')?$reply['admin']:'NoName';
+				$dates[$reply['admin']]=$reply['date'];
 				array_push($all_replies, $adminName);
-				$lastreplyIsAdmin = 1;
 			} else {
-				$lastreplyIsAdmin = 0;
+				$adminName = '';
 			}
 		}
 		$replies['adminNiks'] = array_count_values($all_replies);
-		$replies['lastreplyIsAdmin']= $lastreplyIsAdmin;
+		$replies['dates'] = $dates;
 		$replies['reply_count'] = count($ticket_full_data);
+		$replies['lastReplyAdmin'] = $adminName??'';
 		Log::info('Getting reply count',['array'=>$replies]);
 		return $replies;
 	}
@@ -277,14 +287,20 @@ trait MotherDaemon
 	 * IReturning array where [admin_nik_id] = count his replies on this ticket and client
 	 * @param int $service_id
 	 * @param array $adminNiks and replies
+	 * @param array $dates
 	 * @return array
 	 */
-	private function storeSysadminNiks(int $service_id, array  $adminNiks)	{
-		$adminNikIdsWithReplies = array();
+	private function storeSysadminNiks(int $service_id, array  $adminNiks, array $dates, $lastReplyAdmin)	{
+		$adminNikIdsWithReplies = $dateOfLastReply = $repliesCounts = array();
 		foreach ($adminNiks as $adminNik =>$replies) {
 			$sysadminNik = AdminNik::firstOrCreate(array('admin_nik'=>$adminNik,'service_id'=>$service_id));
 			$adminNikId = $sysadminNik->id??$sysadminNik->admin_nik_id;
-			$adminNikIdsWithReplies[$adminNikId] = $replies;
+			$lastReplyAdminNikId = ($lastReplyAdmin==$adminNik) ? $adminNikId : 0;
+			if(array_key_exists($adminNik,$dates))$dateOfLastReply[$adminNikId] = $dates[$adminNik];
+			$repliesCounts[$adminNikId]=$replies;
+			$adminNikIdsWithReplies['replies_count'] = $repliesCounts;//array($adminNikId => $replies);
+			$adminNikIdsWithReplies['last_reply'] = $dateOfLastReply;
+			$adminNikIdsWithReplies['last_replier_nik_id'] = $lastReplyAdminNikId;
 		}
 		return $adminNikIdsWithReplies;
 	}
@@ -293,21 +309,21 @@ trait MotherDaemon
 	 * Storing activity in specific ticket and client with lastreply dateTime
 	 *
 	 * replies are count of admin reply
-	 * @param array $adminNikIds
+	 * @param array $adminNikIdsWithReplies
 	 * @param int $ticket_id
-	 * @param $lastreply
 	 */
-	private function storeAdminActivities(array $adminNikIds, int $ticket_id,  $lastreply)
+	private function storeAdminActivities(array $adminNikIdsWithReplies, int $ticket_id)
 	: void{
-		foreach ($adminNikIds as $adminNikId => $reply){
-			$systemadminActivity  = SysadminActivity::updateOrCreate(array(
-				'admin_nik_id' =>$adminNikId,
+		foreach ($adminNikIdsWithReplies['replies_count'] as $adminNikId => $reply){
+			$systemadminActivity  = SysadminActivity::firstOrCreate(array(
 				'ticket_id'=>$ticket_id,
+				'admin_nik_id' =>$adminNikId,
 			), array(
 				'replies'=>$reply,
-				'lastreply'=>$lastreply
+				'lastreply'=>$adminNikIdsWithReplies['last_reply'][$adminNikId],
 			));
-			if($systemadminActivity->admin_nik_id) {
+			$activity_id = $systemadminActivity->admin_nik_id??$systemadminActivity->id;
+			if($activity_id) {
 				Log::info("Admin nik id $adminNikId stored in ticket id $ticket_id on service $this->service");
 			}
 			else
