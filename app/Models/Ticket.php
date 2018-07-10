@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class Ticket extends Model
 {
-	protected $fillable = array('ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'reply_count','compl', 'lastreply', 'lastreply_is_admin', 'is_closed', 'deadline_id');
+	protected $fillable = array('ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'reply_count','compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'deadline_id');
 
 
 	/**
@@ -46,7 +46,7 @@ class Ticket extends Model
 	 */
 	public function getCountClosedTickets($service_id)
 	{
-		return $this::with('getService')->where(['is_closed'=>1,'service_id'=>$service_id])->get()->count();
+		return $this::where(['is_closed'=>1,'service_id'=>$service_id])->get()->count();
 	}
 
 	/**
@@ -55,9 +55,19 @@ class Ticket extends Model
 	 */
 	public function getCountOpenTickets($service_id)
 	{
-		return $this::with('getService')->where(['is_closed'=>0,'service_id'=>$service_id])->get()->count();
+		return $this::where(['is_closed'=>0,'service_id'=>$service_id])->get()->count();
 	}
 
+	/**
+	 * getting summary count of tickets
+	 *
+	 * @param $service_id
+	 * @return mixed
+	 */
+	public function getSummaryCountTickets($service_id)
+	{
+		return $this::where('service_id',$service_id)->get()->count();
+	}
 	/**
 	 * get inner id from DB
 	 *
@@ -132,8 +142,12 @@ class Ticket extends Model
 		else Log::error("Ticket id $absentTicket[$service_id] (service id is $service_id) checked as remove from DB because it has had status 4 remove but it doesn't remove, real id $id is not found");
 	}
 
+	public function getPriority()
+	{
+		return $this->hasOne(Priority::class,'id','priority_id');
+	}
 	/**
-	 * move ticket from Ticket table 2 ClosedTickets table
+	 * sign (check is_closed) when ticket is checked as Closed
 	 *
 	 * $absentId['service_id'] => $absentId['absentId']
 	 * @param array $absentTicket
@@ -147,5 +161,19 @@ class Ticket extends Model
 			Log::info("Ticket id $absentTicket[$service_id] (service id is $service_id) checked as closed", ['result'=>$res]);
 		}
 		else Log::error("Ticket id $absentTicket[$service_id] (service id is $service_id) checked to moved but error occurs, real id $id is not found");
+	}
+
+	/**
+	 * get real admin name cross sysadminNiks if applicable
+	 * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+	 */
+	public function getAdmin()
+	{
+		return $this->hasManyThrough(Sysadmin::class, AdminNik::class,'admin_nik_id','id','last_replier_nik_id','admin_id');
+	}
+
+	public function getAdmins()
+	{
+		return $this->belongsTo('ticket_id');
 	}
 }

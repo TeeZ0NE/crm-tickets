@@ -15,8 +15,13 @@ class AdminNik extends Model
 		return $this->belongsTo(Service::class, 'service_id', 'id');
 	}
 
-	public function getRealAdmin()
+	public function getAdmin()
 	{
 		return $this->belongsTo(Sysadmin::class,'admin_id','id');
+	}
+
+	public function getAdminActivity()
+	{
+		return $this->hasMany(SysadminActivity::class,'admin_nik_id', 'admin_nik_id');
 	}
 }
