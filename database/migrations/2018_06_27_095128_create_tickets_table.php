@@ -21,9 +21,9 @@ class CreateTicketsTable extends Migration
 	        $table->unsignedTinyInteger('status_id')->comment('status_id');
 	        $table->unsignedTinyInteger('priority_id')->comment('priority');
 	        $table->unsignedTinyInteger('reply_count')->default(0)->comment('summary replies on ticket');
-	        $table->unsignedTinyInteger('compl')->default(1)->comment('difficulty');
+	        $table->unsignedDecimal('compl',2,1)->default(1)->comment('difficulty');
 	        $table->dateTime('lastreply')->comment('Is comming from out');
-	        $table->boolean('lastreply_is_admin')->default(0)->comment('flag who last reply');
+	        $table->unsignedSmallInteger('last_replier_nik_id')->default(0)->comment('nik ID 4 last replier');
 	        $table->boolean('is_closed')->default(0);
 	        $table->unsignedTinyInteger('deadline_id')->nullable();
 	        $table->timestamps();
