@@ -16,7 +16,7 @@ class CreateModelsServicesTable extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->tinyIncrements('id');
             $table->string('name',80)->unique()->comment('service name like Secom');
-            $table->unsignedTinyInteger('compl')->default(1);
+            $table->unsignedDecimal('compl',2,1)->default(1);
         });
     }
 

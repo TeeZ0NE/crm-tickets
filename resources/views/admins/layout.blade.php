@@ -9,9 +9,9 @@
 	       href="{{ mix('css/app.css') }}"></style>{{-- styles --}}
 </head>
 <body>
-@includeWhen(Session::has('msg'),'admin.parts.msg')
-@includeWhen($errors->any(),'admin.parts.errors')
+@includeWhen(Session::has('msg'),'admins.parts.msg')
+@includeWhen($errors->any(),'admins.parts.errors')
 <div>@section('main_content')@show</div>
-<div>@include('admin.parts.footer')</div>
+<div>@include('admins.parts.footer')</div>
 </body>
 </html>

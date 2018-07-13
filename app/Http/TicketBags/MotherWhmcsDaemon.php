@@ -13,25 +13,20 @@ use App\Models\{
 	AdminNik, Priority, Service, SysadminActivity, Ticket, Status
 };
 use Exception;
-use App\Http\TicketBags\Whmcsapi;
 
-trait MotherDaemon
+//use App\Http\TicketBags\Whmcsapi;
+
+trait MotherWhmcsDaemon
 {
 
 	private $service;
 	private $whmcs;
-	private $whmcs_services;
 
 	public function __construct($service)
 	{
 		$this->service = $service;
-		$this->whmcs_services = (array)config('services_arr.whmcs_services');
 		# choose service settings
-		if (in_array($service, $this->whmcs_services)) {
-			$this->whmcs = new Whmcsapi($service);
-		} else {
-			echo 'another service than whmcs';
-		}
+		$this->whmcs = new Whmcsapi($service);
 	}
 
 	/**
@@ -49,12 +44,11 @@ trait MotherDaemon
 				? (array)$this->whmcs->getListTikets()['tickets']['ticket']
 				: '';//Null;
 			if ($tickets == '') throw new Exception($tickets['message']);
-			echo "$this->service";
-			print_r($tickets);
 			return $tickets;
 		} catch (Exception $e) {
 			Log::error("==Get tickets error from $this->service==", ["msg" => $e->getMessage()]);
-			die("Get tickets error!");
+			# return Null if response Error or Empty tickets array
+			return Null;
 		}
 	}
 
@@ -68,17 +62,16 @@ trait MotherDaemon
 	 */
 	public function getTicketFromService(int $ticketId)
 	{
-		$serv = new $this->whmcs;
 		try {
 			Log::info("Get ticket $ticketId from $this->service");
-			$ticket = (array_key_exists('replies', $serv->getTiket($ticketId)))
-				? (array)$serv->getTiket($ticketId)['replies']['reply']
+			$ticket = (array_key_exists('replies', $this->whmcs->getTiket($ticketId)))
+				? (array)$this->whmcs->getTiket($ticketId)['replies']['reply']
 				: Null;
 			if ($ticket == Null) throw new Exception($ticket['message']);
 			return $ticket;
 		} catch (Exception $e) {
 			Log::error("Get ticket $ticketId from $this->service ", ["msg" => $e->getMessage()]);
-			die("Get ticket error!");
+			//die("Get ticket error!");
 		}
 	}
 
@@ -111,11 +104,17 @@ trait MotherDaemon
 				# get replies count of this ticket
 				$replies = (array)$this->getRepliesCount($ticketID);
 				$service_id = $this->getServiceId();
-				# get admin nik ids if applicable
+				$sav_l_repl_id = $this->getLastReplierNickId($ticketID);
+				# get admins nik ids if applicable
 				if (count($replies['adminNiks'])) {
 					$adminNikIdsWithReplies = (array)$this->storeSysadminNiks($service_id, $replies['adminNiks'], $replies['dates'], $replies['lastReplyAdmin']);
 				}
+
+				$last_replier_nik_id = $adminNikIdsWithReplies['last_replier_nik_id'] ?? $sav_l_repl_id;
 				# storing ticket and get own ID
+				//todo debug
+				echo sprintf('last reply id %d %s',$last_replier_nik_id,"\n");
+# getting last replier  nick id if applicable
 				$ticket_id = $this->storeTicket([
 					'ticketid' => $ticketID,
 				], [
@@ -125,14 +124,17 @@ trait MotherDaemon
 						'priority_id' => $priorityId,
 
 						'reply_count' => $replies['reply_count'],
-						'last_replier_nik_id' => $adminNikIdsWithReplies['last_replier_nik_id'],
-
+						'last_replier_nik_id' => $last_replier_nik_id,
+						'last_is_admin' => $replies['last_is_admin'],
+						'is_new' => $replies['is_new'],
 						'lastreply' => $ticket['lastreply'],
 
 					]
 				);
-				# storing admin activities in current ticket
-				$this->storeAdminActivities($adminNikIdsWithReplies, $ticket_id);
+				# storing admins activities in current ticket
+				if (count($replies['adminNiks'])) {
+					$this->storeAdminActivities($adminNikIdsWithReplies, $ticket_id);
+				}
 				if ($ticket_id) Log::info('Store ticket', ['ticket_id' => $ticket_id, 'real ticket id' => $ticketID]);
 			}
 			Log::info("==/Get tickets from $this->service==");
@@ -175,8 +177,9 @@ trait MotherDaemon
 	 */
 	private function getServiceId()
 	{
+		$service = new Service();
 		try {
-			return Service::where('name', $this->service)->first()->id;
+			return $service::firstOrCreate(['name' => $this->service])->id;
 		} catch (Exception $e) {
 			Log::error("Service not found. Please add it first");
 			die('Service id error. See log');
@@ -216,7 +219,8 @@ trait MotherDaemon
 	{
 		$id_out = $id_in = $result_arr = array();
 		$t = new Ticket();
-		$id_in = $t->getTidArray();
+		# get all ticketsids from db 4 compare
+		$id_in = $t->getTidArray($this->getServiceId());
 		foreach ($tickets as $ticket) {
 			array_push($id_out, $ticket['id']);
 		}
@@ -231,10 +235,9 @@ trait MotherDaemon
 	private function checkAbsentIds(array $absentIds)
 	{
 		$result_arr = $temp_arr = array();
-		$serv = new $this->whmcs;
 		$service_id = $this->getServiceId();
 		foreach ($absentIds as $absentId) {
-			array_push($temp_arr, $serv->getTiket($absentId));
+			array_push($temp_arr, $this->whmcs->getTiket($absentId));
 			$result_arr[] = array('absentId' => $absentId, 'service_id' => $service_id, 'status' => strtolower($temp_arr[0]['result']));
 		}
 		# push them into model and remove if error or move
@@ -266,22 +269,27 @@ trait MotherDaemon
 	private function getRepliesCount(int $ticketID)
 	{
 		$adminName = '';
+		$last_is_admin = 0;
 		$all_replies = $replies = $dates = array();
 		$ticket_full_data = $this->getTicketFromService($ticketID);
 		foreach ($ticket_full_data as $reply) {
 			if ($reply['name'] === '' AND $reply['admin'] !== '') {
-				$adminName = ($reply['admin'] !== '') ? $reply['admin'] : 'NoName';
+				$adminName =  $reply['admin'];
 				$dates[$reply['admin']] = $reply['date'];
 				array_push($all_replies, $adminName);
-			} else {
-				$adminName = '';
+				$last_is_admin=1;
 			}
+			else {$last_is_admin = 0;}
 		}
 		$replies['adminNiks'] = array_count_values($all_replies);
 		$replies['dates'] = $dates;
 		$replies['reply_count'] = count($ticket_full_data);
-		$replies['lastReplyAdmin'] = $adminName ?? '';
+		$replies['lastReplyAdmin'] = $adminName;
+		$replies['last_is_admin'] = $last_is_admin;
+		$replies['is_new'] = (empty($replies['adminNiks'])) ? 1 : 0;
 		Log::info('Getting reply count', ['array' => $replies]);
+		//todo debug
+		echo "$ticketID";print_r($replies);
 		return $replies;
 	}
 
@@ -291,6 +299,7 @@ trait MotherDaemon
 	 * IReturning array where [admin_nik_id] = count his replies on this ticket and client
 	 * @param int $service_id
 	 * @param array $adminNiks and replies
+	 * @param $lastReplyAdmin admins's id
 	 * @param array $dates
 	 * @return array
 	 */
@@ -313,7 +322,7 @@ trait MotherDaemon
 	/**
 	 * Storing activity in specific ticket and client with lastreply dateTime
 	 *
-	 * replies are count of admin reply
+	 * replies are count of admins reply
 	 * @param array $adminNikIdsWithReplies
 	 * @param int $ticket_id
 	 */
@@ -334,4 +343,26 @@ trait MotherDaemon
 				Log::error("Admin nik id $adminNikId not stored in ticket id $ticket_id on service $this->service");
 		}
 	}
+
+	public function getLastReplierNickId(int $ticketID)
+	{
+		$last_replier_nik_id = 0;
+# trying to get last reply admin nik id
+		$ticket_m = Ticket::where([
+			['ticketid', '=', $ticketID],
+			['service_id', '=', $this->getServiceId()]
+		])->first();
+		if ($ticket_m) $last_replier_nik_id = $ticket_m->last_replier_nik_id;
+		return $last_replier_nik_id;
+	}
 }
+/*
+ * 88535 adminvps
+ * [userid] => 0
+                            [contactid] => 0
+                            [name] =>
+                            [email] =>
+                            [date] => 2018-07-10 20:34:06
+                            [message] => Здравствуйте!
+Ваша заявка принята в работу. Ожидайте пожалуйста.
+*/

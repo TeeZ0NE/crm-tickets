@@ -17,8 +17,8 @@ class CreateSysadminTableNiks extends Migration
 //        	$table->unsignedSmallInteger('sysadmin_id')->default(0)->comment('using  sysadmins table. At first time we don\'t know who take that');
         	$table->unsignedTinyInteger('service_id')->comment('service id');
         	$table->string('admin_nik',100)->charset('utf8')->collation('utf8_unicode_ci')->comment('nick on this ticket service');
-        	$table->smallIncrements('admin_nik_id')->comment('real admin id');
-        	$table->smallInteger('admin_id')->default(0)->comment('real admin id');
+        	$table->smallIncrements('admin_nik_id')->comment('real admins id');
+        	$table->smallInteger('admin_id')->default(0)->comment('real admins id');
 
         	$table->foreign('service_id')->references('id')->on('services')->onUpdate('cascade');
         });

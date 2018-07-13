@@ -92,7 +92,7 @@ $array = json_decode($json,TRUE);
 
 $params=$array["replies"]["reply"];
 $end_element = array_pop($params);
-$adminname=$end_element["admin"];
+$adminname=$end_element["admins"];
 if ($params["name"] != "")
 {
 $newtickets[$ticketid]["replier"]=$params["name"];
@@ -105,7 +105,7 @@ else
         }
         else
         {
-        $newtickets[$ticketid]["replier"]="[".$end_element["admin"]."]";
+        $newtickets[$ticketid]["replier"]="[".$end_element["admins"]."]";
         }
 }
 

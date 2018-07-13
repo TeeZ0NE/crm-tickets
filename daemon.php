@@ -18,11 +18,11 @@ use App\Models\Service;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 
-class Daemon
+class WhmcsDaemon
 {
-	use \App\Http\TicketBags\MotherDaemon;
+	use \App\Http\TicketBags\MotherWhmcsDaemon;
 }
-
+/*
 $pathOfTicketBags = config('services_arr.path');
 $service_model = new Service();
 # getting all Services which are equivalents 2 classes in app/Http/TicketBags/
@@ -32,37 +32,23 @@ try {
 	$services = array('Secom');
 	Log::error('Services not found!. Using default->Secom');
 }
-# concatenate path to class and service class
+*/
 
-for ($i = 0; $i < count($services); $i++) {
-	$Daemon = new Daemon($services[$i]);
-	$tickets = $Daemon->getTicketsFromService();
-	$Daemon->storeData($tickets);
+# take array of services and loop it to take data
+
+$whmcs_services = (array)config('services_arr.whmcs_services');
+foreach ($whmcs_services as $whmcs_service){
+	$WhmcsDaemon = new WhmcsDaemon($whmcs_service);
+	$tickets = $WhmcsDaemon->getTicketsFromService();
+	if ($tickets==Null)continue;
+	$WhmcsDaemon->storeData($tickets);
 }
 
 /*
-$Daemon = new Daemon($services[0]);
-$tickets = $Daemon->getTicketsFromService();
-$Daemon->storeData($tickets);
-*/
-/*
- 	$serviceClass = $pathOfTicketBags . $services[0];
-$secom = new $serviceClass;
-try {
-//	$tickets = $secom->getListTikets();
-//	if($tickets['result']=='error') throw new Exception($tickets['message']);
-//	print_r($tickets);
-	$ticket = $secom->getTiket(8761);
-	print_r($ticket);
-}
-catch(Exception $e) {
-	echo "error ".$e->getMessage();
-}
-*/
-
-//$secom = new Whmcsapi('secom');
+$secom = new Whmcsapi('adminvps');
 //print_r($secom->getListTikets());
-//
+print_r($secom->getTiket(88535));
+*/
 //$adminvps = new Whmcsapi('adminvps');
 //print_r($adminvps->getListTikets());
 

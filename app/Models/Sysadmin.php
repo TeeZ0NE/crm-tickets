@@ -11,7 +11,7 @@ class Sysadmin extends Model
 	protected $fillable = array('name');
 
 	/**
-	 * get services real admin
+	 * get services real admins
 	 * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
 	 */
 	public function getServices()
@@ -20,7 +20,7 @@ class Sysadmin extends Model
 	}
 
 	/**
-	 * getting all niks real admin
+	 * getting all niks real admins
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function getNiks()
@@ -28,6 +28,11 @@ class Sysadmin extends Model
 		return $this->hasMany(AdminNik::class, 'admin_id');
 	}
 
+	/**
+	 * getting activities on closed tickets
+	 *
+	 * @return \Illuminate\Support\Collection
+	 */
 	public function getCountOfClosedTicketsAndReplies()
 	{
 		return
@@ -36,7 +41,7 @@ class Sysadmin extends Model
 			leftJoin('sysadmin_niks as snik', 'snik.admin_id', '=', 's.id')->
 			join('sysadmin_activities as sact', 'sact.admin_nik_id', '=', 'snik.admin_nik_id')->
 			join('tickets as t', 'sact.ticket_id', '=', 't.id')->
-			where('t.is_closed', 0)->
+			where('t.is_closed', 1)->
 			groupBy('s.id')->
 			orderByDesc('ticket_count')->
 			orderByDesc('reply_count')->

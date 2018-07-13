@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class Ticket extends Model
 {
-	protected $fillable = array('ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'reply_count','compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'deadline_id');
+	protected $fillable = array('ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'reply_count','compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'deadline_id','last_is_admin','is_new');
 
 
 	/**
@@ -79,7 +79,7 @@ class Ticket extends Model
 	{
 		$id = 0;
 		try {
-			$id = $this::where(array(['ticketid', '=', $tid], ['service_id', '=', $service_id]))->firstOrFail()->id;
+			$id = $this::where([['ticketid', '=', $tid], ['service_id', '=', $service_id]])->firstOrFail()->id;
 		} catch (ModelNotFoundException $mnf) {
 			Log::error("Error getting ID from DB where ticketid is $tid and service_id is $service_id");
 		}
@@ -89,11 +89,12 @@ class Ticket extends Model
 	/**
 	 * get array from DB 2 compare with outer array ticketid tid
 	 *
+	 * @param int $service_id
 	 * @return array of ticketid
 	 */
-	public function getTidArray()
+	public function getTidArray($service_id)
 	{
-		return $this->pluck('ticketid', 'id')->toArray();
+		return $this->where('service_id',$service_id)->pluck('ticketid', 'id')->toArray();
 	}
 
 	/**
@@ -164,7 +165,7 @@ class Ticket extends Model
 	}
 
 	/**
-	 * get real admin name cross sysadminNiks if applicable
+	 * get real admins name cross sysadminNiks if applicable
 	 * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
 	 */
 	public function getAdmin()

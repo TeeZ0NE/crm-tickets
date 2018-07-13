@@ -1,6 +1,6 @@
-@extends('admin.layout')
+@extends('admins.layout')
 @section('main_content')
-	<form action="{{route('realAdmin.bindNiks')}}" method="POST"> {{csrf_field()}}
+	<form action="{{route('admins.bindNiks')}}" method="POST"> {{csrf_field()}}
 		<p>
 			<select name="admin_id" id="admin">
 				@foreach($admins as $admin)
@@ -18,9 +18,12 @@
 			</select>
 		</p>
 	</form>
-	<p><a href="{{route('index')}}">Go Home</a>
-	<a href="{{route('realAdmin.create')}}">Create new real admin</a></p>
-	@include('admin.parts.msg')
+	<p>
+		<a href="{{route('index')}}">Go Home</a>
+		|<a href="{{route('admins.create')}}">Create new real admin</a>
+		|<a href="{{route('admins.index')}}">Admins</a>
+	</p>
+	@include('admins.parts.msg')
 	<h3>Admin niks and services</h3>
 	<table border="1">
 		<thead>

@@ -87,13 +87,13 @@ if ($data6 != null) {
             <a target="_blank" href="<?php if ($item['department'] == 'coopertino') {
                 echo "https://coopertino.ru:1500/billmgr?func=desktop&startpage=tickets&startform=tickets.edit&elid={$key}";
             } else if ($item['department'] == 'ua-hosting') {
-                echo "https://billing.ua-hosting.company/admin/supporttickets.php?action=view&id={$key}";
+                echo "https://billing.ua-hosting.company/admins/supporttickets.php?action=view&id={$key}";
             } else if ($item['department'] == 'SeCom') {
-                echo "https://secom.com.ua/billing/admin/supporttickets.php?action=view&id={$key}";
+                echo "https://secom.com.ua/billing/admins/supporttickets.php?action=view&id={$key}";
             } else if ($item['department'] == 'SKT') {
                 echo "https://skt.ru/manager/billmgr?func=desktop&startpage=tickets&startform=tickets.edit&elid={$key}";
             } else if ($item['department'] == 'HostiMan') {
-                echo "https://cp.hostiman.ru/admin/supporttickets.php?action=view&id={$key}";
+                echo "https://cp.hostiman.ru/admins/supporttickets.php?action=view&id={$key}";
             } else {
                 echo "https://my.adminvps.ru/admi/supporttickets.php?action=view&id={$key}";
             } ?>">

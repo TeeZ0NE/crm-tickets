@@ -1,4 +1,3 @@
-
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -21,4 +20,14 @@ require('./bootstrap');
 //     el: '#app'
 // });
 
-console.log('app.js');
+// rename admin name in showAllAdmins page
+$(".rename-admin").on("click", function (event) {
+	event.preventDefault();
+	let old_name = $(this).attr('data-name');
+	let new_name = prompt('Rename admin', old_name);
+	if (new_name!==old_name && new_name!==null && new_name!==''){
+		$("input[name='_method']").val('PUT');
+		$(this).parent().prepend("<input type=\"hidden\" name=\"name\" value=\"" + new_name + "\">");
+		$(this).parent().submit();
+	}
+});

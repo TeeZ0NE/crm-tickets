@@ -7,5 +7,7 @@
  */
 return array(
 	'path'=>'\App\Http\TicketBags\\',
-	'services'=>array('Secom',),
+//TODO:: On all services, now only secom and adminvps
+//	'whmcs_services'=>array('secom','adminvps','hostiman','ua-hosting'),
+'whmcs_services'=>array('secom','adminvps',),
 );
