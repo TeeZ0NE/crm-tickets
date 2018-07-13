@@ -47,7 +47,7 @@ foreach ($whmcs_services as $whmcs_service){
 /*
 $secom = new Whmcsapi('adminvps');
 //print_r($secom->getListTikets());
-print_r($secom->getTiket(88535));
+print_r($secom->getTiket(89066));
 */
 //$adminvps = new Whmcsapi('adminvps');
 //print_r($adminvps->getListTikets());
