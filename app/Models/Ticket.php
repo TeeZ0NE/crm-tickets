@@ -123,8 +123,8 @@ class Ticket extends Model
 	}
 
 	public function getAdminNiks()
-	{                           return $this->hasManyThrough(AdminNik::class,SysadminActivity::class, 'ticket_id','admin_nik_id','id', 'admin_nik_id');
-
+	{
+		return $this->hasManyThrough(AdminNik::class,SysadminActivity::class, 'ticket_id','admin_nik_id','id', 'admin_nik_id');
 	}
 	/**
 	 * Remove ticket from DB (ticket table) and Log it
@@ -158,7 +158,7 @@ class Ticket extends Model
 		$service_id = key($absentTicket);
 		$id = $this->getTicketIdFromDb($absentTicket[$service_id], $service_id);
 		if ($id) {
-			$res = $this::find($id)->update(['is_closed'=>1]);
+			$res = $this::find($id)->update(['is_closed'=>1,'is_new'=>1]);
 			Log::info("Ticket id $absentTicket[$service_id] (service id is $service_id) checked as closed", ['result'=>$res]);
 		}
 		else Log::error("Ticket id $absentTicket[$service_id] (service id is $service_id) checked to moved but error occurs, real id $id is not found");
