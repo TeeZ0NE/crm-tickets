@@ -23,26 +23,16 @@ class IndexController extends Controller
 			$serviceTicketCounts[$service->name] = array(
 				'summary_tickets' => $ticket_m->getSummaryCountTickets($service->id),
 				'open_tickets' => $ticket_m->getCountOpenTickets($service->id),
-				'yesterday' => $ticket_m::where([['created_at', '>=', Carbon::now()->yesterday()], ['service_id', $service->id]])->get()->count(),
-				'start_month' => $ticket_m::where([['created_at', '>=', Carbon::now()->startOfMonth()], ['service_id', $service->id]])->get()->count(),
-				'tickets' => Ticket::with(['getService', 'getPriority', 'getStatus'])->where('is_closed', 0),
+				'yesterday' => $ticket_m->getAllTicketsFromYesterday($service->id)->count(),
+				'start_month' => $ticket_m->getAllTicketsFromMonth($service->id)->count(),
+//				todo::delete me
+// 'tickets' => Ticket::with(['getService', 'getPriority', 'getStatus'])->where('is_closed', 0),
 			);
 		}
 		return view('admins.pages.index')->with([
-				'adminNiks' => AdminNik::with(['getService', 'getAdmin'])->get(),
-
 				'ticketCounts' => $serviceTicketCounts,
-
-				'openTickets' => Ticket::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin'])->
-				where('is_closed', 0)->
-				orderBy('last_is_admin')->
-				orderBy('lastreply')->
-				get(),
-				'newTickets'=>Ticket::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin'])->
-				where([['is_closed','=',0],['is_new','=',1]])->
-				orderBy('last_is_admin')->
-				orderBy('lastreply')->
-				get(),
+				'openTickets' => $ticket_m->getOpenTickets(),
+				'newTickets'=>$ticket_m->getNewTickets(),
 				'countOfClosedAndReplies' => $sysadmin_m->getCountOfClosedTicketsAndReplies(),
 			]
 		);

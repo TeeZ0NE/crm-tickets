@@ -113,7 +113,10 @@ trait MotherWhmcsDaemon
 				$last_replier_nik_id = $adminNikIdsWithReplies['last_replier_nik_id'] ?? $sav_l_repl_id;
 				# storing ticket and get own ID
 				//todo debug
-				echo sprintf('last reply id %d %s',$last_replier_nik_id,"\n");
+				$adminNikIdsWithReplies['last_replier_nik_id']=0;
+				echo sprintf(
+					'storeData-> last reply id %2$d and saved %3$d%1$s result lastReplNikId after compare %4$d%1$s',
+					"\n",$adminNikIdsWithReplies['last_replier_nik_id'], $sav_l_repl_id,$last_replier_nik_id);
 # getting last replier  nick id if applicable
 				$ticket_id = $this->storeTicket([
 					'ticketid' => $ticketID,
@@ -269,7 +272,7 @@ trait MotherWhmcsDaemon
 	private function getRepliesCount(int $ticketID)
 	{
 		$adminName = '';
-		$last_is_admin = 0;
+		$last_is_admin = (bool)0;
 		$all_replies = $replies = $dates = array();
 		$ticket_full_data = $this->getTicketFromService($ticketID);
 		foreach ($ticket_full_data as $reply) {
@@ -287,9 +290,10 @@ trait MotherWhmcsDaemon
 		$replies['lastReplyAdmin'] = $adminName;
 		$replies['last_is_admin'] = $last_is_admin;
 		$replies['is_new'] = (empty($replies['adminNiks'])) ? 1 : 0;
-		Log::info('Getting reply count', ['array' => $replies]);
 		//todo debug
-		echo "$ticketID";print_r($replies);
+		echo sprintf('is new ticket=%2$d (ticketID %4$d) count admins=%3$d%1$s',
+			"\n", $replies['is_new'], count($replies['adminNiks']),$ticketID);
+		Log::info('Getting reply count', ['array' => $replies]);
 		return $replies;
 	}
 
@@ -306,10 +310,11 @@ trait MotherWhmcsDaemon
 	private function storeSysadminNiks(int $service_id, array $adminNiks, array $dates, $lastReplyAdmin)
 	{
 		$adminNikIdsWithReplies = $dateOfLastReply = $repliesCounts = array();
+		$lastReplyAdminNikId=(int)0;
 		foreach ($adminNiks as $adminNik => $replies) {
 			$sysadminNik = AdminNik::firstOrCreate(array('admin_nik' => $adminNik, 'service_id' => $service_id));
 			$adminNikId = $sysadminNik->id ?? $sysadminNik->admin_nik_id;
-			$lastReplyAdminNikId = ($lastReplyAdmin == $adminNik) ? $adminNikId : 0;
+			if($lastReplyAdmin == $adminNik) $lastReplyAdminNikId =$adminNikId;
 			if (array_key_exists($adminNik, $dates)) $dateOfLastReply[$adminNikId] = $dates[$adminNik];
 			$repliesCounts[$adminNikId] = $replies;
 			$adminNikIdsWithReplies['replies_count'] = $repliesCounts;//array($adminNikId => $replies);
@@ -353,6 +358,8 @@ trait MotherWhmcsDaemon
 			['service_id', '=', $this->getServiceId()]
 		])->first();
 		if ($ticket_m) $last_replier_nik_id = $ticket_m->last_replier_nik_id;
+		//todo debug
+		echo sprintf('getLastReplierNickId -> %d%s',$last_replier_nik_id,"\n");
 		return $last_replier_nik_id;
 	}
 }

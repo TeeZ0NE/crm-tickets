@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\{
 	Model, ModelNotFoundException
 };
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class Ticket extends Model
 {
@@ -122,6 +123,10 @@ class Ticket extends Model
 		}
 	}
 
+	/**
+	 * get admin nicks
+	 * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+	 */
 	public function getAdminNiks()
 	{
 		return $this->hasManyThrough(AdminNik::class,SysadminActivity::class, 'ticket_id','admin_nik_id','id', 'admin_nik_id');
@@ -173,8 +178,70 @@ class Ticket extends Model
 		return $this->hasManyThrough(Sysadmin::class, AdminNik::class,'admin_nik_id','id','last_replier_nik_id','admin_id');
 	}
 
+	/**
+	 * get admins which are replying in ticket
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
 	public function getAdmins()
 	{
 		return $this->belongsTo('ticket_id');
+	}
+
+	/**
+	 * get open tickets
+	 *
+	 * if need use getAdminActivity method to take all admin's activity in open ticket
+	 *
+	 * @return Ticket[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+	 */
+	public function getOpenTickets()
+	{
+		return $this::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin'])->
+		where('is_closed', 0)->
+		orderBy('last_is_admin')->
+		orderBy('lastreply')->
+		get();
+	}
+
+	/**
+	 * get new tickets
+	 *
+	 * they don't have admin(-s) yet
+	 * @return Ticket[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+	 */
+	public function getNewTickets()
+	{
+		return $this::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin'])->
+		where([['is_closed','=',0],['is_new','=',1]])->
+		orderBy('last_is_admin')->
+		orderBy('lastreply')->
+		get();
+	}
+
+	/**
+	 * get all tickets on service from yesterday
+	 *
+	 * @param int $service_id
+	 * @return mixed
+	 */
+	public function getAllTicketsFromYesterday(int $service_id)
+	{
+		return $this::where([['created_at', '>=', Carbon::now()->yesterday()], ['service_id', $service_id]])->get();
+	}
+
+	/**
+	 * get all tickets on service from month start
+	 *
+	 * @param int $service_id
+	 * @return mixed
+	 */
+	public function getAllTicketsFromMonth(int $service_id)
+	{
+		return $this::where([['created_at', '>=', Carbon::now()->startOfMonth()], ['service_id', $service_id]])->get();
+	}
+
+	public function getAdminActivity()
+	{
+		return $this->hasMany(SysadminActivity::class,'ticket_id');
 	}
 }
