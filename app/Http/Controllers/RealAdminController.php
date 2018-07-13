@@ -15,8 +15,9 @@ class RealAdminController extends Controller
      */
     public function index()
     {
+    	$admin_m = new Sysadmin();
         return view('admins.pages.adminsShowAll')->with([
-        	'admins'=>Sysadmin::orderBy('name')->get()
+        	'admins'=>$admin_m->getAdmins(),
         ]);
     }
 
@@ -107,10 +108,12 @@ class RealAdminController extends Controller
 	 */
 	public function nicks()
 	{
+		$admins_m = new Sysadmin();
+		$adminNiks_m = new AdminNik();
 		return view('admins.pages.bindNiksWAdmins')->with([
-			'adminNiks'=>AdminNik::with('getService')->orderBy('admin_nik')->get(),
-			'admins'=>Sysadmin::orderBy('name')->get(),
-			'adminNiksVV' => Sysadmin::with(['getServices', 'getNiks'])->get(),
+			'adminNiks'=>$adminNiks_m->getNicks(),
+			'admins'=>$admins_m->getAdmins(),
+			'adminNiksVV' => $admins_m->getAdminsWservicesAndNicks(),
 		]);
     }
 
