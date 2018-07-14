@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class Ticket extends Model
 {
-	protected $fillable = array('ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'reply_count','compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'deadline_id','last_is_admin','is_new');
+	protected $fillable = array('ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'deadline_id','last_is_admin','is_new');
 
 
 	/**
@@ -163,7 +163,7 @@ class Ticket extends Model
 		$service_id = key($absentTicket);
 		$id = $this->getTicketIdFromDb($absentTicket[$service_id], $service_id);
 		if ($id) {
-			$res = $this::find($id)->update(['is_closed'=>1,'is_new'=>1]);
+			$res = $this::find($id)->update(['is_closed'=>1,'is_new'=>0]);
 			Log::info("Ticket id $absentTicket[$service_id] (service id is $service_id) checked as closed", ['result'=>$res]);
 		}
 		else Log::error("Ticket id $absentTicket[$service_id] (service id is $service_id) checked to moved but error occurs, real id $id is not found");
@@ -212,7 +212,7 @@ class Ticket extends Model
 	public function getNewTickets()
 	{
 		return $this::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin'])->
-		where([['is_closed','=',0],['is_new','=',1]])->
+		where([['is_closed','=',0],['last_replier_nik_id','=',0]])->
 		orderBy('last_is_admin')->
 		orderBy('lastreply')->
 		get();
@@ -240,8 +240,30 @@ class Ticket extends Model
 		return $this::where([['created_at', '>=', Carbon::now()->startOfMonth()], ['service_id', $service_id]])->get();
 	}
 
+	/**
+	 * get admin activity in ticket
+	 * 
+	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
+	 */
 	public function getAdminActivity()
 	{
 		return $this->hasMany(SysadminActivity::class,'ticket_id');
+	}
+
+	/**
+	 * get all open ticket 4 admin id
+	 *
+	 * 4 current admin id get from DB all his open tickets
+	 * @param $admin_id
+	 * @return Ticket[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+	 */
+	public function getOpenTickets4CurrAdmin($admin_id)
+	{
+		return $this::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin'])->
+		where('is_closed',0)->
+		whereHas('getAdmin', function($f) use($admin_id){
+			$f->where('id',$admin_id);})->
+		get();
+
 	}
 }

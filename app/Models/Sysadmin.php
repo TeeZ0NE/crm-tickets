@@ -33,7 +33,7 @@ class Sysadmin extends Model
 	 *
 	 * @return \Illuminate\Support\Collection
 	 */
-	public function getCountOfClosedTicketsAndReplies()
+	public function getCountTicketsAndReplies()
 	{
 		return
 			DB::table('sysadmins as s')->
@@ -41,7 +41,7 @@ class Sysadmin extends Model
 			leftJoin('sysadmin_niks as snik', 'snik.admin_id', '=', 's.id')->
 			join('sysadmin_activities as sact', 'sact.admin_nik_id', '=', 'snik.admin_nik_id')->
 			join('tickets as t', 'sact.ticket_id', '=', 't.id')->
-			where('t.is_closed', 1)->
+//			where('t.is_closed', 1)->
 			groupBy('s.id')->
 			orderByDesc('ticket_count')->
 			orderByDesc('reply_count')->
