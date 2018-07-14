@@ -25,15 +25,14 @@ class IndexController extends Controller
 				'open_tickets' => $ticket_m->getCountOpenTickets($service->id),
 				'yesterday' => $ticket_m->getAllTicketsFromYesterday($service->id)->count(),
 				'start_month' => $ticket_m->getAllTicketsFromMonth($service->id)->count(),
-//				todo::delete me
-// 'tickets' => Ticket::with(['getService', 'getPriority', 'getStatus'])->where('is_closed', 0),
 			);
 		}
 		return view('admins.pages.index')->with([
 				'ticketCounts' => $serviceTicketCounts,
 				'openTickets' => $ticket_m->getOpenTickets(),
 				'newTickets'=>$ticket_m->getNewTickets(),
-				'countOfClosedAndReplies' => $sysadmin_m->getCountOfClosedTicketsAndReplies(),
+				'countTicketsAndReplies' => $sysadmin_m->getCountTicketsAndReplies(),
+				'showMyTickets'=>$ticket_m->getOpenTickets4CurrAdmin(2),
 			]
 		);
 	}
