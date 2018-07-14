@@ -20,12 +20,10 @@ class CreateTicketsTable extends Migration
 	        $table->unsignedTinyInteger('service_id')->comment('secom etc');
 	        $table->unsignedTinyInteger('status_id')->comment('status_id');
 	        $table->unsignedTinyInteger('priority_id')->comment('priority');
-	        $table->unsignedSmallInteger('reply_count')->default(0)->comment('summary replies on ticket');
 	        $table->unsignedDecimal('compl',2,1)->default(1)->comment('difficulty');
 	        $table->dateTime('lastreply')->comment('Is comming from out');
 	        $table->unsignedSmallInteger('last_replier_nik_id')->default(0)->comment('nik ID 4 last replier');
 	        $table->boolean('is_closed')->default(0);
-	        $table->boolean('is_new')->default(1)->comment('doesn\'t have admin reply yet');
 	        $table->boolean('last_is_admin')->default(0)->comment('when sorted table using who last reply. Past in top time then sort by last replier');
 	        $table->unsignedTinyInteger('deadline_id')->nullable();
 	        $table->timestamps();
