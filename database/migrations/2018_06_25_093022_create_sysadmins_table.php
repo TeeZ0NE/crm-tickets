@@ -15,7 +15,7 @@ class CreateSysadminsTable extends Migration
     {
         Schema::create('sysadmins', function (Blueprint $table) {
             $table->smallIncrements('id');
-            $table->string('name',120)->charset('utf8')->collation('utf8_unicode_ci')->comment('real sysadmin name');
+            $table->string('name',120)->unique()->charset('utf8')->collation('utf8_unicode_ci')->comment('real sysadmin name');
         });
     }
 
