@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class Status extends Model
 {
     public $timestamps=False;
-    protected $fillable = array('name');
+    protected $fillable = ['name'];
 
 	/**
 	 * @param $value

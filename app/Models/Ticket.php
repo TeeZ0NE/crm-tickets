@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class Ticket extends Model
 {
-	protected $fillable = array('ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'deadline_id','last_is_admin','is_new');
+	protected $fillable = ['ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'deadline_id','last_is_admin',];
 
 
 	/**
@@ -43,18 +43,22 @@ class Ticket extends Model
 
 	/**
 	 * getting count of closed tickets
+	 * @param  int $service_id
+	 *
 	 * @return int
 	 */
-	public function getCountClosedTickets($service_id)
+	public function getCountClosedTickets($service_id):int
 	{
 		return $this::where(['is_closed'=>1,'service_id'=>$service_id])->get()->count();
 	}
 
 	/**
+	 *
 	 * getting count of open tickets on service
+	 * @param  int $service_id
 	 * @return int
 	 */
-	public function getCountOpenTickets($service_id)
+	public function getCountOpenTickets($service_id):int
 	{
 		return $this::where(['is_closed'=>0,'service_id'=>$service_id])->get()->count();
 	}
@@ -65,7 +69,7 @@ class Ticket extends Model
 	 * @param $service_id
 	 * @return mixed
 	 */
-	public function getSummaryCountTickets($service_id)
+	public function getSummaryCountTickets($service_id):int
 	{
 		return $this::where('service_id',$service_id)->get()->count();
 	}
@@ -76,7 +80,7 @@ class Ticket extends Model
 	 * @param int $service_id
 	 * @return int
 	 */
-	public function getTicketIdFromDb(int $tid, int $service_id)
+	public function getTicketIdFromDb(int $tid, int $service_id):int
 	{
 		$id = 0;
 		try {
@@ -93,7 +97,7 @@ class Ticket extends Model
 	 * @param int $service_id
 	 * @return array of ticketid
 	 */
-	public function getTidArray($service_id)
+	public function getTidArray($service_id):array
 	{
 		return $this->where('service_id',$service_id)->pluck('ticketid', 'id')->toArray();
 	}
@@ -107,7 +111,7 @@ class Ticket extends Model
 	public function moveRemoveTicketsDecision(array $absentIds)
 	{
 		# statuses when we remove from tickets
-		$removeStatuses = array('error');
+		$removeStatuses = ['error'];
 		foreach ($absentIds as $absentId) {
 			if (in_array($absentId['status'], $removeStatuses))
 				$this->removeTicket(
@@ -148,7 +152,10 @@ class Ticket extends Model
 		else Log::error("Ticket id $absentTicket[$service_id] (service id is $service_id) checked as remove from DB because it has had status 4 remove but it doesn't remove, real id $id is not found");
 	}
 
-	public function getPriority()
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
+	 */
+	public function getPriority() :object
 	{
 		return $this->hasOne(Priority::class,'id','priority_id');
 	}
@@ -161,12 +168,13 @@ class Ticket extends Model
 	private function moveTicket(array $absentTicket) : void
 	{
 		$service_id = key($absentTicket);
+		$msg = 'Ticket id %d (service id is %d) checked as closed", result is %s';
 		$id = $this->getTicketIdFromDb($absentTicket[$service_id], $service_id);
 		if ($id) {
-			$res = $this::find($id)->update(['is_closed'=>1,'is_new'=>0]);
-			Log::info("Ticket id $absentTicket[$service_id] (service id is $service_id) checked as closed", ['result'=>$res]);
+			$res = $this::find($id)->update(['is_closed'=>1]);
+			Log::info(sprintf($msg,$absentTicket[$service_id],$service_id,$res));
 		}
-		else Log::error("Ticket id $absentTicket[$service_id] (service id is $service_id) checked to moved but error occurs, real id $id is not found");
+		else Log::error(sprintf($msg,$absentTicket[$service_id],$service_id,$id));
 	}
 
 	/**

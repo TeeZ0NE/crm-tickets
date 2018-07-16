@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class SysadminActivity extends Model
 {
     public $timestamps = False;
-    protected $fillable = array('admin_nik_id', 'ticket_id', 'replies', 'lastreply');
+    protected $fillable = ['admin_nik_id', 'ticket_id', 'replies', 'lastreply'];
 
 	public function getTickets()
 	{

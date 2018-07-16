@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 class Sysadmin extends Model
 {
 	public $timestamps = False;
-	protected $fillable = array('name');
+	protected $fillable = ['name'];
 
 	/**
 	 * get services real admins

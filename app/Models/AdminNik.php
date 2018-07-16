@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AdminNik extends Model
 {
     public $timestamps = False;
-    protected $fillable = array('service_id','admin_nik','admin_id');
+    protected $fillable = ['service_id','admin_nik','admin_id'];
 	protected $table = 'sysadmin_niks';
 
 	/**
