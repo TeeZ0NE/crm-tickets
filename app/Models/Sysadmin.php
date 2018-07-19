@@ -16,7 +16,7 @@ class Sysadmin extends Model
 	 */
 	public function getServices()
 	{
-		return $this->hasManyThrough(Service::class, AdminNik::class, 'admin_id', 'id', 'id', 'service_id');
+		return $this->hasManyThrough(Service::class, AdminNik::class, 'sysadmin_id', 'id', 'id', 'service_id');
 	}
 
 	/**
@@ -25,7 +25,7 @@ class Sysadmin extends Model
 	 */
 	public function getNiks()
 	{
-		return $this->hasMany(AdminNik::class, 'admin_id');
+		return $this->hasMany(AdminNik::class, 'sysadmin_id');
 	}
 
 	/**
@@ -38,8 +38,8 @@ class Sysadmin extends Model
 		return
 			DB::table('sysadmins as s')->
 			select(DB::raw('s.name, COUNT(sact.ticket_id) as ticket_count, SUM(sact.replies) as reply_count'))->
-			leftJoin('sysadmin_niks as snik', 'snik.admin_id', '=', 's.id')->
-			join('sysadmin_activities as sact', 'sact.admin_nik_id', '=', 'snik.admin_nik_id')->
+			leftJoin('sysadmin_niks as snik', 'snik.sysadmin_id', '=', 's.id')->
+			join('sysadmin_activities as sact', 'sact.sysadmin_niks_id', '=', 'snik.sysadmin_niks_id')->
 			join('tickets as t', 'sact.ticket_id', '=', 't.id')->
 //			where('t.is_closed', 1)->
 			groupBy('s.id')->
@@ -57,8 +57,8 @@ class Sysadmin extends Model
 		return
 			DB::table('sysadmins as s')->
 			select(DB::raw('s.name, COUNT(sact.ticket_id) as ticket_count, SUM(sact.replies) as reply_count'))->
-			leftJoin('sysadmin_niks as snik', 'snik.admin_id', '=', 's.id')->
-			join('sysadmin_activities as sact', 'sact.admin_nik_id', '=', 'snik.admin_nik_id')->
+			leftJoin('sysadmin_niks as snik', 'snik.sysadmin_id', '=', 's.id')->
+			join('sysadmin_activities as sact', 'sact.sysadmin_niks_id', '=', 'snik.sysadmin_niks_id')->
 			join('tickets as t', 'sact.ticket_id', '=', 't.id')->
 			where('t.is_closed', 0)->
 			groupBy('s.id')->

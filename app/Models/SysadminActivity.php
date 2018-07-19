@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class SysadminActivity extends Model
 {
     public $timestamps = False;
-    protected $fillable = ['admin_nik_id', 'ticket_id', 'replies', 'lastreply'];
+    protected $fillable = ['sysadmin_niks_id', 'ticket_id', 'replies', 'lastreply'];
 
 	public function getTickets()
 	{
@@ -16,9 +16,13 @@ class SysadminActivity extends Model
 
 	public function getSysadmins()
 	{
-		return $this->hasManyThrough(Sysadmin::class,AdminNik::class,'admin_nik_id','id','admin_nik_id', 'admin_id');
+		return $this->hasManyThrough(Sysadmin::class,AdminNik::class,'sysadmin_niks_id','id','sysadmin_niks_id', 'sysadmin_id');
     }
 
+	public function getSysAdminsPivot()
+	{
+		return $this->belongsToMany(Sysadmin::class,'sysadmin_niks','sysadmin_id','sysadmin_niks_id');
+    }
 
 
 }

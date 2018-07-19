@@ -133,7 +133,7 @@ class Ticket extends Model
 	 */
 	public function getAdminNiks()
 	{
-		return $this->hasManyThrough(AdminNik::class,SysadminActivity::class, 'ticket_id','admin_nik_id','id', 'admin_nik_id');
+		return $this->hasManyThrough(AdminNik::class,SysadminActivity::class, 'ticket_id','sysadmin_niks_id','id', 'sysadmin_niks_id');
 	}
 	/**
 	 * Remove ticket from DB (ticket table) and Log it
@@ -183,7 +183,7 @@ class Ticket extends Model
 	 */
 	public function getAdmin()
 	{
-		return $this->hasManyThrough(Sysadmin::class, AdminNik::class,'admin_nik_id','id','last_replier_nik_id','admin_id');
+		return $this->hasManyThrough(Sysadmin::class, AdminNik::class,'sysadmin_niks_id','id','last_replier_nik_id','sysadmin_id');
 	}
 
 	/**
