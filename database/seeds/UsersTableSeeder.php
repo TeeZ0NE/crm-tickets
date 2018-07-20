@@ -12,12 +12,18 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $user_sysadm = new User;
-		$user_sysadm->name = 'Юрий Кирил';
-		$user_sysadm->email = 'yura_kiril@crm.com';
+	    $sysadmins = [
+		    'Роман Кор', 'Юрий Кирил', 'Сергей Петрук','Дмитр Заверт','Вячеслав Голов','Игорь Рыжук','Никол Демч','Богдан Черн','Влад Гарб',
+	    ];
+	    $i=1;
+	    $email = 'admin_%d@crm.com';
+	foreach ($sysadmins as &$sysadmin) {
+		$user_sysadm = new User;
+		$user_sysadm->name = $sysadmin;
+		$user_sysadm->email = sprintf($email,$i++);
 		$user_sysadm->password = bcrypt('111111');
 		$user_sysadm->save();
-
+	}
 		$user_boss = new Boss();
 		$user_boss->name = "TeeZ0NE";
 		$user_boss->email = "teez0ne@crm.com";

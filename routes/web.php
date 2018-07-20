@@ -48,12 +48,16 @@ Route::get('/', function(){
 //		echo route()->name;
 //		return redirect(route('boss.home'));
 //	}
-	if (!Auth::guard('boss')->check()){
-//		return
-		return view('auth.login');
+	if (Auth::check()) {
+		if (Auth::guard('boss')->check()) {
+			return view('boss.home');
+		}
+		return view('home');
 	}
-	return 'boss';
+	return view('auth.login');
 });
 Auth::routes();
-
+Route::match(['get','post'], 'register', function () {
+	return view('errors.403');
+})->name('register');
 Route::get('/home', 'HomeController@index')->name('home');

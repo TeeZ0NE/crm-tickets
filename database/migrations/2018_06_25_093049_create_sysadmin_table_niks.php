@@ -14,11 +14,10 @@ class CreateSysadminTableNiks extends Migration
     public function up()
     {
         Schema::create('sysadmin_niks', function (Blueprint $table) {
-//        	$table->unsignedSmallInteger('sysadmin_id')->default(0)->comment('using  sysadmins table. At first time we don\'t know who take that');
         	$table->unsignedTinyInteger('service_id')->comment('service id');
         	$table->string('admin_nik',100)->charset('utf8')->collation('utf8_unicode_ci')->comment('nick on this ticket service');
         	$table->smallIncrements('id')->comment('real admins id');
-        	$table->smallInteger('sysadmin_id')->default(0)->comment('real admins id');
+			$table->unsignedInteger('user_id')->default(0);
 
         	$table->foreign('service_id')->references('id')->on('services')->onUpdate('cascade');
         });
