@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Models\{Ticket,User};
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
@@ -23,9 +24,13 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function __invoke()
     {
 	    User::where('id',Auth::id())->update(['active'=>1]);
-        return view('home');
+	    $ticket_m = new Ticket();
+        return view('admins.pages.home')->with([
+	        'newTickets' => $ticket_m->getNewTickets(),
+	        'showMyTickets'=>$ticket_m->getOpenTickets4CurrAdmin(Auth::id()),
+        ]);
     }
 }

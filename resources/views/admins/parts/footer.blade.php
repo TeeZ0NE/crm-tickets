@@ -1,4 +1,3 @@
 <p>
-	footer
+	admins footer
 </p>
-<script src="{{ mix('js/app.js') }}"></script>

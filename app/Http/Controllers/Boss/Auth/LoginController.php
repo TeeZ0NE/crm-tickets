@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Boss\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\Session as Session_m;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -56,5 +59,37 @@ class LoginController extends Controller
 	protected function guard()
 	{
 		return Auth::guard('boss');
+	}
+
+	/**
+	 * Send the response after the user was authenticated.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	protected function sendLoginResponse(Request $request)
+	{
+		$request->session()->regenerate();
+
+		$this->clearLoginAttempts($request);
+
+		return $this->authenticated($request, $this->guard('boss')->user())
+			?: redirect()->intended($this->redirectPath());
+	}
+	/**
+	 * The user has been authenticated.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  mixed  $user
+	 * @return mixed
+	 */
+	protected function authenticated(Request $request, $user) :void
+	{
+		//TODO::need modify via Event Listener or smth else
+		/*$request->session()->put('is_boss',1);
+		$request->session()->save();
+		if($request->session()->getId()!=='' && $request->session()->has('is_boss'))
+		Session_m::where('id',Session::getId())->update(['is_boss'=>1,'user_id'=>0]);
+		*/
 	}
 }

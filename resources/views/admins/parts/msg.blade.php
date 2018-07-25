@@ -1,1 +1,0 @@
-@if(Session::has('msg'))<p>{{Session::get('msg')}}</p>@endif

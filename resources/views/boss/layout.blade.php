@@ -9,9 +9,14 @@
 	<link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
 </head>
 <body>
-@includeWhen(Session::has('msg'),'admins.parts.msg')
-@includeWhen($errors->any(),'admins.parts.errors')
-<div>@section('main_content')@show</div>
+@includeWhen(Session::has('msg'),'parts.msg')
+@includeWhen($errors->any(),'parts.errors')
+<div id="app">
+	@if(Auth::check())@include('boss.parts.nav')@endif
+	<main class="py-4">
+			@yield('main_content')
+	</main>
+</div>
 <div>@include('admins.parts.footer')</div>
 </body>
 </html>
