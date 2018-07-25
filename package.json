@@ -12,12 +12,13 @@
   "devDependencies": {
     "axios": "^0.18.0",
     "cross-env": "^5.2.0",
+    "file-loader": "^1.1.11",
+    "jquery": "^3.3.1",
     "laravel-mix": "^2.1.11",
     "lodash": "^4.17.4",
     "popper.js": "^1.12",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1",
-    "jquery": "^3.3.1"
+    "stylus-loader": "^3.0.1"
   },
   "dependencies": {
     "bootstrap": "4.1.1"
