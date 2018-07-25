@@ -88,7 +88,7 @@
 	__webpack_require__(1),
 	__webpack_require__(19),
 	__webpack_require__(46),
-	__webpack_require__(12)
+	__webpack_require__(11)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( arr, document, getProto, slice, concat, push, indexOf,
 	class2type, toString, hasOwn, fnToString, ObjectFunctionString,
 	support, isFunction, isWindow, DOMEval, toType ) {
@@ -468,7 +468,7 @@ return jQuery;
 }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
 
 /***/ }),
 /* 1 */
@@ -1006,7 +1006,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() 
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(12),
+	__webpack_require__(11),
 	__webpack_require__(1)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, toType, isFunction ) {
 
@@ -1104,53 +1104,6 @@ return nodeName;
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(0),
-	__webpack_require__(3),
-	__webpack_require__(14),
-	__webpack_require__(32),
-	__webpack_require__(13),
-	__webpack_require__(87),
-	__webpack_require__(54),
-	__webpack_require__(88),
-	__webpack_require__(34),
-	__webpack_require__(89),
-	__webpack_require__(93),
-	__webpack_require__(15),
-	__webpack_require__(97),
-	__webpack_require__(23),
-	__webpack_require__(99),
-	__webpack_require__(102),
-	__webpack_require__(17),
-	__webpack_require__(103),
-	__webpack_require__(68),
-	__webpack_require__(16),
-	__webpack_require__(104),
-	__webpack_require__(105),
-	__webpack_require__(106),
-	__webpack_require__(107),
-	__webpack_require__(110),
-	__webpack_require__(35),
-	__webpack_require__(111),
-	__webpack_require__(112),
-	__webpack_require__(113),
-	__webpack_require__(114),
-	__webpack_require__(116),
-	__webpack_require__(117)
-], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery ) {
-
-"use strict";
-
-return jQuery;
-
-}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(21),
 	__webpack_require__(44)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( class2type, toString ) {
@@ -1174,7 +1127,7 @@ return toType;
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -1580,7 +1533,7 @@ return jQuery;
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -1778,7 +1731,7 @@ return jQuery;
 
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -2533,7 +2486,7 @@ return jQuery;
 
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
@@ -2548,7 +2501,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(5),
 	__webpack_require__(101),
 	__webpack_require__(38),
-	__webpack_require__(13),
+	__webpack_require__(12),
 	__webpack_require__(68) // jQuery.param
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, document, isFunction, rnothtmlwhite, location, nonce, rquery ) {
 
@@ -3396,6 +3349,53 @@ return jQuery;
 
 
 /***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
+	__webpack_require__(0),
+	__webpack_require__(3),
+	__webpack_require__(13),
+	__webpack_require__(32),
+	__webpack_require__(12),
+	__webpack_require__(87),
+	__webpack_require__(54),
+	__webpack_require__(88),
+	__webpack_require__(34),
+	__webpack_require__(89),
+	__webpack_require__(93),
+	__webpack_require__(14),
+	__webpack_require__(97),
+	__webpack_require__(23),
+	__webpack_require__(99),
+	__webpack_require__(102),
+	__webpack_require__(17),
+	__webpack_require__(103),
+	__webpack_require__(68),
+	__webpack_require__(15),
+	__webpack_require__(104),
+	__webpack_require__(105),
+	__webpack_require__(106),
+	__webpack_require__(107),
+	__webpack_require__(110),
+	__webpack_require__(35),
+	__webpack_require__(111),
+	__webpack_require__(112),
+	__webpack_require__(113),
+	__webpack_require__(114),
+	__webpack_require__(116),
+	__webpack_require__(117)
+], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery ) {
+
+"use strict";
+
+return jQuery;
+
+}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+
+
+/***/ }),
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3993,9 +3993,9 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(10),
 
 	__webpack_require__(5),
-	__webpack_require__(14),
+	__webpack_require__(13),
 	__webpack_require__(3),
-	__webpack_require__(15)
+	__webpack_require__(14)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, concat, isFunction, push, access,
 	rcheckableType, rtagName, rscriptType,
 	wrapMap, getAll, setGlobalEval, buildFragment, support,
@@ -4671,7 +4671,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(12),
+	__webpack_require__(11),
 	__webpack_require__(1),
 	__webpack_require__(7)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, toType, isFunction, rnothtmlwhite ) {
@@ -4941,7 +4941,7 @@ return function( owner ) {
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(6),
-	__webpack_require__(13),
+	__webpack_require__(12),
 	__webpack_require__(32)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, dataPriv ) {
 
@@ -5106,8 +5106,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 	__webpack_require__(5),
 	__webpack_require__(34),
+	__webpack_require__(12),
 	__webpack_require__(13),
-	__webpack_require__(14),
 	__webpack_require__(23),
 	__webpack_require__(17),
 	__webpack_require__(92)
@@ -5868,7 +5868,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(24),
 	__webpack_require__(1),
 	__webpack_require__(19),
-	__webpack_require__(15)
+	__webpack_require__(14)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, document, dataPriv, acceptData, hasOwn, isFunction, isWindow ) {
 
 "use strict";
@@ -9170,7 +9170,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(0),
 	__webpack_require__(2),
 	__webpack_require__(84),
-	__webpack_require__(13)
+	__webpack_require__(12)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, document ) {
 
 "use strict";
@@ -9485,7 +9485,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(12),
+	__webpack_require__(11),
 	__webpack_require__(59),
 	__webpack_require__(60),
 	__webpack_require__(61),
@@ -9911,11 +9911,11 @@ var __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_RESULT__ = (function() 
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(12),
+	__webpack_require__(11),
 	__webpack_require__(64),
 	__webpack_require__(1),
 	__webpack_require__(5),
-	__webpack_require__(14), // filter
+	__webpack_require__(13), // filter
 	__webpack_require__(65)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, toType, rcheckableType, isFunction ) {
 
@@ -10081,7 +10081,7 @@ module.exports = g;
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(11), __webpack_require__(39)) :
+   true ? factory(exports, __webpack_require__(16), __webpack_require__(39)) :
   typeof define === 'function' && define.amd ? define(['exports', 'jquery', 'popper.js'], factory) :
   (factory((global.bootstrap = {}),global.jQuery,global.Popper));
 }(this, (function (exports,$,Popper) { 'use strict';
@@ -14292,7 +14292,7 @@ module.exports = __webpack_require__(140);
 
 __webpack_require__(78);
 __webpack_require__(70);
-var $ = __webpack_require__(11);
+// let $ = require("jquery");
 __webpack_require__(39);
 
 // window.Vue = require('vue');
@@ -14309,18 +14309,6 @@ __webpack_require__(39);
 //     el: '#app'
 // });
 
-// rename admin name in showAllAdmins page
-$(".rename-admin").on("click", function (event) {
-  event.preventDefault();
-  var old_name = $(this).attr('data-name');
-  var new_name = prompt('Rename admin', old_name);
-  if (new_name !== old_name && new_name !== null && new_name !== '') {
-    $("input[name='_method']").val('PUT');
-    $(this).parent().prepend("<input type=\"hidden\" name=\"name\" value=\"" + new_name + "\">");
-    $(this).parent().submit();
-  }
-});
-
 /***/ }),
 /* 78 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -14336,7 +14324,7 @@ window.Popper = __webpack_require__(39).default;
  */
 
 try {
-  window.$ = __webpack_provided_window_dot_jQuery = __webpack_require__(11);
+  window.$ = __webpack_provided_window_dot_jQuery = __webpack_require__(16);
 
   __webpack_require__(70);
 } catch (e) {}
@@ -14381,7 +14369,7 @@ if (token) {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     encrypted: true
 // });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
 
 /***/ }),
 /* 79 */
@@ -16807,7 +16795,7 @@ return function( n, elem ) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(13)
+	__webpack_require__(12)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery ) {
 
 "use strict";
@@ -17899,7 +17887,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(6),
 	__webpack_require__(98),
 
-	__webpack_require__(15),
+	__webpack_require__(14),
 	__webpack_require__(38)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, dataPriv, support ) {
 
@@ -17975,7 +17963,7 @@ return support;
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
-	__webpack_require__(16)
+	__webpack_require__(15)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery ) {
 
 "use strict";
@@ -18058,7 +18046,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(1),
 	__webpack_require__(5),
 	__webpack_require__(23), // clone
-	__webpack_require__(14) // parent, contents
+	__webpack_require__(13) // parent, contents
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, isFunction ) {
 
 "use strict";
@@ -18163,7 +18151,7 @@ jQuery.expr.pseudos.visible = function( elem ) {
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(8),
-	__webpack_require__(16)
+	__webpack_require__(15)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, support ) {
 
 "use strict";
@@ -18340,7 +18328,7 @@ jQuery.ajaxTransport( function( options ) {
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 	__webpack_require__(2),
-	__webpack_require__(16)
+	__webpack_require__(15)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, document ) {
 
 "use strict";
@@ -18426,7 +18414,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(1),
 	__webpack_require__(67),
 	__webpack_require__(66),
-	__webpack_require__(16)
+	__webpack_require__(15)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, isFunction, nonce, rquery ) {
 
 "use strict";
@@ -18536,8 +18524,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(37),
 	__webpack_require__(1),
 	__webpack_require__(108),
-	__webpack_require__(16),
-	__webpack_require__(14),
+	__webpack_require__(15),
+	__webpack_require__(13),
 	__webpack_require__(23),
 	__webpack_require__(3)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery, stripAndCollapse, isFunction ) {
@@ -18716,7 +18704,7 @@ return support;
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
-	__webpack_require__(15)
+	__webpack_require__(14)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery ) {
 
 "use strict";
@@ -19073,7 +19061,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 	__webpack_require__(0),
 	__webpack_require__(10),
 	__webpack_require__(20),
-	__webpack_require__(12),
+	__webpack_require__(11),
 	__webpack_require__(1),
 	__webpack_require__(19),
 	__webpack_require__(22),
@@ -19177,7 +19165,7 @@ jQuery.isNumeric = function( obj ) {
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [
 	__webpack_require__(0),
 
-	__webpack_require__(15),
+	__webpack_require__(14),
 	__webpack_require__(38)
 ], __WEBPACK_AMD_DEFINE_RESULT__ = (function( jQuery ) {
 
@@ -19280,7 +19268,7 @@ if ( !noGlobal ) {
 }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(16)))
 
 /***/ }),
 /* 118 */

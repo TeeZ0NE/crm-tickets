@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class Ticket extends Model
 {
-	protected $fillable = ['ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'deadline_id','last_is_admin',];
+	protected $fillable = ['ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'deadline_id','last_is_admin','user_assign_id',];
 
 
 	/**
@@ -133,7 +133,7 @@ class Ticket extends Model
 	 */
 	public function getAdminNiks()
 	{
-		return $this->hasManyThrough(AdminNik::class,SysadminActivity::class, 'ticket_id','sysadmin_niks_id','id', 'sysadmin_niks_id');
+		return $this->hasManyThrough(AdminNik::class,SysadminActivity::class, 'ticket_id','id','id', 'sysadmin_niks_id');
 	}
 	/**
 	 * Remove ticket from DB (ticket table) and Log it
@@ -183,9 +183,12 @@ class Ticket extends Model
 	 */
 	public function getAdmin()
 	{
-		return $this->hasManyThrough(Sysadmin::class, AdminNik::class,'sysadmin_niks_id','id','last_replier_nik_id','sysadmin_id');
+		return $this->hasManyThrough(User::class, AdminNik::class,'user_id','id','last_replier_nik_id','id');
 	}
 
+	public function getUserAssignedTicket(){
+		return $this->hasOne(User::class,'id','user_assign_id');
+	}
 	/**
 	 * get admins which are replying in ticket
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -262,15 +265,15 @@ class Ticket extends Model
 	 * get all open ticket 4 admin id
 	 *
 	 * 4 current admin id get from DB all his open tickets
-	 * @param $admin_id
+	 * @param $user_id
 	 * @return Ticket[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
 	 */
-	public function getOpenTickets4CurrAdmin($admin_id)
+	public function getOpenTickets4CurrAdmin($user_id)
 	{
-		return $this::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin'])->
+		return $this::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin','getUserAssignedTicket'])->
 		where('is_closed',0)->
-		whereHas('getAdmin', function($f) use($admin_id){
-			$f->where('id',$admin_id);})->
+		whereHas('getAdmin', function($f) use($user_id){
+			$f->where('user_id',$user_id);})->
 		get();
 
 	}

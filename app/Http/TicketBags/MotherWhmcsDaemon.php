@@ -50,10 +50,8 @@ trait MotherWhmcsDaemon
 		try {
 			Log::info(sprintf($msg,$this->service));
 			# try 2 get tickets if error read message
-			$tickets = (array_key_exists('tickets', $this->whmcs->getListTikets()))
-				? (array)$this->whmcs->getListTikets()['tickets']['ticket']
-				: '';//Null;
-			if ($tickets == '') throw new Exception($tickets['message']);
+			$tickets =(array)array_get($this->whmcs->getListTikets(),'tickets.ticket',null);
+			if ($tickets == null) throw new Exception($tickets['message']);
 			return $tickets;
 		} catch (Exception $e) {
 			Log::error(sprintf($err_msg,$this->service,$e->getMessage()));
@@ -125,21 +123,24 @@ trait MotherWhmcsDaemon
 				}
 				# getting last replier  nick id if applicable
 				$last_replier_nik_id = $adminNikIdsWithReplies['last_replier_nik_id'] ?? $sav_l_repl_id;
+//				$user_assign_id
+
+				$store_data = [
+					'subject' => $ticket['subject'],
+					'service_id' => $this->service_id,
+					'status_id' => $this->getStatusId($ticket['status']),
+					'priority_id' => $priorityId,
+
+					'last_replier_nik_id' => $last_replier_nik_id,
+					'last_is_admin' => $replies['last_is_admin'],
+					'lastreply' => $ticket['lastreply'],
+//					'user_assign_id' => ($last_replier_nik_id)?Null:Null,
+				];
+				if($last_replier_nik_id)  $store_data['user_assign_id']=Null;
 				# storing ticket and get own ID
 				$ticket_id = $this->storeTicket([
 					'ticketid' => $ticketID,
-				], [
-						'subject' => $ticket['subject'],
-						'service_id' => $this->service_id,
-						'status_id' => $this->getStatusId($ticket['status']),
-						'priority_id' => $priorityId,
-
-						'last_replier_nik_id' => $last_replier_nik_id,
-						'last_is_admin' => $replies['last_is_admin'],
-						'lastreply' => $ticket['lastreply'],
-
-					]
-				);
+				], $store_data);
 				# storing admins activities in current ticket
 				if (count($replies['adminNiks'])) {
 					$this->storeAdminActivities($adminNikIdsWithReplies, $ticket_id);
@@ -327,7 +328,7 @@ trait MotherWhmcsDaemon
 		$lastReplyAdminNikId = 0;
 		foreach ($adminNiks as $adminNik => $replies) {
 			$sysadminNik = AdminNik::firstOrCreate(['admin_nik' => $adminNik, 'service_id' => $service_id]);
-			$adminNikId = $sysadminNik->id ?? $sysadminNik->admin_nik_id;
+			$adminNikId = $sysadminNik->id;
 			if ($lastReplyAdmin == $adminNik) $lastReplyAdminNikId = $adminNikId;
 			if (array_key_exists($adminNik, $dates)) $dateOfLastReply[$adminNikId] = $dates[$adminNik];
 			$repliesCounts[$adminNikId] = $replies;
@@ -351,12 +352,12 @@ trait MotherWhmcsDaemon
 		foreach ($adminNikIdsWithReplies['replies_count'] as $adminNikId => $reply) {
 			$sysadminActivity = SysadminActivity::firstOrCreate(array(
 				'ticket_id' => $ticket_id,
-				'admin_nik_id' => $adminNikId,
+				'sysadmin_niks_id' => $adminNikId,
 			), array(
 				'replies' => $reply,
 				'lastreply' => $adminNikIdsWithReplies['last_reply'][$adminNikId],
 			));
-			$activity_id = $sysadminActivity->admin_nik_id ?? $sysadminActivity->id;
+			$activity_id = $sysadminActivity->sysadmin_niks_id ?? $sysadminActivity->id;
 			if (!$activity_id)
 				Log::error(sprintf($err_msg,$adminNikId,$ticket_id, $this->service));
 		}

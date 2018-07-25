@@ -23,6 +23,7 @@ class CreateTicketsTable extends Migration
 	        $table->unsignedDecimal('compl',2,1)->default(1)->comment('difficulty');
 	        $table->dateTime('lastreply')->comment('Is comming from out');
 	        $table->unsignedSmallInteger('last_replier_nik_id')->default(0)->comment('nik ID 4 last replier');
+	        $table->unsignedInteger('user_assign_id')->nullable()->comment('user id which assign ticket');
 	        $table->boolean('is_closed')->default(0);
 	        $table->boolean('last_is_admin')->default(0)->comment('when sorted table using who last reply. Past in top time then sort by last replier');
 	        $table->unsignedTinyInteger('deadline_id')->nullable();

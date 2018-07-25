@@ -20,6 +20,9 @@ class PurifyRequest
 		if(isset($request->name)){
         	$request->name = Purify::clean($request->name);
 		}
+	    if(isset($request->email)){
+		    $request->email = Purify::clean($request->email);
+	    }
         return $next($request);
     }
 }

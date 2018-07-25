@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AdminNik extends Model
 {
     public $timestamps = False;
-    protected $fillable = ['service_id','admin_nik','sysadmin_id'];
+    protected $fillable = ['service_id','admin_nik','user_id'];
 	protected $table = 'sysadmin_niks';
 
 	/**
@@ -25,7 +25,7 @@ class AdminNik extends Model
 	 */
 	public function getAdmin()
 	{
-		return $this->belongsTo(Sysadmin::class,'admin_id','id');
+		return $this->belongsTo(User::class,'user_id','id');
 	}
 
 	/**
@@ -34,7 +34,7 @@ class AdminNik extends Model
 	 */
 	public function getAdminActivity()
 	{
-		return $this->hasMany(SysadminActivity::class,'admin_nik_id', 'admin_nik_id');
+		return $this->hasMany(SysadminActivity::class,'sysadmin_niks_id', 'id');
 	}
 
 	/**

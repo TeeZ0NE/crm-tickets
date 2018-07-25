@@ -11,13 +11,7 @@
 |
 */
 use Illuminate\Support\Facades\Auth;
-Route::group(['middleware' => ['purify']], function () {
-//	Route::resource('/', 'Boss\IndexController')->only(['index']);
-	Route::post('/bind-nicks', 'RealAdminController@bindNiks')->name('admins.bindNiks');
-	Route::get('/nicks', 'RealAdminController@nicks')->name('admins.nicks');
-	Route::resource('/admins', 'RealAdminController');
-});
-
+//TODO::delete me
 Route::view('/table', 'table');
 
 # boss login
@@ -36,7 +30,12 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 	Route::get('password/reset/{token}', 'Boss\Auth\ResetPasswordController@showResetForm')->name('boss.password.reset');
 	Route::post('password/reset', 'Boss\Auth\ResetPasswordController@reset');
 	Route::get('/home', 'Boss\IndexController@index')->name('boss.home');
+	Route::group(['prefix'=>'admins'], function(){
+	});
 });
+Route::get('boss/nicks', 'Boss\RealAdminController@nicks')->name('admins.nicks');
+Route::post('boss/bind-nicks', 'Boss\RealAdminController@bindNiks')->name('admins.bindNiks');
+Route::resource('/boss/admins', 'Boss\RealAdminController')->middleware('purify');
 #sysadmin user
 //Route::get('/', 'RealAdminController@index')->name('home');
 Route::get('/', function(){
@@ -60,4 +59,12 @@ Auth::routes();
 Route::match(['get','post'], 'register', function () {
 	return view('errors.403');
 })->name('register');
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['middleware' => ['purify','auth']], function () {
+	Route::get('/home', 'Admin\HomeController')->name('home');
+	Route::post('admin/{id}/assign-ticket/{ticket_id}', 'Admin\TicketsController@assignTicket')->name('admin.assign-ticket');
+
+	Route::get('admin/{id}/assign-ticket/{ticket_id}',function(){
+		return redirect(404);
+	});
+});
+
