@@ -12,27 +12,12 @@ $response = $kernel->handle(
 );
 
 
-use App\Http\TicketBags\Secom;
 use App\Http\TicketBags\Whmcsapi;
-use App\Models\Service;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Log;
 
 class WhmcsDaemon
 {
 	use \App\Http\TicketBags\MotherWhmcsDaemon;
 }
-/*
-$pathOfTicketBags = config('services_arr.path');
-$service_model = new Service();
-# getting all Services which are equivalents 2 classes in app/Http/TicketBags/
-try {
-	$services = count($service_model->getServicesNames()) ? $service_model->getServicesNames() : array('Secom');
-} catch (ModelNotFoundException $mnf) {
-	$services = array('Secom');
-	Log::error('Services not found!. Using default->Secom');
-}
-*/
 
 # take array of services and loop it to take data
 
@@ -57,3 +42,4 @@ print_r($secom->getTiket(515789));
 //
 //$uahosting = new Whmcsapi('ua-hosting');
 //print_r($uahosting->getListTikets());
+
