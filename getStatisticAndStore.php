@@ -21,6 +21,10 @@ class getStatistics
 {
 	use \App\Http\TicketBags\GetStatistics;
 }
+class storeStatistics
+{
+	use \App\Http\TicketBags\StoreStatistic;
+}
 
 $files = ["adminvps" => 'http://91.235.128.62/adminvps/stat/adminvps_%s.stat.csv'];
 $yesterday = Carbon::now()->yesterday()->format('d.m.Y');
@@ -28,6 +32,7 @@ foreach ($files as $service => $file) {
 	$file_name = sprintf($file, $yesterday);
 	$getStatistics = new getStatistics();
 	print_r($getStatistics->getStatistic($service,$file_name));
+	$storeStatistic = new storeStatistics();
 }
 
 

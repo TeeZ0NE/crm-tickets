@@ -142,9 +142,9 @@ trait MotherWhmcsDaemon
 					'ticketid' => $ticketID,
 				], $store_data);
 				# storing admins activities in current ticket
-				if (count($replies['adminNiks'])) {
+				/*if (count($replies['adminNiks'])) {
 					$this->storeAdminActivities($adminNikIdsWithReplies, $ticket_id);
-				}
+				}*/
 				if (!$ticket_id) Log::error('Ticket doesn\'t store', ['ticket_id' => $ticket_id, 'real ticket id' => $ticketID]);
 			}
 			Log::info("==/Get tickets from $this->service==");
