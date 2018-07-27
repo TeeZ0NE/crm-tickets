@@ -30,9 +30,12 @@ $files = ["adminvps" => 'http://91.235.128.62/adminvps/stat/adminvps_%s.stat.csv
 $yesterday = Carbon::now()->yesterday()->format('d.m.Y');
 foreach ($files as $service => $file) {
 	$file_name = sprintf($file, $yesterday);
+	# get statistic
 	$getStatistics = new getStatistics();
-	print_r($getStatistics->getStatistic($service,$file_name));
-	$storeStatistic = new storeStatistics();
+	$get_stat_arr = $getStatistics->getStatistic($service,$file_name);
+	# store statistic
+	$storeStatistic = new storeStatistics($service,$get_stat_arr);
+	$storeStatistic->store();
 }
 
 
