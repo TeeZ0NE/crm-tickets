@@ -106,12 +106,12 @@
 								<th>{{__('service')}}</th>
 								<th>{{__('ticket id')}}</th>
 								<th>{{__('site.subject')}}</th>
-								<th>last replier</th>
-								<th>last reply</th>
-								<th>Ticket Owner</th>
-								<th>Priority</th>
-								<th>Status</th>
-								<th>Deadline</th>
+								<th>{{__('site.last replier')}}</th>
+								<th>{{__('site.last reply')}}</th>
+								<th>{{__('site.assign')}}</th>
+								<th>{{__('site.priority')}}</th>
+								<th>{{__('site.status')}}</th>
+								<th>{{__('site.deadline')}}</th>
 							</tr>
 							</thead>
 							<tbody>
@@ -140,10 +140,9 @@
 										<td>{{$lastReplier or __('site.unknown')}}</td>
 										<td>{{$openTicket->lastreply}}</td>
 										<td>{{$ticket_owner or __('site.unknown')}}</td>
-										<td>{{$openTicket->getPriority->priority}}</td>
-										<td>{{$openTicket->getStatus->name}}</td>
-										<td>@if(isset($openTicket->getDeadline)){{$openTicket->getDeadline->deadline}}@else
-												-- @endif</td>
+										<td>{{$openTicket->getPriority->priority or __('site.unknown')}}</td>
+										<td>{{$openTicket->getStatus->name or __('site.unknown')}}</td>
+										<td>{{$openTicket->getDeadline->deadline or __('site.unknown')}}</td>
 									</tr>
 								@endforeach
 							@endif
