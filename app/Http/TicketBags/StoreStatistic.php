@@ -58,7 +58,8 @@ trait StoreStatistic
 			#[sysadmin_id]=>reply_count
 			$replies = array_count_values($lastreplies);
 			foreach ($lastreplies as $lastreply => $sysadmin_id) {
-				//todo: store sysadminactivity
+				$last_replier_nik_id = $sysadmin_id;
+				$last_reply = $lastreply;
 				SysadminActivity::updateOrCreate([
 					'sysadmin_niks_id' => $sysadmin_id,
 					'ticket_id' => $ticket_id,],
@@ -66,6 +67,7 @@ trait StoreStatistic
 						'lastreply' => $lastreply,
 					]);
 			}
+			Ticket::find($ticket_id)->update(['last_replier_nik_id'=>$last_replier_nik_id, 'lastreply'=>$last_reply]);
 		}
 	}
 
