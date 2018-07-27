@@ -47,7 +47,7 @@ class Ticket extends Model
 	 *
 	 * @return int
 	 */
-	public function getCountClosedTickets($service_id):int
+	public function getCountClosedTickets(int $service_id):int
 	{
 		return $this::where(['is_closed'=>1,'service_id'=>$service_id])->get()->count();
 	}
@@ -58,7 +58,7 @@ class Ticket extends Model
 	 * @param  int $service_id
 	 * @return int
 	 */
-	public function getCountOpenTickets($service_id):int
+	public function getCountOpenTickets(int $service_id):int
 	{
 		return $this::where(['is_closed'=>0,'service_id'=>$service_id])->get()->count();
 	}
@@ -69,7 +69,7 @@ class Ticket extends Model
 	 * @param $service_id
 	 * @return mixed
 	 */
-	public function getSummaryCountTickets($service_id):int
+	public function getSummaryCountTickets(int $service_id):int
 	{
 		return $this::where('service_id',$service_id)->get()->count();
 	}
@@ -91,13 +91,19 @@ class Ticket extends Model
 		return $id;
 	}
 
+	public function getTicketId(int $ticketid, int $service_id,  array $values=[])
+	{
+	    $ticket_m = $this->firstOrCreate(['service_id'=>$service_id, 'ticketid'=>$ticketid],$values);
+	    return $ticket_m->id;
+	}
+
 	/**
 	 * get array from DB 2 compare with outer array ticketid tid
 	 *
 	 * @param int $service_id
 	 * @return array of ticketid
 	 */
-	public function getTidArray($service_id):array
+	public function getTidArray(int $service_id):array
 	{
 		return $this->where('service_id',$service_id)->pluck('ticketid', 'id')->toArray();
 	}
@@ -268,13 +274,12 @@ class Ticket extends Model
 	 * @param $user_id
 	 * @return Ticket[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
 	 */
-	public function getOpenTickets4CurrAdmin($user_id)
+	public function getOpenTickets4CurrAdmin(int $user_id)
 	{
 		return $this::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin','getUserAssignedTicket'])->
 		where('is_closed',0)->
 		whereHas('getAdmin', function($f) use($user_id){
 			$f->where('user_id',$user_id);})->
 		get();
-
 	}
 }
