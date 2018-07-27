@@ -45,4 +45,11 @@ class AdminNik extends Model
 	{
 		return $this::with('getService')->orderBy('admin_nik')->get();
 	}
+
+	public function getAdminNikId(string $admin_nik, int $service_id)
+	{
+		$sysadminNik = AdminNik::firstOrCreate(['admin_nik' => $admin_nik, 'service_id' => $service_id]);
+		$adminNikId = $sysadminNik->id;
+		return $adminNikId;
+	}
 }
