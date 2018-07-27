@@ -54,10 +54,11 @@
 									<td>{{$newTicket->subject}}</td>
 									<td>{{$lastReplier or __('site.unknown') }}</td>
 									<td>{{$newTicket->lastreply}}</td>
-									<td  class="align-middle">{{$newTicket->getPriority->priority}}</td>
-									<td  class="align-middle">{{$newTicket->getStatus->name}}</td>
-									<td>@if(isset($newTicket->getDeadline)){{$newTicket->getDeadline->deadline}}@else
-											-- @endif</td>
+									<td  class="align-middle">{{$newTicket->getPriority->priority or __('site.unknown')}}</td>
+									<td  class="align-middle">{{$newTicket->getStatus->name or __('site.unknown')}}</td>
+									{{--<td>@if(isset($newTicket->getDeadline)){{$newTicket->getDeadline->deadline}}@else--}}
+											{{---- @endif</td>--}}
+									<td>{{$newTicket->getDeadline or __('site.unknown')}}</td>
 								</tr>
 							@endforeach
 							</tbody>
@@ -97,9 +98,9 @@
 										<td>{{$showMyTicket->getService->name}}</td>
 										<td>{{$showMyTicket->ticketid}}</td>
 										<td>{{$showMyTicket->subject}}</td>
-										<td>{{$lastReplier or "Невідомо"}}</td>
+										<td>{{$lastReplier or __('site.unknown')}}</td>
 										<td>{{$showMyTicket->lastreply}}</td>
-										<td>{{$showMyTicket->getPriority->priority}}</td>
+										<td>{{$showMyTicket->getPriority->priority or __('site.unknown')}}</td>
 										<td>{{$showMyTicket->getStatus->name}}</td>
 										<td>@if(isset($newTicket->getDeadline)){{$newTicket->getDeadline->deadline}}@else
 												-- @endif</td>

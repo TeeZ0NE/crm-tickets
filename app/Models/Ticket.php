@@ -189,20 +189,13 @@ class Ticket extends Model
 	 */
 	public function getAdmin()
 	{
-		return $this->hasManyThrough(User::class, AdminNik::class,'user_id','id','last_replier_nik_id','id');
+		return $this->hasManyThrough(User::class, AdminNik::class,'id','id','last_replier_nik_id','user_id');
 	}
 
 	public function getUserAssignedTicket(){
 		return $this->hasOne(User::class,'id','user_assign_id');
 	}
-	/**
-	 * get admins which are replying in ticket
-	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-	 */
-	public function getAdmins()
-	{
-		return $this->belongsTo('ticket_id');
-	}
+
 
 	/**
 	 * get open tickets
@@ -262,7 +255,7 @@ class Ticket extends Model
 	 * 
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
-	public function getAdminActivity()
+	public function getAdminsActivities()
 	{
 		return $this->hasMany(SysadminActivity::class,'ticket_id');
 	}

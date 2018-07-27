@@ -16,12 +16,12 @@ class SysadminActivity extends Model
 
 	public function getSysadmins()
 	{
-		return $this->hasManyThrough(User::class,AdminNik::class,'sysadmin_niks_id','id','sysadmin_niks_id', 'user_id');
+		return $this->hasManyThrough(User::class,AdminNik::class,'id','id','sysadmin_niks_id', 'user_id');
     }
 
 	public function getSysAdminsPivot()
 	{
-		return $this->belongsToMany(User::class,'sysadmin_niks','user_id','sysadmin_niks_id');
+		return $this->belongsToMany(User::class,'sysadmin_niks','user_id','id');
     }
 
 

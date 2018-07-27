@@ -36,13 +36,13 @@ class User extends Model implements Authenticatable,CanResetPasswordContract
 	 *
 	 * @return \Illuminate\Support\Collection
 	 */
-	public function getCountTicketsAndReplies()
+	public function getSummaryCountTicketsAndReplies()
 	{
 		return
 			DB::table('users as s')->
 			select(DB::raw('s.name, COUNT(sact.ticket_id) as ticket_count, SUM(sact.replies) as reply_count'))->
 			leftJoin('sysadmin_niks as snik', 'snik.user_id', '=', 's.id')->
-			join('sysadmin_activities as sact', 'sact.sysadmin_niks_id', '=', 'snik.sysadmin_niks_id')->
+			join('sysadmin_activities as sact', 'sact.sysadmin_niks_id', '=', 'snik.id')->
 			join('tickets as t', 'sact.ticket_id', '=', 't.id')->
 //			where('t.is_closed', 1)->
 			groupBy('s.id')->
