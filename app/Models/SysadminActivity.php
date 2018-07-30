@@ -23,6 +23,6 @@ class SysadminActivity extends Model
 	{
 		return $this->belongsToMany(User::class,'sysadmin_niks','user_id','id');
     }
-
+//DB::table('sysadmin_activities')->select(DB::raw('sysadmin_niks_id, COUNT(ticket_id), SUM(replies)'))->groupBy('sysadmin_niks_id')->get()
 
 }

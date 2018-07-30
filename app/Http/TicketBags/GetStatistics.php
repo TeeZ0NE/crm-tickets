@@ -96,6 +96,9 @@ trait GetStatistics
 				case 0:
 					$res_arr['lastreply'] = $val;
 					break;
+				case 1:
+					$res_arr['time_uses'] = $val;
+					break;
 				case 3:
 					$res_arr['subject'] = trim($val);
 					break;
