@@ -17,9 +17,9 @@ class CreateSysadminActivitiesTable extends Migration
         	$table->increments('id');
         	$table->unsignedSmallInteger('sysadmin_niks_id');
         	$table->unsignedInteger('ticket_id')->comment('outer ticket id');
-        	$table->unsignedMediumInteger('replies')->default(0)->comment('count of replies on this ticket');
+//        	$table->unsignedMediumInteger('replies')->default(0)->comment('count of replies on this ticket');
         	$table->dateTime('lastreply')->comment('when last reply admins');
-
+			$table->unsignedSmallInteger('time_uses')->default(0);
         	$table->foreign('sysadmin_niks_id')->references('id')->on('sysadmin_niks')->onUpdate('cascade')->onDelete('cascade');
         	$table->foreign('ticket_id')->references('id')->on('tickets')->onUpdate('cascade')->onDelete('cascade');
         });

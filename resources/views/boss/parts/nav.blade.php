@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light">
+<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
 	<div class="container">
 		<a class="navbar-brand" href="{{ route('boss.home') }}">
 			{{ config('app.name', 'CRM tickets') }}
@@ -22,6 +22,7 @@
 						<a class="dropdown-item" href="{{route('admins.index')}}"><i class="fas fa-list"></i> Все</a>
 					</div>
 				</li>
+				<li class="nav-item"><a class="nav-link" href="{{route('admins.statistics')}}">Статистика</a></li>
 			</ul>
 			<!-- Right Side Of Navbar -->
 			<ul class="navbar-nav ml-auto">

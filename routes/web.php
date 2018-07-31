@@ -30,11 +30,12 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 	Route::get('password/reset/{token}', 'Boss\Auth\ResetPasswordController@showResetForm')->name('boss.password.reset');
 	Route::post('password/reset', 'Boss\Auth\ResetPasswordController@reset');
 	Route::get('/home', 'Boss\IndexController@index')->name('boss.home');
+	Route::get('/nicks', 'Boss\RealAdminController@nicks')->name('admins.nicks');
+	Route::post('/bind-nicks', 'Boss\RealAdminController@bindNiks')->name('admins.bindNiks');
 	Route::group(['prefix'=>'admins'], function(){
+		Route::get('/statistics', 'Boss\StatisticController')->name('admins.statistics');
 	});
 });
-Route::get('boss/nicks', 'Boss\RealAdminController@nicks')->name('admins.nicks');
-Route::post('boss/bind-nicks', 'Boss\RealAdminController@bindNiks')->name('admins.bindNiks');
 Route::resource('/boss/admins', 'Boss\RealAdminController')->middleware('purify');
 #sysadmin user
 //Route::get('/', 'RealAdminController@index')->name('home');

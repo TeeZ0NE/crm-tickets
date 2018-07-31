@@ -11652,14 +11652,17 @@ readers do not read off random characters that represent icons */
 .fas {
   font-family: 'Font Awesome 5 Free';
   font-weight: 900; }
-div {
-  border: 1px solid #f00;
-}
 html {
-  font-size: 0.7em;
+  font-size: 0.75em;
 }
 /* Boss pages */
 .all-tickets td {
   vertical-align: middle !important;
 }
 /* /Boss Pages */
+.card-body {
+  overflow-x: auto;
+}
+.navbar {
+  z-index: 1021;
+}

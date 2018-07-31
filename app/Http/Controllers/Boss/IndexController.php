@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Boss;
 
 //use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Ticket, User, Service};
+use App\Models\{Ticket,  Service};
+use Carbon\Carbon;
 //use Illuminate\Support\Facades\Session;
 
 
@@ -43,6 +44,7 @@ class IndexController extends Controller
 					'ticketCounts' => $serviceTicketCounts,
 					'openTickets' => $ticket_m->getOpenTickets(),
 					'newTickets' => $ticket_m->getNewTickets(),
+					'Carbon'=>new Carbon(),
 				]
 			);
 		} else {

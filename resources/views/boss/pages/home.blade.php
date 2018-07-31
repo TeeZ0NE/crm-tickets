@@ -59,7 +59,7 @@
 							@foreach($newTickets as $newTicket)
 								<tr>
 									@php
-										$waitingTime = \Carbon\Carbon::createFromTimeStamp(strtotime($newTicket->lastreply))->diffForHumans();
+										$waitingTime = $Carbon::createFromTimeStamp(strtotime($newTicket->lastreply))->diffForHumans();
 											if($newTicket->last_is_admin):
 												foreach($newTicket->getAdmin as $admin):
 												$lastReplier =$admin->name;
@@ -120,7 +120,7 @@
 								@foreach($openTickets as $openTicket)
 									<tr class="align-middle">
 										@php
-											$waitingTime = \Carbon\Carbon::createFromTimeStamp(strtotime($openTicket->lastreply))->diffForHumans();
+											$waitingTime = $Carbon::createFromTimeStamp(strtotime($openTicket->lastreply))->diffForHumans();
 												if($openTicket->last_is_admin):
 													$lastReplier = ($openTicket->getAdmin->first()['name'])
 													?$openTicket->getAdmin->first()['name']
