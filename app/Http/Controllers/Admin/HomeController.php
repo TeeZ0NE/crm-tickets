@@ -32,9 +32,14 @@ class HomeController extends Controller
 	    $sa_m = new SysadminActivity();
 	    $user_id = Auth::id();
 	    $statistic = $sa_m->getStatistic4Admin($user_id);
-	    $tickets_count = $statistic->tickets_count;
-	    $replies_count = $statistic->replies_count;
-	    $using_time = sprintf('%02d:%02d',floor($statistic->time_sum/60),$statistic->time_sum%60);
+	    if (count((array) $statistic)) {
+		    $tickets_count = $statistic->tickets_count ?? 0;
+		    $replies_count = $statistic->replies_count ?? 0;
+		    $using_time = sprintf('%02d:%02d', floor($statistic->time_sum / 60), $statistic->time_sum % 60);
+	    }
+	    else{
+	    	$tickets_count = $replies_count = $using_time = 0;
+	    }
         return view('admins.pages.home')->with([
 	        'newTickets' => $ticket_m->getNewTickets(),
 	        'showMyTickets'=>$ticket_m->getOpenTickets4CurrAdmin($user_id),
@@ -43,6 +48,7 @@ class HomeController extends Controller
 	        'user_id'=>Auth::id(),
 	        'statistic4AllAdmins'=>$sa_m->getStatistic4AllAdmins(),
 	        'openTickets' => $ticket_m->getOpenTickets(),
+	        'fromStartOfMonth'=>Carbon::now()->startOfMonth(),
         ]);
     }
 }
