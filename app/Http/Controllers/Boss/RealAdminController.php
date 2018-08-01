@@ -147,16 +147,21 @@ class RealAdminController extends Controller
 	{
 		request()->validate([
 			'user_id'=>'required|numeric',
-			'adminNikIds'=>'required|array|min:1'
+//			'adminNikIds'=>'required|array|min:1'
+			'adminNikIds'=>'array'
 		]);
 		$adminNikIds=(array)$request->adminNikIds;
 		$user_id = $request->user_id;
 		$adminNik_m = new AdminNik();
 		$adminNik_m->where('user_id',$user_id)->update(['user_id'=>0]);
-		foreach ($adminNikIds as $adminNikId){
-			$res = AdminNik::where('id', $adminNikId)->update(['user_id'=>$user_id]);
+		if(count($adminNikIds)) {
+			foreach ($adminNikIds as $adminNikId) {
+				$res = AdminNik::where('id', $adminNikId)->update(['user_id' => $user_id]);
+			}
+			$msg = sprintf('Администратор с ID %d связан со-своими никами с результатом %d',$user_id,$res);
 		}
+		else $msg= sprintf('Администратор с ID %d отвязан от своих ников',$user_id);
 		return redirect(route('admins.nicks'))->
-		with('msg',sprintf('Администратор с ID %d связан со-своими никами с результатом %d',$user_id,$res));
+		with('msg',$msg);
 	}
 }
