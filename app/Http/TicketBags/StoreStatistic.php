@@ -41,7 +41,6 @@ trait StoreStatistic
 					'last_replier_nik_id' => $nik_id,
 					'lastreply' => $lastreply,
 					'subject' => $val['subject'],
-					'compl' => $service_m->getCompl($service_id),
 				]);
 						$this->storeAdminActivities($ticket_id, $nik_id, $lastreply, (int)$val['time_uses']);
 			} # ticketid not found
