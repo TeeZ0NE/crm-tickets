@@ -1,4 +1,5 @@
 @extends('boss.layout')
+@section('title','Ники администраторов')
 @section('main_content')
 	<div class="container">
 		<form action="{{route('admins.bindNiks')}}" method="POST"> {{csrf_field()}}

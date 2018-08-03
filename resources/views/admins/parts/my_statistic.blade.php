@@ -7,6 +7,7 @@
 				<th>{{__('site.tickets count')}}</th>
 				<th>{{__('site.replies count')}}</th>
 				<th>{{__('site.time summary')}}</th>
+				<th>{{__('site.compl')}}</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -14,6 +15,7 @@
 				<td>{{$showMyStatistic['tickets_count']}}</td>
 				<td>{{$showMyStatistic['replies_count']}}</td>
 				<td>{{$showMyStatistic['using_time']}}</td>
+				<td>{{$showMyStatistic['compl']}}</td>
 			</tr>
 			</tbody>
 		</table>

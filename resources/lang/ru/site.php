@@ -7,6 +7,7 @@
  */
 return[
 	'assign'=>'Owner',
+	'compl'=>'Pnts',
 	'deadline'=>'Deadline',
 	'last replier'=>'Last replier',
 	'last reply'=>'Last reply',

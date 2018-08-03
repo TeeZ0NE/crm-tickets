@@ -36,14 +36,15 @@ class HomeController extends Controller
 		    $tickets_count = $statistic->tickets_count ?? 0;
 		    $replies_count = $statistic->replies_count ?? 0;
 		    $using_time = sprintf('%02d:%02d', floor($statistic->time_sum / 60), $statistic->time_sum % 60);
+		    $compl = $statistic->compl;
 	    }
 	    else{
-	    	$tickets_count = $replies_count = $using_time = 0;
+	    	$tickets_count = $replies_count = $using_time = $compl = 0;
 	    }
         return view('admins.pages.home')->with([
 	        'newTickets' => $ticket_m->getNewTickets(),
 	        'showMyTickets'=>$ticket_m->getOpenTickets4CurrAdmin($user_id),
-	        'showMyStatistic'=>compact("tickets_count","replies_count","using_time"),
+	        'showMyStatistic'=>compact("tickets_count","replies_count","using_time","compl"),
 	        'Carbon'=>new Carbon(),
 	        'user_id'=>Auth::id(),
 	        'statistic4AllAdmins'=>$sa_m->getStatistic4AllAdmins(),
