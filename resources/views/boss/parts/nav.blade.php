@@ -23,6 +23,27 @@
 					</div>
 				</li>
 				<li class="nav-item"><a class="nav-link" href="{{route('admins.statistics')}}">Статистика</a></li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Клиенты
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						{{--<a class="dropdown-item" href="{{route('services.create')}}"><i class="far fa-save"></i> Create</a>--}}
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="{{route('services.index')}}"><i class="fas fa-list"></i> Все</a>
+					</div>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						DeadLines
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="#"><i class="far fa-save"></i> Create</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="#"><i class="fas fa-list"></i> Все</a>
+					</div>
+				</li>
+				<li class="nav-item"><a class="nav-link" href="{{route('logs')}}">Логи</a></li>
 			</ul>
 			<!-- Right Side Of Navbar -->
 			<ul class="navbar-nav ml-auto">

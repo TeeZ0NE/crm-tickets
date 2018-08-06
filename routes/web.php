@@ -36,9 +36,18 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 		Route::get('/statistics', 'Boss\StatisticController@index')->name('admins.statistics');
 		Route::get('/statistics-submonth/', 'Boss\StatisticController@getStatisticsSubMonth')->name('admins.statistics_subMonths');
 	});
+	Route::group(['prefix'=>'services'], function(){
+		Route::get('/','Boss\ServicesController@index')->name('services.index');
+		Route::put('/{service}','Boss\ServicesController@update')->name('services.update');
+		Route::delete('/{service}','Boss\ServicesController@destroy')->name('services.destroy');
+	});
+	Route::get('/logs','Boss\LogController')->name('logs');
+
 });
 Route::resource('/boss/admins', 'Boss\RealAdminController')->middleware('purify');
-Route::resource('/boss/services','Boss\ServicesController')->middleware('purify');
+Route::resource('/boss/deadline','Boss\DeadlineController')->middleware('purify');
+// todo delete me after write all routes
+//Route::resource('/boss/services','Boss\ServicesController')->middleware('purify');
 #sysadmin user
 //Route::get('/', 'RealAdminController@index')->name('home');
 Route::get('/', function(){
