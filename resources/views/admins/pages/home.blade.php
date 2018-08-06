@@ -7,7 +7,7 @@
 			<div class="col-md-4 col-lg-3">
 				<div class="sticky-top">
 					@include('admins.parts.my_statistic')
-					@include('parts.rates')
+					@include('parts.rates',['this_month'=>$fromStartOfMonth])
 				</div>
 			</div>
 			<div class="col-md-8 col-lg-9">
