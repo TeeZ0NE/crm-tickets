@@ -13,7 +13,6 @@
 								<th>Имя</th>
 								<th>Активен</th>
 								<th class="text-right">Операции</th>
-								u
 							</tr>
 							<tbody>@php $i=0;@endphp
 							@foreach($admins as $admin)
