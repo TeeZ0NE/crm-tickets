@@ -38,9 +38,9 @@
 						DeadLines
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="#"><i class="far fa-save"></i> Create</a>
+						<a class="dropdown-item" href="{{route('deadline.create')}}"><i class="far fa-save"></i> Create</a>
 						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="#"><i class="fas fa-list"></i> Все</a>
+						<a class="dropdown-item" href="{{route('deadline.index')}}"><i class="fas fa-list"></i> Все</a>
 					</div>
 				</li>
 				<li class="nav-item"><a class="nav-link" href="{{route('logs')}}">Логи</a></li>
