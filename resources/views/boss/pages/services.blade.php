@@ -15,7 +15,6 @@
 							</tr>
 							<tbody>
 							@foreach($services as $service)
-
 								<tr>
 									<td class="align-middle">{{$service->id}}</td>
 									<td>
