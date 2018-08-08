@@ -45,7 +45,7 @@
 					<td>{{$ticket_owner or __('site.unknown')}}</td>
 					<td>{{$openTicket->getPriority->priority or __('site.unknown')}}</td>
 					<td>{{$openTicket->getStatus->name or __('site.unknown')}}</td>
-					<td>{{$openTicket->getDeadline->deadline or __('site.unknown')}}</td>
+					<td>{{$openTicket->has_deadline or __('site.unknown')}}</td>
 				</tr>
 			@endforeach
 		@endif
