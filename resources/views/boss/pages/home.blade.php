@@ -14,7 +14,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-12 mb-md-2 mb-lg-3">
-				@include('parts.all_tickets')
+				@include('boss.parts.all_tickets')
 			</div>
 		</div>
 	</div>

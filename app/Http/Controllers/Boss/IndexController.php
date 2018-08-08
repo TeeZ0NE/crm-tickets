@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Boss;
 
 //use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Ticket,  Service};
+use App\Models\{Ticket,  Service, Deadline};
 use Carbon\Carbon;
+use App\Http\Controllers\Boss\DeadlineController as DLC;
 //use Illuminate\Support\Facades\Session;
 
 
 class IndexController extends Controller
 {
+
 	/**
 	 * Create a new controller instance.
 	 *
@@ -26,9 +28,12 @@ class IndexController extends Controller
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
-	public function index()
+	public function __invoke()
 	{
 		$ticket_m = new Ticket();
+		$deadline_m = new Deadline();
+		$dlc = new DLC();
+		$maxDeadline = $dlc->explodeTime($deadline_m->getMaxDeadline());
 		$serviceTicketCounts = [];
 		if (count(Service::all())) {
 
@@ -45,6 +50,8 @@ class IndexController extends Controller
 					'openTickets' => $ticket_m->getOpenTickets(),
 					'newTickets' => $ticket_m->getNewTickets(),
 					'Carbon'=>new Carbon(),
+					'deadlineList'=>$dlc->getSummaryArrMinutes(),
+					'maxDeadline'=>$maxDeadline,
 				]
 			);
 		} else {
@@ -52,4 +59,6 @@ class IndexController extends Controller
 			return Null;
 		}
 	}
+
+
 }

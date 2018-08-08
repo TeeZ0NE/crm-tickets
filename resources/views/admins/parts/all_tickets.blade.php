@@ -14,14 +14,16 @@
 			<th>{{__('site.assign')}}</th>
 			<th>{{__('site.priority')}}</th>
 			<th>{{__('site.status')}}</th>
-			<th>{{__('site.deadline')}}</th>
 		</tr>
 		</thead>
 		<tbody>
 		@if(isset($openTickets))
 			@php $i=1;@endphp
 			@foreach($openTickets as $openTicket)
-				<tr class="align-middle">
+				@php
+					$lastreply_class = setClass4lastreply($openTicket, $deadlineList,$maxDeadline);
+				@endphp
+				<tr class="align-middle {{$lastreply_class or ''}}">
 					@php
 						$waitingTime = $Carbon::createFromTimeStamp(strtotime($openTicket->lastreply))->diffForHumans();
 							if($openTicket->last_is_admin):
@@ -45,7 +47,6 @@
 					<td>{{$ticket_owner or __('site.unknown')}}</td>
 					<td>{{$openTicket->getPriority->priority or __('site.unknown')}}</td>
 					<td>{{$openTicket->getStatus->name or __('site.unknown')}}</td>
-					<td>{{$openTicket->has_deadline or __('site.unknown')}}</td>
 				</tr>
 			@endforeach
 		@endif

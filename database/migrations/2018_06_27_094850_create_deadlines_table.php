@@ -15,7 +15,7 @@ class CreateDeadlinesTable extends Migration
     {
         Schema::create('deadlines', function (Blueprint $table) {
             $table->tinyIncrements('id');
-            $table->dateTime('deadline');
+            $table->time('deadline')->default(0);
         });
     }
 

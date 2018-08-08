@@ -18,7 +18,10 @@
 			<tbody>
 			@if(isset($showMyTickets))
 				@foreach($showMyTickets as $showMyTicket)
-					<tr>
+					@php
+						$lastreply_class = setClass4lastreply($showMyTicket, $deadlineList,$maxDeadline);
+					@endphp
+					<tr @isset($lastreply_class) class="{{$lastreply_class}}" @endisset>
 						@php
 							$waitingTime = $Carbon::createFromTimeStamp(strtotime($showMyTicket->lastreply))->diffForHumans();
 								if($showMyTicket->last_is_admin):
@@ -35,8 +38,11 @@
 						<td>{{$showMyTicket->lastreply}}</td>
 						<td>{{$showMyTicket->getPriority->priority or __('site.unknown')}}</td>
 						<td>{{$showMyTicket->getStatus->name}}</td>
-						<td>@if(isset($newTicket->getDeadline)){{$newTicket->getDeadline->deadline}}@else
-								-- @endif</td>
+						<td><form action="{{route('boss.ticket.update',$showMyTicket->id)}}" method="post">
+								@csrf
+								@method('PUT')
+								<input type="checkbox" name="has_deadline" @if($showMyTicket->has_deadline)checked @endif>
+							</form></td>
 					</tr>
 				@endforeach
 			@endif
@@ -44,3 +50,8 @@
 		</table>
 	</div>
 </div>
+<script>
+	$('input[type="checkbox"]').on('click', function () {
+		$(this).parent().submit();
+	})
+</script>

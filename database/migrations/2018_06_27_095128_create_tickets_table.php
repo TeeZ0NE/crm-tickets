@@ -25,11 +25,12 @@ class CreateTicketsTable extends Migration
 	        $table->unsignedInteger('user_assign_id')->nullable()->comment('user id which assign ticket');
 	        $table->boolean('is_closed')->default(0);
 	        $table->boolean('last_is_admin')->default(0)->comment('when sorted table using who last reply. Past in top time then sort by last replier');
-	        $table->unsignedTinyInteger('deadline_id')->nullable();
+	        $table->boolean('has_deadline')->default(1);
+//	        $table->unsignedTinyInteger('deadline_id')->nullable();
 	        $table->timestamps();
 
         	$table->foreign('status_id')->references('id')->on('statuses')->onUpdate('cascade');
-	        $table->foreign('deadline_id')->references('id')->on('deadlines')->onUpdate('cascade')->onDelete('cascade');
+//	        $table->foreign('deadline_id')->references('id')->on('deadlines')->onUpdate('cascade')->onDelete('cascade');
 	        $table->foreign('service_id')->references('id')->on('services')->onUpdate('cascade');
 	        $table->foreign('priority_id')->references('id')->on('priorities')->onUpdate('cascade');
         });

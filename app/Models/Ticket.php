@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class Ticket extends Model
 {
-	protected $fillable = ['ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'deadline_id','last_is_admin','user_assign_id',];
+	protected $fillable = ['ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'has_deadline','last_is_admin','user_assign_id',];
 
 
 	/**
@@ -22,15 +22,6 @@ class Ticket extends Model
 	public function getStatus()
 	{
 		return $this->hasOne(Status::class, 'id', 'status_id');
-	}
-
-	/**
-	 * getting DataTime of deadline if exist
-	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
-	 */
-	public function getDeadline()
-	{
-		return $this->hasOne(Deadline::class, 'id', 'deadline_id');
 	}
 
 	/**
@@ -206,7 +197,7 @@ class Ticket extends Model
 	 */
 	public function getOpenTickets()
 	{
-		return $this::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin'])->
+		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin'])->
 		where('is_closed', 0)->
 		orderBy('last_is_admin')->
 		orderBy('lastreply')->
@@ -221,13 +212,20 @@ class Ticket extends Model
 	 */
 	public function getNewTickets()
 	{
-		return $this::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin'])->
+		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin'])->
 		where([['is_closed','=',0],['last_replier_nik_id','=',0]])->
 		orderBy('last_is_admin')->
 		orderBy('lastreply')->
 		get();
 	}
-
+	public function getNewTickets4Admin()
+	{
+		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin'])->
+		where([['is_closed','=',0],['last_replier_nik_id','=',0],['user_assign_id','=',Null]])->
+		orderBy('last_is_admin')->
+		orderBy('lastreply')->
+		get();
+	}
 	/**
 	 * get all tickets on service from yesterday
 	 *
@@ -269,9 +267,9 @@ class Ticket extends Model
 	 */
 	public function getOpenTickets4CurrAdmin(int $user_id)
 	{
-		return $this::with(['getStatus', 'getDeadline', 'getPriority', 'getService', 'getAdmin','getUserAssignedTicket'])->
-		where('is_closed',0)->
-		whereHas('getAdmin', function($f) use($user_id){
+		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin','getUserAssignedTicket'])->
+		where([['is_closed','=',0],['user_assign_id','=',$user_id]])->
+		orWhereHas('getAdmin', function($f) use($user_id){
 			$f->where('user_id',$user_id);})->
 		get();
 	}

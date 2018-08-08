@@ -13,7 +13,6 @@
 				<th>{{__('site.last reply')}}</th>
 				<th>{{__('site.priority')}}</th>
 				<th>{{__('site.status')}}</th>
-				<th>{{__('site.deadline')}}</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -21,7 +20,10 @@
 				$Carbon::setLocale(App::getLocale());
 			@endphp
 			@foreach($newTickets as $newTicket)
-				<tr>
+				@php
+					$lastreply_class = setClass4lastreply($newTicket, $deadlineList,$maxDeadline);
+				@endphp
+				<tr @isset($lastreply_class) class="{{$lastreply_class}}" @endisset>
 					@php
 						$waitingTime = $Carbon::createFromTimeStamp(strtotime($newTicket->lastreply))->diffForHumans();
 							if($newTicket->last_is_admin):
@@ -52,9 +54,6 @@
 					<td>{{$newTicket->lastreply}}</td>
 					<td class="align-middle">{{$newTicket->getPriority->priority or __('site.unknown')}}</td>
 					<td class="align-middle">{{$newTicket->getStatus->name or __('site.unknown')}}</td>
-					{{--<td>@if(isset($newTicket->getDeadline)){{$newTicket->getDeadline->deadline}}@else--}}
-					{{---- @endif</td>--}}
-					<td>{{$newTicket->getDeadline or __('site.unknown')}}</td>
 				</tr>
 			@endforeach
 			</tbody>
