@@ -15,17 +15,19 @@ AND (lastreply between  DATE_FORMAT(NOW() ,'%Y-%m-01') AND NOW() )
 GROUP BY (sysadmin_niks_id);
 */
 
-SELECT name,COUNT(DISTINCT ticket_id)AS tickets_count, COUNT(lastreply) AS replies_count,SUM(time_uses)  AS time_sum 
-FROM sysadmin_activities
+SELECT users.name,COUNT(DISTINCT ticket_id)AS tickets_count, COUNT(sact.lastreply) AS replies_count,SUM(time_uses)  AS time_sum, Sum(serv.compl)
+FROM sysadmin_activities as sact
 LEFT JOIN sysadmin_niks AS sniks ON sniks.id=sysadmin_niks_id
 LEFT JOIN users ON users.id=user_id
+join tickets ON tickets.id=ticket_id
+RIGHT JOIN services as serv ON tickets.service_id=serv.id
 WHERE sysadmin_niks_id IN (
 	SELECT sniks.id FROM users
 	LEFT JOIN sysadmin_niks AS sniks ON sniks.user_id=users.id
 WHERE users.id=2
 )
-AND (lastreply between  DATE_FORMAT(NOW() ,'%Y-%m-01') AND NOW() )
-GROUP BY (name) ORDER BY tickets_count DESC, replies_count DESC;
+AND (sact.lastreply between  DATE_FORMAT(NOW() ,'%Y-%m-01') AND NOW() )
+GROUP BY (users.name) ORDER BY tickets_count DESC, replies_count DESC;
 
 -- get summary and comp count
 SELECT u.name, COUNT(DISTINCT ticket_id) AS tickets_count, COUNT(sact.lastreply) AS replies_count ,SUM(time_uses), SUM(serv.compl)
@@ -77,4 +79,33 @@ WHERE users.id=2;
 
 -- /test count of tickets by user
 
+UPDATE tickets SET user_assign_id=2 WHERE ticketid=10597 AND service_id=1;
 
+SELECT COUNT(last_replier_nik_id) AS serv_1 FROM tickets
+WHERE service_id=1
+UNION SELECT COUNT(last_replier_nik_id) AS serv_2 FROM tickets
+WHERE service_id=2;
+
+SELECT services.name,
+COUNT(sact.lastreply),
+COUNT(DISTINCT ticket_id) AS ticket_count,
+services.compl as s_compl,
+COUNT(DISTINCT ticket_id)*services.compl AS rate,
+u.name
+FROM sysadmin_activities AS sact
+LEFT JOIN sysadmin_niks AS sniks ON sniks.id=sysadmin_niks_id
+LEFT JOIN users AS u ON u.id=user_id
+RIGHT JOIN tickets as t ON sact.ticket_id=t.id
+RIGHT JOIN services ON t.service_id=services.id
+WHERE sysadmin_niks_id IN (
+	SELECT sniks.id FROM users
+	LEFT JOIN sysadmin_niks AS sniks ON sniks.user_id=users.id
+-- 	WHERE users.id=2
+)
+AND t.service_id=2
+AND (sact.lastreply between  DATE_FORMAT('2018-08-01' ,'%Y-%m-01') AND DATE_FORMAT('2018-08-31','%Y-%m-%d') )
+GROUP BY(u.name) ORDER BY ticket_count DESC;
+
+
+
+UPDATE services SET compl=0.8 where services.id=1;

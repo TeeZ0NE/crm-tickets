@@ -12,7 +12,7 @@
 */
 use Illuminate\Support\Facades\Auth;
 //TODO::delete me
-Route::view('/table', 'table');
+//Route::view('/table', 'table');
 
 # boss login
 Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
@@ -33,6 +33,7 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 	Route::put('ticket/{id}', 'Boss\TicketController@update')->name('boss.ticket.update');
 	Route::get('/nicks', 'Boss\RealAdminController@nicks')->name('admins.nicks');
 	Route::post('/bind-nicks', 'Boss\RealAdminController@bindNiks')->name('admins.bindNiks');
+	Route::put('/deactivate/{user_id}','Boss\RealAdminController@deactivate')->name('admin.deactivate');
 	Route::group(['prefix'=>'admins'], function(){
 		Route::get('/statistics', 'Boss\StatisticController@index')->name('admins.statistics');
 		Route::get('/statistics-submonth/', 'Boss\StatisticController@getStatisticsSubMonth')->name('admins.statistics_subMonths');

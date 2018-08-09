@@ -1,3 +1,4 @@
+@stack('js-scripts')
 <p>
-	boss footer
+	boss footers
 </p>
