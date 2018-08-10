@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light">
 	<div class="container">
-		<a class="navbar-brand" href="#">
+		<a class="navbar-brand" href="{{route('home')}}">
 			{{ config('app.name', 'CRM tickets') }}
 		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -13,13 +13,13 @@
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Menu
+					 <i class="fas fa-bars"></i> {{__('site.menu')}}
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="#">item</a>
-						<a class="dropdown-item" href="#">item2</a>
+						<a class="dropdown-item" href="{{route('admins.statistic')}}"><i class="fas fa-list-ol"></i> @lang('site.rate')</a>
+						<a class="dropdown-item disabled" href="#">item2</a>
 						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="#">item3</a>
+						<a class="dropdown-item disabled" href="#">item3</a>
 					</div>
 				</li>
 			</ul>
