@@ -30,7 +30,6 @@ class LoginController extends Controller
      * @var string
      */
     protected $redirectTo = '/boss/home';
-    protected  $redirectPath = 'google';
 
     /**
      * Create a new controller instance.

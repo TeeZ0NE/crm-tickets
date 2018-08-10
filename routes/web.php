@@ -48,9 +48,9 @@ Route::resource('/boss/deadline','Boss\DeadlineController')->middleware('purify'
 Route::get('/', function(){
 	if (Auth::check()) {
 		if (Auth::guard('boss')->check()) {
-			return view('boss.home');
+			return redirect(route('boss.home'));
 		}
-		return view('home');
+		return redirect(route('home'));
 	}
 	return view('auth.login');
 });
