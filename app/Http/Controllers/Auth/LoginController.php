@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
+use App\Models\{User,Ticket};
 
 class LoginController extends Controller
 {
@@ -48,7 +48,9 @@ class LoginController extends Controller
 	 */
 	public function logout(Request $request)
 	{
-		User::where('id',Auth::id())->update(['active'=>0]);
+		$user_id = Auth::id();
+		User::where('id',$user_id)->update(['active'=>0]);
+		Ticket::where('user_assign_id',$user_id)->update(['user_assign_id'=>Null]);
 		$this->guard()->logout();
 		$request->session()->invalidate();
 
