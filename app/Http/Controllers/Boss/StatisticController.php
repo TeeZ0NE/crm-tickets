@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Boss;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\SysadminActivity;
 use Carbon\Carbon;
+use App\Http\Libs\Statistic;
 
 class StatisticController extends Controller
 {
+	use Statistic;
 	public function __construct()
 	{
 		$this->middleware('auth:boss');
@@ -16,14 +17,18 @@ class StatisticController extends Controller
 
 	public function index()
 	{
-		$sa_m = new SysadminActivity();
 		return view('boss.pages.statistics')->with([
-			'statistic4AllAdmins'=>$sa_m->getStatistic4AllAdmins(),
+			'statistic4AllAdmins'=>$this->recurseStatistic4AllAdmin(),
 			'this_month'=>Carbon::now()->startOfMonth(),
 			'curr_month'=>0,
 		]);
 	}
 
+	/**
+	 * Get statistic 4 all services with sub-month
+	 * @param Request $request
+	 * @return $this
+	 */
 	public function getStatisticsSubMonth(Request $request)
 	{
 		request()->validate([
@@ -34,10 +39,9 @@ class StatisticController extends Controller
 		if(!$month_count){
 			return $this->index();
 		}
-		$sact_m = new SysadminActivity();
 		$statistics = [];
 		foreach (range(0,$month_count) as $month){
-			array_push($statistics,$sact_m->getAllStatistic4AllAdmins($month));
+			array_push($statistics,$this->recurseStatistic4AllAdmin($month));
 		}
 		return view('boss.pages.statisticsByMonth')->with([
 		'statistic4AllAdminsByMonths'=>array_reverse($statistics),
