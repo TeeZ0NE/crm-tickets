@@ -199,7 +199,7 @@ class Ticket extends Model
 	{
 		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin'])->
 		where('is_closed', 0)->
-		orderBy('last_is_admin')->
+		orderByDesc('has_deadline')->
 		orderBy('lastreply')->
 		get();
 	}
