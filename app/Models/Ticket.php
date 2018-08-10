@@ -271,6 +271,7 @@ class Ticket extends Model
 		where([['is_closed','=',0],['user_assign_id','=',$user_id]])->
 		orWhereHas('getAdmin', function($f) use($user_id){
 			$f->where('user_id',$user_id);})->
+		orderBy('lastreply')->
 		get();
 	}
 }
