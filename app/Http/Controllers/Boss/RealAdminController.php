@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Boss;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use App\Models\{AdminNik, User};
+use App\Models\{AdminNik, User, Ticket};
 use Illuminate\Support\Facades\{Redirect, Hash, Mail};
 use App\Http\Controllers\Controller;
 use App\Mail\UserAccess;
@@ -175,6 +175,7 @@ class RealAdminController extends Controller
 		$error_msg = 'Admin with ID %d don\'t deactivated';
 		try{
 			User::findOrFail($user_id)->update(['active'=>0]);
+			Ticket::where('user_assign_id',$user_id)->update(['user_assign_id'=>Null]);
 			Log::info(sprintf($msg,$user_id));
 		}catch(ModelNotFoundException $mnf){
 			Log::error(sprintf($error_msg,$user_id));
