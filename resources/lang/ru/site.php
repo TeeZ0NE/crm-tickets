@@ -16,6 +16,7 @@ return[
 	'new'=>'Новый',
 	'priority'=>'Priority',
 	'rate from to'=>'Rate from :FROM to :TO',
+	'rate from'=>'Rate from :FROM',
 	'rate'=>'Rate',
 	'replies count' => 'Cnt repl',
 	'service'=>'Client',
