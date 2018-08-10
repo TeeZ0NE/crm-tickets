@@ -37,7 +37,7 @@
 						<td>{{$lastReplier or __('site.unknown')}}</td>
 						<td>{{$showMyTicket->lastreply}}</td>
 						<td>{{$showMyTicket->getPriority->priority or __('site.unknown')}}</td>
-						<td>{{$showMyTicket->getStatus->name}}</td>
+						<td>{{$showMyTicket->getStatus->name or __('site.unknown')}}</td>
 						<td><form action="{{route('boss.ticket.update',$showMyTicket->id)}}" method="post">
 								@csrf
 								@method('PUT')
