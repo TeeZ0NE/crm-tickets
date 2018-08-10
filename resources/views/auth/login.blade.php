@@ -1,5 +1,5 @@
 @extends('admins.layout')
-
+@section('title','Admin login')
 @section('main_content')
 <div class="container">
     <div class="row justify-content-center">

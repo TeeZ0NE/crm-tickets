@@ -1,5 +1,5 @@
 @extends('boss.layout')
-
+@section('title','Boss Login')
 @section('main_content')
 	<div class="container">
 		<div class="row justify-content-center">
