@@ -86,26 +86,37 @@ WHERE service_id=1
 UNION SELECT COUNT(last_replier_nik_id) AS serv_2 FROM tickets
 WHERE service_id=2;
 
-SELECT services.name,
-COUNT(sact.lastreply),
-COUNT(DISTINCT ticket_id) AS ticket_count,
-services.compl as s_compl,
-COUNT(DISTINCT ticket_id)*services.compl AS rate,
-u.name
-FROM sysadmin_activities AS sact
-LEFT JOIN sysadmin_niks AS sniks ON sniks.id=sysadmin_niks_id
-LEFT JOIN users AS u ON u.id=user_id
-RIGHT JOIN tickets as t ON sact.ticket_id=t.id
+-- get rate 4 users or curr user in current service beetwen in date
+select services.name as service, COUNT(DISTINCT sact.ticket_id) AS tickets_count,COUNT(sact.lastreply) AS replies_count, u.name as user_name, SUM(sact.time_uses) AS sum_time, COUNT(DISTINCT ticket_id)*compl AS rate
+from sysadmin_activities as sact
+RIGHT JOIN tickets AS t ON sact.ticket_id=t.id
 RIGHT JOIN services ON t.service_id=services.id
-WHERE sysadmin_niks_id IN (
-	SELECT sniks.id FROM users
-	LEFT JOIN sysadmin_niks AS sniks ON sniks.user_id=users.id
--- 	WHERE users.id=2
+LEFT JOIN sysadmin_niks AS sniks ON sniks.id=sact.sysadmin_niks_id
+LEFT JOIN users AS u ON u.id=sniks.user_id
+where sact.sysadmin_niks_id in(select sniks.id from users LEFT JOIN sysadmin_niks as sniks on sniks.user_id=users.id 
+where users.id=1
 )
-AND t.service_id=2
-AND (sact.lastreply between  DATE_FORMAT('2018-08-01' ,'%Y-%m-01') AND DATE_FORMAT('2018-08-31','%Y-%m-%d') )
-GROUP BY(u.name) ORDER BY ticket_count DESC;
-
+AND (sact.lastreply between  DATE_FORMAT('2018-07-01' ,'%Y-%m-%d') AND DATE_FORMAT('2018-07-31','%Y-%m-%d') )
+AND services.id=1
+GROUP BY service, user_name
+ORDER BY tickets_count DESC, rate DESC;
+-- /get rate 4 users or curr user in current service beetwen in date
 
 
 UPDATE services SET compl=0.8 where services.id=1;
+
+-- get rate without summing
+select services.name as service, sact.ticket_id, sact.lastreply AS replies_count, u.name as user_name, sact.time_uses
+from sysadmin_activities as sact
+RIGHT JOIN tickets AS t ON sact.ticket_id=t.id
+RIGHT JOIN services ON t.service_id=services.id
+LEFT JOIN sysadmin_niks AS sniks ON sniks.id=sact.sysadmin_niks_id
+LEFT JOIN users AS u ON u.id=sniks.user_id
+where sact.sysadmin_niks_id in(select sniks.id from users LEFT JOIN sysadmin_niks as sniks on sniks.user_id=users.id 
+where users.id=1
+)
+AND (sact.lastreply between  DATE_FORMAT('2018-07-01' ,'%Y-%m-%d') AND DATE_FORMAT('2018-07-31','%Y-%m-%d') )
+AND services.id=1;
+-- /get rate without summing
+
+SELECT id from tickets WHERE service_id=3 LIMIT 1;
