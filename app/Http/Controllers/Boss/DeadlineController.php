@@ -12,7 +12,11 @@ use Exception;
 
 class DeadlineController extends Controller
 {
+	/**
+	 * @var Array
+	 */
 	private 	$deadlineList;
+
 	public function __construct()
 	{
 		$this->middleware('auth:boss');
@@ -141,12 +145,23 @@ class DeadlineController extends Controller
         return redirect()->back()->withErrors(['msg'=>sprintf($error_msg,$id)]);
     }
 
+	/**
+	 * Convert variables 2 Time type
+	 * @param int $hour
+	 * @param int $minutes
+	 * @return string
+	 */
     private function convert2Time(int $hour,int $minutes)  {
 	    $time = Carbon::createFromFormat('H:i',sprintf('%1$02d:%2$02d', $hour, $minutes))->toTimeString();
 	    return $time;
     }
 
-    public function explodeTime( $time) {
+	/**
+	 * Convert to minutes
+	 * @param $time
+	 * @return int
+	 */
+    public function explodeTime( $time) : int {
     	try{
     		$explode_time = explode(':',$time);
     		$hour = $explode_time[0];
@@ -155,21 +170,33 @@ class DeadlineController extends Controller
     		$exploded_time = $minutes+$h2min;
 	    }
 	    catch(Exception $e){
-		    $exploded_time = ['hour'=>0, 'minutes'=>0];
+		    $exploded_time = 0;
 	    }
 	    return $exploded_time;
     }
 
-	public function getListOfDeadlines()
+	/**
+	 * Getting list of deadlines from DB
+	 * @return array
+	 */
+	public function getListOfDeadlines():array
 	{
 		return Deadline::orderBy('deadline')->pluck('deadline')->toArray();
 	}
 
+	/**
+	 * @return \Generator
+	 */
 	private function convertArray2Min(){
 		foreach ($this->deadlineList as $deadline){
 			yield $deadline;
 		}
 	}
+
+	/**
+	 * Convert list with deadline 2 minutes
+	 * @return array
+	 */
 	public function getSummaryArrMinutes(){
 		$timeArr=[];
 		foreach ($this->convertArray2Min() as $element){

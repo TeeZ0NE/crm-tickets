@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Boss;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Models\{AdminNik, User};
 use Illuminate\Support\Facades\{Redirect, Hash, Mail};
 use App\Http\Controllers\Controller;
 use App\Mail\UserAccess;
+use Illuminate\Support\Facades\Log;
 
 class RealAdminController extends Controller
 {
@@ -45,6 +47,7 @@ class RealAdminController extends Controller
      */
     public function store(Request $request)
     {
+    	$msg = 'User name %2$s with ID %1$d and confirmation send to email %3$s';
 	    request()->validate([
 		    'name'=>'required|unique:users|max:120',
 		    'email'=>'required|unique:users',
@@ -55,14 +58,15 @@ class RealAdminController extends Controller
 	    $email = $request->email;
 	    $password = $request->password;
 
-
 	    $user_m = new User();
 	    $user_m->name = $name;
 	    $user_m->password = Hash::make($request->password);
 	    $user_m->email = $email;
 	    $user_m->save();
-	    if($user_m->id) {
+	    $user_id = $user_m->id;
+	    if($user_id) {
 		    Mail::to($request->email)->send(new UserAccess($name, $email, $password));
+		    Log::info(sprintf($msg,$user_id,$name,$email));
 		    return redirect(route('boss.home'))->with('msg', sprintf('%s добавлено в БД! Отправлено письмо с данными', $name));
 	    }
 	    else return redirect(route('boss.home'))->withErrors(['msg'=>'Данные не были сохранены']);
@@ -163,5 +167,19 @@ class RealAdminController extends Controller
 		else $msg= sprintf('Администратор с ID %d отвязан от своих ников',$user_id);
 		return redirect(route('admins.nicks'))->
 		with('msg',$msg);
+	}
+
+	public function deactivate(int $user_id)
+	{
+		$msg = 'Admin with ID %d deactivated';
+		$error_msg = 'Admin with ID %d don\'t deactivated';
+		try{
+			User::findOrFail($user_id)->update(['active'=>0]);
+			Log::info(sprintf($msg,$user_id));
+		}catch(ModelNotFoundException $mnf){
+			Log::error(sprintf($error_msg,$user_id));
+			return redirect(route('admins.index'))->withErrors(['msg'=>sprintf($error_msg,$user_id)]);
+		}
+		return redirect(route('admins.index'))->with('msg',sprintf($msg,$user_id));
 	}
 }

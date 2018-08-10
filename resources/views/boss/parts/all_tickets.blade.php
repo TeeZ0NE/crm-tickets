@@ -53,7 +53,7 @@
 							<form action="{{route('boss.ticket.update',$openTicket->id)}}" method="post">
 								@csrf
 								@method('PUT')
-								<input type="checkbox" name="has_deadline" @if($openTicket->has_deadline)checked @endif>
+								<input type="checkbox" name="has_deadline" class="submit" @if($openTicket->has_deadline)checked @endif>
 							</form>
 						</td>
 					</tr>
@@ -63,8 +63,6 @@
 		</table>
 	</div>
 </div>
-<script>
-	$('input[type="checkbox"]').on('click', function () {
-		$(this).parent().submit();
-	})
-</script>
+@push('js-scripts')
+	<script type="text/javascript" src="{{asset('js/submitOnCheckbox.min.js')}}"></script>
+ @endpush

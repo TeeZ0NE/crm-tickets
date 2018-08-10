@@ -15,17 +15,19 @@ AND (lastreply between  DATE_FORMAT(NOW() ,'%Y-%m-01') AND NOW() )
 GROUP BY (sysadmin_niks_id);
 */
 
-SELECT name,COUNT(DISTINCT ticket_id)AS tickets_count, COUNT(lastreply) AS replies_count,SUM(time_uses)  AS time_sum 
-FROM sysadmin_activities
+SELECT users.name,COUNT(DISTINCT ticket_id)AS tickets_count, COUNT(sact.lastreply) AS replies_count,SUM(time_uses)  AS time_sum, Sum(serv.compl)
+FROM sysadmin_activities as sact
 LEFT JOIN sysadmin_niks AS sniks ON sniks.id=sysadmin_niks_id
 LEFT JOIN users ON users.id=user_id
+join tickets ON tickets.id=ticket_id
+RIGHT JOIN services as serv ON tickets.service_id=serv.id
 WHERE sysadmin_niks_id IN (
 	SELECT sniks.id FROM users
 	LEFT JOIN sysadmin_niks AS sniks ON sniks.user_id=users.id
 WHERE users.id=2
 )
-AND (lastreply between  DATE_FORMAT(NOW() ,'%Y-%m-01') AND NOW() )
-GROUP BY (name) ORDER BY tickets_count DESC, replies_count DESC;
+AND (sact.lastreply between  DATE_FORMAT(NOW() ,'%Y-%m-01') AND NOW() )
+GROUP BY (users.name) ORDER BY tickets_count DESC, replies_count DESC;
 
 -- get summary and comp count
 SELECT u.name, COUNT(DISTINCT ticket_id) AS tickets_count, COUNT(sact.lastreply) AS replies_count ,SUM(time_uses), SUM(serv.compl)
@@ -77,4 +79,44 @@ WHERE users.id=2;
 
 -- /test count of tickets by user
 
+UPDATE tickets SET user_assign_id=2 WHERE ticketid=10597 AND service_id=1;
 
+SELECT COUNT(last_replier_nik_id) AS serv_1 FROM tickets
+WHERE service_id=1
+UNION SELECT COUNT(last_replier_nik_id) AS serv_2 FROM tickets
+WHERE service_id=2;
+
+-- get rate 4 users or curr user in current service beetwen in date
+select services.name as service, COUNT(DISTINCT sact.ticket_id) AS tickets_count,COUNT(sact.lastreply) AS replies_count, u.name as user_name, SUM(sact.time_uses) AS sum_time, COUNT(DISTINCT ticket_id)*compl AS rate
+from sysadmin_activities as sact
+RIGHT JOIN tickets AS t ON sact.ticket_id=t.id
+RIGHT JOIN services ON t.service_id=services.id
+LEFT JOIN sysadmin_niks AS sniks ON sniks.id=sact.sysadmin_niks_id
+LEFT JOIN users AS u ON u.id=sniks.user_id
+where sact.sysadmin_niks_id in(select sniks.id from users LEFT JOIN sysadmin_niks as sniks on sniks.user_id=users.id 
+where users.id=1
+)
+AND (sact.lastreply between  DATE_FORMAT('2018-07-01' ,'%Y-%m-%d') AND DATE_FORMAT('2018-07-31','%Y-%m-%d') )
+AND services.id=1
+GROUP BY service, user_name
+ORDER BY tickets_count DESC, rate DESC;
+-- /get rate 4 users or curr user in current service beetwen in date
+
+
+UPDATE services SET compl=0.8 where services.id=1;
+
+-- get rate without summing
+select services.name as service, sact.ticket_id, sact.lastreply AS replies_count, u.name as user_name, sact.time_uses
+from sysadmin_activities as sact
+RIGHT JOIN tickets AS t ON sact.ticket_id=t.id
+RIGHT JOIN services ON t.service_id=services.id
+LEFT JOIN sysadmin_niks AS sniks ON sniks.id=sact.sysadmin_niks_id
+LEFT JOIN users AS u ON u.id=sniks.user_id
+where sact.sysadmin_niks_id in(select sniks.id from users LEFT JOIN sysadmin_niks as sniks on sniks.user_id=users.id 
+where users.id=1
+)
+AND (sact.lastreply between  DATE_FORMAT('2018-07-01' ,'%Y-%m-%d') AND DATE_FORMAT('2018-07-31','%Y-%m-%d') )
+AND services.id=1;
+-- /get rate without summing
+
+SELECT id from tickets WHERE service_id=3 LIMIT 1;

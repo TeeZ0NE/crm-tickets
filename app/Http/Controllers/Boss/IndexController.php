@@ -36,7 +36,6 @@ class IndexController extends Controller
 		$maxDeadline = $dlc->explodeTime($deadline_m->getMaxDeadline());
 		$serviceTicketCounts = [];
 		if (count(Service::all())) {
-
 			foreach (Service::all() as $service) {
 				$serviceTicketCounts[$service->name] = [
 					'summary_tickets' => $ticket_m->getSummaryCountTickets($service->id),

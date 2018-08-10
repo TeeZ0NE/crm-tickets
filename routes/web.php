@@ -11,8 +11,6 @@
 |
 */
 use Illuminate\Support\Facades\Auth;
-//TODO::delete me
-Route::view('/table', 'table');
 
 # boss login
 Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
@@ -33,6 +31,7 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 	Route::put('ticket/{id}', 'Boss\TicketController@update')->name('boss.ticket.update');
 	Route::get('/nicks', 'Boss\RealAdminController@nicks')->name('admins.nicks');
 	Route::post('/bind-nicks', 'Boss\RealAdminController@bindNiks')->name('admins.bindNiks');
+	Route::put('/deactivate/{user_id}','Boss\RealAdminController@deactivate')->name('admin.deactivate');
 	Route::group(['prefix'=>'admins'], function(){
 		Route::get('/statistics', 'Boss\StatisticController@index')->name('admins.statistics');
 		Route::get('/statistics-submonth/', 'Boss\StatisticController@getStatisticsSubMonth')->name('admins.statistics_subMonths');
@@ -43,23 +42,10 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 		Route::delete('/{service}','Boss\ServicesController@destroy')->name('services.destroy');
 	});
 	Route::get('/logs','Boss\LogController')->name('logs');
-
 });
 Route::resource('/boss/admins', 'Boss\RealAdminController')->middleware('purify');
 Route::resource('/boss/deadline','Boss\DeadlineController')->middleware('purify');
-// todo delete me after write all routes
-//Route::resource('/boss/services','Boss\ServicesController')->middleware('purify');
-#sysadmin user
-//Route::get('/', 'RealAdminController@index')->name('home');
 Route::get('/', function(){
-//	return redirect(route('home'));
-//	if (Auth::check() && Auth::guard('boss')){
-
-//		if(Auth::guard('boss')->check()) {echo 'boss '.Auth::guard('boss')->user()->name;}
-//		if(Auth::guard()) {echo Auth::user()->name;}
-//		echo route()->name;
-//		return redirect(route('boss.home'));
-//	}
 	if (Auth::check()) {
 		if (Auth::guard('boss')->check()) {
 			return view('boss.home');
@@ -73,11 +59,11 @@ Route::match(['get','post'], 'register', function () {
 	return view('errors.403');
 })->name('register');
 Route::group(['middleware' => ['purify','auth']], function () {
-	Route::get('/home', 'Admin\HomeController')->name('home');
+	Route::get('/home', 'Admin\HomeController@index')->name('home');
+	Route::get('/statistic','Admin\HomeController@statistic')->name('admins.statistic');
 	Route::post('admin/{id}/assign-ticket/{ticket_id}', 'Admin\TicketsController@assignTicket')->name('admin.assign-ticket');
-
-	Route::get('admin/{id}/assign-ticket/{ticket_id}',function(){
-		return redirect(404);
-	});
+//	Route::get('admin/{id}/assign-ticket/{ticket_id}',function(){
+//		return redirect(404);
+//	});
 });
 

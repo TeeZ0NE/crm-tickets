@@ -9,7 +9,12 @@ use App\Models\{Ticket};
 
 class TicketsController extends Controller
 {
-
+	/**
+	 * User assign ticket to him self
+	 * @param $user_id
+	 * @param $ticket_id
+	 * @return $this|\Illuminate\Http\RedirectResponse
+	 */
 	public function assignTicket($user_id,$ticket_id)
 	{
 		$ticket_m = new Ticket();

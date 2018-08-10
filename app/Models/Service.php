@@ -15,7 +15,7 @@ class Service extends Model
 	 */
 	public function getServicesIds():array
 	{
-		return $this->pluck('id')->toArray();
+		return $this->orderBy('id')->pluck('id')->toArray();
     }
 
 	public function getServiceId(string $service):int
@@ -25,6 +25,11 @@ class Service extends Model
 
 	public function getCompl(int $service_id):float
 	{
-		return $this->find($service_id)->first()->compl;
+		return $this->find($service_id)->compl;
     }
+
+	public function getServiceName(int $service_id){
+		return $this->find($service_id)->name;
+	}
+
 }

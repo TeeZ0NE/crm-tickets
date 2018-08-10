@@ -6,6 +6,16 @@
  * Time: 16:48
  */
 use \Carbon\Carbon;
+
+/**
+ * Get class 4 tr tag in all tickets
+ *
+ * It get's lastreply from Ticket and compare it with deadline intervals and return CSS class 4 it
+ * @param object $ticket
+ * @param array $deadlineList
+ * @param int $maxDeadline
+ * @return string
+ */
 function setClass4lastreply(object $ticket, array $deadlineList, int $maxDeadline){
 	$lastreply_class='';
 	$lastreply = Carbon::now()->diffInMinutes($ticket->lastreply);

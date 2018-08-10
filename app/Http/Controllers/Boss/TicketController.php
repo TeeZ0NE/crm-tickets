@@ -15,6 +15,12 @@ class TicketController extends Controller
     	$this->middleware('auth:boss');
     }
 
+	/**
+	 * Change deadline
+	 * @param Request $request
+	 * @param $id
+	 * @return $this|\Illuminate\Http\RedirectResponse
+	 */
     public function update(Request $request, $id){
     	$has_deadline = isset($request->has_deadline)?1:0;
     	$msg = 'Ticket ID %d update has_deadline to %d with result %d';

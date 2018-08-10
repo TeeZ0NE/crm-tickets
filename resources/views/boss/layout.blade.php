@@ -17,6 +17,6 @@
 			@yield('main_content')
 	</main>
 </div>
-<div>@include('admins.parts.footer')</div>
+<div>@include('boss.parts.footer')</div>
 </body>
 </html>

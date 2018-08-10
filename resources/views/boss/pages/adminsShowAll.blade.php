@@ -1,4 +1,5 @@
 @extends('boss.layout')
+@section('title','Все админы')
 @section('main_content')
 	<div class="container">
 		<div class="row">
@@ -21,8 +22,15 @@
 									<td>{{$admin->id}}</td>
 									<td>{{$admin->name}}</td>
 									<td class="text-center">
-										@if ($admin->active) <i class="fas fa-plus"></i>
-										@else <i class="fas fa-minus"></i>
+										@if($admin->active)
+											<form action="{{route('admin.deactivate',$admin->id)}}" method="post">
+												<input type="checkbox" name="deactivate" class="submit" checked
+												       title="deactivate">
+												@csrf
+												@method('PUT')
+											</form>
+										@else
+											<i class="fas fa-minus"></i>
 										@endif
 									</td>
 									<td class="text-right">
@@ -47,16 +55,8 @@
 			</div>
 		</div>
 	</div>
-		<script type="text/javascript">
-			$(".rename-admin").on("click", function (event) {
-				event.preventDefault();
-				let old_name = $(this).attr('data-name');
-				let new_name = prompt('Rename admin', old_name);
-				if (new_name !== old_name && new_name !== null && new_name !== '') {
-					$("input[name='_method']").val('PUT');
-					$(this).parent().prepend("<input type=\"hidden\" name=\"name\" value=\"" + new_name + "\">");
-					$(this).parent().submit();
-				}
-			});
-		</script>
+	@push('js-scripts')
+		<script type="text/javascript" src="{{asset('js/submitOnCheckbox.min.js')}}"></script>
+		<script type="text/javascript" src="{{asset('js/adminRename.min.js')}}"></script>
+	@endpush
 @endsection
