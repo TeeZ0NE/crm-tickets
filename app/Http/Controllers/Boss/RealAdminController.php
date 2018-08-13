@@ -171,16 +171,17 @@ class RealAdminController extends Controller
 
 	public function deactivate(int $user_id)
 	{
-		$msg = 'Admin with ID %d deactivated';
+		$msg = 'Admin with ID %d deactivated. Assign tickets count free %d';
 		$error_msg = 'Admin with ID %d don\'t deactivated';
+		$ticket_m = new Ticket();
 		try{
 			User::findOrFail($user_id)->update(['active'=>0]);
-			Ticket::where('user_assign_id',$user_id)->update(['user_assign_id'=>Null]);
-			Log::info(sprintf($msg,$user_id));
+			$tick_assign_count = $ticket_m->setNullUserAssignId($user_id);
+			Log::info(sprintf($msg,$user_id,$tick_assign_count));
 		}catch(ModelNotFoundException $mnf){
 			Log::error(sprintf($error_msg,$user_id));
 			return redirect(route('admins.index'))->withErrors(['msg'=>sprintf($error_msg,$user_id)]);
 		}
-		return redirect(route('admins.index'))->with('msg',sprintf($msg,$user_id));
+		return redirect(route('admins.index'))->with('msg',sprintf($msg,$user_id,$tick_assign_count));
 	}
 }

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use App\Models\{User,Ticket};
+use Illuminate\Support\Facades\Log;
 
 class LoginController extends Controller
 {
@@ -49,10 +50,12 @@ class LoginController extends Controller
 	public function logout(Request $request)
 	{
 		$user_id = Auth::id();
+		$ticket_m = new Ticket();
 		User::where('id',$user_id)->update(['active'=>0]);
-		Ticket::where('user_assign_id',$user_id)->update(['user_assign_id'=>Null]);
+		$countOfAssignTickets = $ticket_m->setNullUserAssignId($user_id);
 		$this->guard()->logout();
 		$request->session()->invalidate();
+		Log::info(sprintf('User ID %d logout, tickets assign free %d',$user_id,$countOfAssignTickets));
 
 		return $this->loggedOut($request) ?: redirect('/');
 	}
