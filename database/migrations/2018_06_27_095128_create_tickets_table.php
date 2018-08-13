@@ -28,6 +28,7 @@ class CreateTicketsTable extends Migration
 	        $table->boolean('has_deadline')->default(1);
 //	        $table->unsignedTinyInteger('deadline_id')->nullable();
 	        $table->timestamps();
+	        $table->index('is_closed','ticket_open');
 
         	$table->foreign('status_id')->references('id')->on('statuses')->onUpdate('cascade');
 //	        $table->foreign('deadline_id')->references('id')->on('deadlines')->onUpdate('cascade')->onDelete('cascade');
