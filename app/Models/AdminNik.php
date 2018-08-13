@@ -52,4 +52,17 @@ class AdminNik extends Model
 		$adminNikId = $sysadminNik->id;
 		return $adminNikId;
 	}
+
+	/**
+	 * Does user with nik id active and get user_id
+	 * @param int $admin_nik_id
+	 * @return array
+	 */
+	public function isUserNikIdActive(int $admin_nik_id)
+	{
+		$collection = collect($this::with('getAdmin')->find($admin_nik_id));
+		if($collection->has('get_admin'))
+		return array('active'=>(bool)$collection['get_admin']['active'],'user_id'=>$collection['get_admin']['id']);
+		else return array('active'=>False);
+	}
 }

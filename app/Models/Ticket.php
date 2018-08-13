@@ -10,7 +10,7 @@ use Carbon\Carbon;
 
 class Ticket extends Model
 {
-	protected $fillable = ['ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'has_deadline','last_is_admin','user_assign_id',];
+	protected $fillable = ['ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'has_deadline', 'last_is_admin', 'user_assign_id',];
 
 
 	/**
@@ -38,9 +38,9 @@ class Ticket extends Model
 	 *
 	 * @return int
 	 */
-	public function getCountClosedTickets(int $service_id):int
+	public function getCountClosedTickets(int $service_id): int
 	{
-		return $this::where(['is_closed'=>1,'service_id'=>$service_id])->get()->count();
+		return $this::where(['is_closed' => 1, 'service_id' => $service_id])->get()->count();
 	}
 
 	/**
@@ -49,9 +49,9 @@ class Ticket extends Model
 	 * @param  int $service_id
 	 * @return int
 	 */
-	public function getCountOpenTickets(int $service_id):int
+	public function getCountOpenTickets(int $service_id): int
 	{
-		return $this::where(['is_closed'=>0,'service_id'=>$service_id])->get()->count();
+		return $this::where(['is_closed' => 0, 'service_id' => $service_id])->get()->count();
 	}
 
 	/**
@@ -60,10 +60,11 @@ class Ticket extends Model
 	 * @param $service_id
 	 * @return mixed
 	 */
-	public function getSummaryCountTickets(int $service_id):int
+	public function getSummaryCountTickets(int $service_id): int
 	{
-		return $this::where('service_id',$service_id)->get()->count();
+		return $this::where('service_id', $service_id)->get()->count();
 	}
+
 	/**
 	 * get inner id from DB
 	 *
@@ -71,7 +72,7 @@ class Ticket extends Model
 	 * @param int $service_id
 	 * @return int
 	 */
-	public function getTicketIdFromDb(int $tid, int $service_id):int
+	public function getTicketIdFromDb(int $tid, int $service_id): int
 	{
 		$id = 0;
 		try {
@@ -82,10 +83,10 @@ class Ticket extends Model
 		return $id;
 	}
 
-	public function getTicketId(int $ticketid, int $service_id,  array $values=[])
+	public function getTicketId(int $ticketid, int $service_id, array $values = [])
 	{
-	    $ticket_m = $this->firstOrCreate(['service_id'=>$service_id, 'ticketid'=>$ticketid],$values);
-	    return $ticket_m->id;
+		$ticket_m = $this->firstOrCreate(['service_id' => $service_id, 'ticketid' => $ticketid], $values);
+		return $ticket_m->id;
 	}
 
 	/**
@@ -94,9 +95,9 @@ class Ticket extends Model
 	 * @param int $service_id
 	 * @return array of ticketid
 	 */
-	public function getTidArray(int $service_id):array
+	public function getTidArray(int $service_id): array
 	{
-		return $this->where('service_id',$service_id)->pluck('ticketid', 'id')->toArray();
+		return $this->where('service_id', $service_id)->pluck('ticketid', 'id')->toArray();
 	}
 
 	/**
@@ -130,8 +131,9 @@ class Ticket extends Model
 	 */
 	public function getAdminNiks()
 	{
-		return $this->hasManyThrough(AdminNik::class,SysadminActivity::class, 'ticket_id','id','id', 'sysadmin_niks_id');
+		return $this->hasManyThrough(AdminNik::class, SysadminActivity::class, 'ticket_id', 'id', 'id', 'sysadmin_niks_id');
 	}
+
 	/**
 	 * Remove ticket from DB (ticket table) and Log it
 	 *
@@ -145,33 +147,32 @@ class Ticket extends Model
 		if ($id) {
 			$res = $this::find($id)->delete();
 			Log::warning("Ticket id $absentTicket[$service_id] (service id is $service_id) removed from DB because it has had status 4 remove. Check statuses in Ticket Model", ["result" => $res]);
-		}
-		else Log::error("Ticket id $absentTicket[$service_id] (service id is $service_id) checked as remove from DB because it has had status 4 remove but it doesn't remove, real id $id is not found");
+		} else Log::error("Ticket id $absentTicket[$service_id] (service id is $service_id) checked as remove from DB because it has had status 4 remove but it doesn't remove, real id $id is not found");
 	}
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Relations\HasOne
 	 */
-	public function getPriority() :object
+	public function getPriority(): object
 	{
-		return $this->hasOne(Priority::class,'id','priority_id');
+		return $this->hasOne(Priority::class, 'id', 'priority_id');
 	}
+
 	/**
 	 * sign (check is_closed) when ticket is checked as Closed
 	 *
 	 * $absentId['service_id'] => $absentId['absentId']
 	 * @param array $absentTicket
 	 */
-	private function moveTicket(array $absentTicket) : void
+	private function moveTicket(array $absentTicket): void
 	{
 		$service_id = key($absentTicket);
 		$msg = 'Ticket id %d (service id is %d) checked as closed", result is %s';
 		$id = $this->getTicketIdFromDb($absentTicket[$service_id], $service_id);
 		if ($id) {
-			$res = $this::find($id)->update(['is_closed'=>1]);
-			Log::info(sprintf($msg,$absentTicket[$service_id],$service_id,$res));
-		}
-		else Log::error(sprintf($msg,$absentTicket[$service_id],$service_id,$id));
+			$res = $this::find($id)->update(['is_closed' => 1]);
+			Log::info(sprintf($msg, $absentTicket[$service_id], $service_id, $res));
+		} else Log::error(sprintf($msg, $absentTicket[$service_id], $service_id, $id));
 	}
 
 	/**
@@ -180,11 +181,12 @@ class Ticket extends Model
 	 */
 	public function getAdmin()
 	{
-		return $this->hasManyThrough(User::class, AdminNik::class,'id','id','last_replier_nik_id','user_id');
+		return $this->hasManyThrough(User::class, AdminNik::class, 'id', 'id', 'last_replier_nik_id', 'user_id');
 	}
 
-	public function getUserAssignedTicket(){
-		return $this->hasOne(User::class,'id','user_assign_id');
+	public function getUserAssignedTicket()
+	{
+		return $this->hasOne(User::class, 'id', 'user_assign_id');
 	}
 
 
@@ -197,7 +199,7 @@ class Ticket extends Model
 	 */
 	public function getOpenTickets()
 	{
-		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin'])->
+		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin', 'getUserAssignedTicket'])->
 		where('is_closed', 0)->
 		orderByDesc('has_deadline')->
 		orderBy('lastreply')->
@@ -213,19 +215,25 @@ class Ticket extends Model
 	public function getNewTickets()
 	{
 		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin'])->
-		where([['is_closed','=',0],['last_replier_nik_id','=',0]])->
-		orderBy('last_is_admin')->
+		where([['is_closed', '=', 0], ['last_replier_nik_id', '=', 0]])->
+//		orderBy('last_is_admin')->
 		orderBy('lastreply')->
 		get();
 	}
+
 	public function getNewTickets4Admin()
 	{
 		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin'])->
-		where([['is_closed','=',0],['last_replier_nik_id','=',0],['user_assign_id','=',Null]])->
-		orderBy('last_is_admin')->
+		where([['is_closed', '=', 0],
+			['user_assign_id', '=', Null]])->
+		orWhere([['last_replier_nik_id', '=', 0], ['is_closed', '=', 0]])->
+		whereHas('getAdmin', function ($q) {
+			$q->where('active', 0);
+		})->
 		orderBy('lastreply')->
 		get();
 	}
+
 	/**
 	 * get all tickets on service from yesterday
 	 *
@@ -250,12 +258,12 @@ class Ticket extends Model
 
 	/**
 	 * get admin activity in ticket
-	 * 
+	 *
 	 * @return \Illuminate\Database\Eloquent\Relations\HasMany
 	 */
 	public function getAdminsActivities()
 	{
-		return $this->hasMany(SysadminActivity::class,'ticket_id');
+		return $this->hasMany(SysadminActivity::class, 'ticket_id');
 	}
 
 	/**
@@ -267,11 +275,22 @@ class Ticket extends Model
 	 */
 	public function getOpenTickets4CurrAdmin(int $user_id)
 	{
-		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin','getUserAssignedTicket'])->
-		where([['is_closed','=',0],['user_assign_id','=',$user_id]])->
-		orWhereHas('getAdmin', function($f) use($user_id){
-			$f->where('user_id',$user_id);})->
+		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin', 'getUserAssignedTicket'])->
+		where([['is_closed', '=', 0],['user_assign_id','=',$user_id]])->
+		/*WhereHas('getAdmin', function ($f) use ($user_id) {
+			$f->where('user_id', $user_id);
+		})->*/
 		orderBy('lastreply')->
 		get();
+	}
+
+	/**
+	 * Set Null value inUser_assign_id
+	 * @param int $user_id
+	 * @return int count of tickets nullabled
+	 */
+	public function setNullUserAssignId(int $user_id)
+	{
+		return $this::where('user_assign_id', $user_id)->update(['user_assign_id' => Null]);
 	}
 }

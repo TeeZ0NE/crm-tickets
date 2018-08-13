@@ -135,11 +135,16 @@ trait MotherWhmcsDaemon
 					'lastreply' => $ticket['lastreply'],
 //					'user_assign_id' => ($last_replier_nik_id)?Null:Null,
 				];
-				if($last_replier_nik_id)  $store_data['user_assign_id']=Null;
+
+//				if($user_active_collection['active'])  $store_data['user_assign_id']=$user_active_collection['user_id'];
 				# storing ticket and get own ID
 				$ticket_id = $this->storeTicket([
 					'ticketid' => $ticketID,
 				], $store_data);
+				# if user active and nobody assigned yet assign to him his ticket
+				$isActiveUser = $this->isLastReplierActive($last_replier_nik_id);
+				if(!$this->getUserAssignId($ticket_id) && $isActiveUser['active'])
+					$this->setUserAssignId($ticket_id,$isActiveUser['user_id']);
 				# storing admins activities in current ticket
 				if (count($replies['adminNiks'])) {
 					$this->storeAdminActivities($adminNikIdsWithReplies, $ticket_id);
@@ -378,5 +383,22 @@ trait MotherWhmcsDaemon
 		])->first();
 		if ($ticket_m) $last_replier_nik_id = $ticket_m->last_replier_nik_id;
 		return $last_replier_nik_id;
+	}
+
+	private function getUserAssignId(int $ticket_id)
+	{
+		return Ticket::find($ticket_id)->user_assign_id;
+	}
+
+	private function isLastReplierActive(int $last_replier_nik_id){
+		# if user active assign to him his ticket
+		$adminNik_m = new AdminNik();
+		return $user_active_collection = $adminNik_m->isUserNikIdActive($last_replier_nik_id);
+
+	}
+
+	private function setUserAssignId(int $ticket_id, int $user_id)
+	{
+		Ticket::find($ticket_id)->update(['user_assign_id'=>$user_id]);
 	}
 }

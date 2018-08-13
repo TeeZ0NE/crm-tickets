@@ -46,8 +46,7 @@ class User extends Model implements Authenticatable,CanResetPasswordContract
 			join('tickets as t', 'sact.ticket_id', '=', 't.id')->
 //			where('t.is_closed', 1)->
 			groupBy('s.id')->
-			orderByDesc('ticket_count')->
-			orderByDesc('reply_count')->
+			orderByDesc('ticket_count','reply_count')->
 			get();
 	}
 	/**
@@ -65,8 +64,7 @@ class User extends Model implements Authenticatable,CanResetPasswordContract
 			join('tickets as t', 'sact.ticket_id', '=', 't.id')->
 			where('t.is_closed', 0)->
 			groupBy('s.id')->
-			orderByDesc('ticket_count')->
-			orderByDesc('reply_count')->
+			orderByDesc('ticket_count','reply_count')->
 			get();
 	}
 	/**
@@ -86,4 +84,5 @@ class User extends Model implements Authenticatable,CanResetPasswordContract
 	{
 		return $this::with(['getServices', 'getNiks'])->orderBy('name')->get();
 	}
+
 }
