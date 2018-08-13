@@ -12,7 +12,7 @@
 			<div class="col-md-8 col-lg-9">
 				@include('admins.parts.new_tickets')
 				@include('admins.parts.my_tickets')
-				@include('admins.parts.all_tickets')
+				@include('parts.all_tickets')
 			</div>
 		</div>
 	</div>
