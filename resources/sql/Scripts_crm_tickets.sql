@@ -120,3 +120,16 @@ AND services.id=1;
 -- /get rate without summing
 
 SELECT id from tickets WHERE service_id=3 LIMIT 1;
+
+SELECT t.id FROM tickets AS t
+WHERE t.is_closed=0 AND t.last_replier_nik_id=0 AND t.user_assign_id is NULL;
+
+-- add and drop indexes
+CREATE INDEX ticket_open ON tickets (is_closed);
+DROP INDEX ticket_open ON tickets;
+
+SELECT * from tickets USE INDEX(ticket_open);
+
+DROP DATABASE crm_tickets_db;
+CREATE DATABASE crm_tickets_db;
+UPDATE tickets SET user_assign_id=NULL where user_assign_id=9;
