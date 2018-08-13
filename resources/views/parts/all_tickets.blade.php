@@ -14,7 +14,9 @@
 				<th>{{__('site.assign')}}</th>
 				<th>{{__('site.priority')}}</th>
 				<th>{{__('site.status')}}</th>
+				@isset($deadline_cb)
 				<th>{{__('site.deadline')}}</th>
+				@endisset
 			</tr>
 			</thead>
 			<tbody>
@@ -27,28 +29,28 @@
 					@endphp
 					<tr class="align-middle {{$lastreply_class or ''}}">
 						@php
+							$is_new = '';
 							$waitingTime = $Carbon::createFromTimeStamp(strtotime($openTicket->lastreply))->diffForHumans();
 								if($openTicket->last_is_admin):
 									$lastReplier = ($openTicket->getAdmin->first()['name'])
 									?$openTicket->getAdmin->first()['name']
 									:"Please bind with admin_nik_id $openTicket->last_replier_nik_id";
 								else:
-									$lastReplier = $openTicket->getService['name']." client";
+									$lastReplier = $openTicket->getService['name']." <b>client</b>";
 								endif;
-								$ticket_owner = ($openTicket->last_replier_nik_id)
-								?$openTicket->getAdmin->first()['name']
-								:'Новий';
+								if (!$openTicket->last_replier_nik_id) $is_new=__('site.new');
 						@endphp
 						<td>{{$i++}}</td>
 						<td>{{$waitingTime}}</td>
 						<td>{{$openTicket->getService->name}}</td>
 						<td>{{$openTicket->ticketid}}</td>
 						<td>{{$openTicket->subject}}</td>
-						<td>{{$lastReplier or __('site.unknown')}}</td>
+						<td>{!! $lastReplier or __('site.unknown') !!}@if((bool)$is_new)<br><u>{{$is_new}}</u>@endif</td>
 						<td>{{$openTicket->lastreply}}</td>
-						<td>{{$ticket_owner or __('site.unknown')}}</td>
+						<td>{{$openTicket->getUserAssignedTicket['name'] or ''}}</td>
 						<td>{{$openTicket->getPriority->priority or __('site.unknown')}}</td>
 						<td>{{$openTicket->getStatus->name or __('site.unknown')}}</td>
+						@isset($deadline_cb)
 						<td>
 							<form action="{{route('boss.ticket.update',$openTicket->id)}}" method="post">
 								@csrf
@@ -56,6 +58,7 @@
 								<input type="checkbox" name="has_deadline" class="submit" @if($openTicket->has_deadline)checked @endif>
 							</form>
 						</td>
+							@endisset
 					</tr>
 				@endforeach
 			@endif
