@@ -13,7 +13,7 @@ return[
 	'last reply'=>'Last reply',
 	'menu'=>'Menu',
 	'my rate from'=>'My rate from',
-	'new'=>'Новый',
+	'new'=>"New",
 	'priority'=>'Priority',
 	'rate from to'=>'Rate from :FROM to :TO',
 	'rate from'=>'Rate from :FROM',
