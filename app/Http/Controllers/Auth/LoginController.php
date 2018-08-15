@@ -51,11 +51,13 @@ class LoginController extends Controller
 	{
 		$user_id = Auth::id();
 		$ticket_m = new Ticket();
-		User::where('id',$user_id)->update(['active'=>0]);
-		$countOfAssignTickets = $ticket_m->setNullUserAssignId($user_id);
+		if($user_id) {
+			User::where('id', $user_id)->update(['active' => 0]);
+			$countOfAssignTickets = $ticket_m->setNullUserAssignId($user_id);
+		}
 		$this->guard()->logout();
 		$request->session()->invalidate();
-		Log::info(sprintf('User ID %d logout, tickets assign free %d',$user_id,$countOfAssignTickets));
+		Log::info(sprintf('User ID %d logout, tickets assign free %d',$user_id,$countOfAssignTickets ?? 0));
 
 		return $this->loggedOut($request) ?: redirect('/');
 	}
