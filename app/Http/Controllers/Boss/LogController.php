@@ -13,6 +13,7 @@ class LogController extends Controller
 	}
     public function __invoke(){
     	$path = storage_path().'/logs/'.$this->log_file;
-    	return view('boss.pages.logs')->with(['logs'=>file_get_contents($path)]);
+    	$logs =(file_exists($path))?file_get_contents($path):'File not found';
+    	return view('boss.pages.logs')->with(['logs'=>$logs]);
     }
 }
