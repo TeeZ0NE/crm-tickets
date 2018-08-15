@@ -1,0 +1,1 @@
+<p>Refreshed at {{\Carbon\Carbon::now()}}</p>
