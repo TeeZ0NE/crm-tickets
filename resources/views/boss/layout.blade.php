@@ -9,11 +9,11 @@
 	<script type="text/javascript" src="{{ mix('js/app.js') }}"></script>
 	<link type="text/css" rel="stylesheet" href="{{ mix('css/app.css') }}">
 </head>
-<body>
+<body class="position-relative">
 @includeWhen(Session::has('msg'),'parts.msg')
 @includeWhen($errors->any(),'parts.errors')
 <div id="app" class="h-100 position-relative mb-5 pb-5">
-	@if(Auth::check())@include('boss.parts.nav')@endif
+	@if(Auth::guard('boss')->check())@include('boss.parts.nav')@endif
 	<main class="py-4">
 			@yield('main_content')
 	</main>
