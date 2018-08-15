@@ -49,8 +49,8 @@ trait MotherWhmcsDaemon
 		try {
 			Log::info(sprintf($msg,$this->service));
 			# try 2 get tickets if error read message
-			$tickets =(array)array_get($this->whmcs->getListTikets(),'tickets.ticket',null);
-			if ($tickets == null) throw new Exception($tickets['message']);
+			$tickets =(array)array_get($this->whmcs->getListTikets(),'tickets.ticket');
+			if ($tickets == null) throw new Exception($this->whmcs->getListTikets()['message']);
 			return $tickets;
 		} catch (Exception $e) {
 			Log::error(sprintf($err_msg,$this->service,$e->getMessage()));
