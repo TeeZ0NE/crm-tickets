@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="position-relative h-100">
 <head>
 	<meta charset="UTF-8">
 	<title>@yield('title')</title>
@@ -12,12 +12,12 @@
 <body>
 @includeWhen(Session::has('msg'),'parts.msg')
 @includeWhen($errors->any(),'parts.errors')
-<div id="app">
+<div id="app" class="h-100 position-relative mb-5 pb-5">
 	@if(Auth::check())@include('boss.parts.nav')@endif
 	<main class="py-4">
 			@yield('main_content')
 	</main>
 </div>
-<div>@include('boss.parts.footer')</div>
+<footer class="position-absolute w-100 text-white-50 bg-dark mt-lg-3 p-lg-5 text-center">@include('boss.parts.footer')</footer>
 </body>
 </html>
