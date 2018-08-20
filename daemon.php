@@ -30,9 +30,11 @@ foreach ($whmcs_services as $whmcs_service){
 }
 
 /*
-$secom = new Whmcsapi('');
-//print_r($secom->getListTikets());
-print_r($secom->getTiket());
+$service = 'ua-hosting';
+printf("sirvice %s\n",$service);
+$secom = new Whmcsapi($service);
+print_r($secom->getListTikets());
+//print_r($secom->getTiket());
 */
 //$adminvps = new Whmcsapi('adminvps');
 //print_r($adminvps->getListTikets());
