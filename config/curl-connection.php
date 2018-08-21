@@ -19,7 +19,7 @@ return [
     'ua-hosting' => [
         'url' => 'https://billing.ua-hosting.company/includes/api.php',
         'identifier' => 'secom_vi',
-        'secret' => 'lDGMboTBTqeL2q3F',
+        'secret' => md5('lDGMboTBTqeL2q3F'),
     ],
    'coopertino' => [
         'url' => 'https://coopertino.ru:1500/billmgr?authinfo=techstaff:MkXv9PoJf9EN4LLwv4gy&out=xml&func=tickets&a&sok=ok',
