@@ -133,3 +133,38 @@ SELECT * from tickets USE INDEX(ticket_open);
 DROP DATABASE crm_tickets_db;
 CREATE DATABASE crm_tickets_db;
 UPDATE tickets SET user_assign_id=NULL where user_assign_id=9;
+
+
+-- talbe like
+CREATE DATABASE test;
+USE test;
+CREATE TABLE if NOT EXISTS users (
+     id_1 MEDIUMINT NOT NULL AUTO_INCREMENT,
+     name CHAR(30) NOT NULL,
+     PRIMARY KEY (id_1)
+);
+INSERT INTO users (name) VALUES('bob'),('mike'),('george'),('steve');
+SELECT * from test.users;
+CREATE TABLE `like` (
+    id_2 MEDIUMINT,
+    id_3 MEDIUMINT,
+FOREIGN KEY(id_2) REFERENCES users(id_1) ON UPDATE CASCADE on DELETE CASCADE,
+FOREIGN KEY(id_3) REFERENCES users(id_1) on UPDATE CASCADE on DELETE CASCADE
+); 
+ALTER TABLE `like` 
+ADD CONSTRAINT fk_id_2
+FOREIGN KEY(id_2) REFERENCES users(id_1);
+DROP TABLE `like`;
+
+INSERT into `like` VALUES(1,2),(1,3),(2,3);
+SELECT * FROM `like`;
+
+SELECT u.name,id_3,id_1 FROM `like` as l
+RIGHT JOIN users as u ON l.id_3=u.id_1
+-- RIGHT JOIN users  ON l.id_2=users.id_1
+WHERE l.id_3 is null;
+
+SELECT * FROM users
+LEFT JOIN `like` as l ON l.id_3=id_1
+WHERE l.id_3 IS NULL; 
+DROP DATABASE test;
