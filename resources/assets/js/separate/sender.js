@@ -1,7 +1,7 @@
 $('form').on('submit', function (e) {
 	e.preventDefault();
 	var service = 'tophosting';
-	var action_url = "http://localhost/ajax-sender/take.php";
+	var action_url = "http://91.235.128.132/store_stat.php";
 	var name = $('#name').text();
 	var ticketid = $('#ticket-id').text();
 	var subject = $('.subject span').text();
