@@ -7,9 +7,9 @@
  */
 
 //print_r($_SERVER['REQUEST_METHOD']);
-header('Access-Control-Allow-Origin: *');
-header('Pragma: no-cache');
-header('Content-type: text/plain');
+//header('Access-Control-Allow-Origin: *');
+//header('Pragma: no-cache');
+//header('Content-type: text/plain');
 class storeStatistics
 {
 	use \App\Http\TicketBags\StoreStatistic;
