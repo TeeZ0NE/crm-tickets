@@ -10,10 +10,10 @@
 //header('Access-Control-Allow-Origin: *');
 header('Pragma: no-cache');
 header('Content-type: text/plain');
-/*class storeStatistics
+class storeStatistics
 {
 	use \App\Http\TicketBags\StoreStatistic;
-}*/
+}
 echo 'Data received'.PHP_EOL;
 /*
 $service = $_REQUEST['service']??'Unknown';
