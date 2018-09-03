@@ -5,8 +5,16 @@
  * Date: 22.08.18
  * Time: 12:25
  */
+define('LARAVEL_START', microtime(true));
+
 require_once __DIR__ . './../vendor/autoload.php';
 $app = require_once __DIR__ . './../bootstrap/app.php';
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+
+$response = $kernel->handle(
+	$request = Illuminate\Http\Request::capture()
+);
+
 //print_r($_SERVER['REQUEST_METHOD']);
 //header('Access-Control-Allow-Origin: *');
 header('Pragma: no-cache');
