@@ -18,7 +18,7 @@ $response = $kernel->handle(
 );
 
 //print_r($_SERVER['REQUEST_METHOD']);
-//header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: *');
 header('Pragma: no-cache');
 //header('Content-type: text/plain');
 
