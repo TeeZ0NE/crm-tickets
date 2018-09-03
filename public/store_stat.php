@@ -18,7 +18,7 @@ $response = $kernel->handle(
 );
 
 //print_r($_SERVER['REQUEST_METHOD']);
-header('Access-Control-Allow-Origin: *');
+//header('Access-Control-Allow-Origin: *');
 header('Pragma: no-cache');
 //header('Content-type: text/plain');
 
@@ -27,7 +27,7 @@ echo 'Data received'.PHP_EOL;
 
 $service = $_REQUEST['service']??'Unknown';
 if (isset($_REQUEST['service'])){unset($_REQUEST['service']);}
-$get_stat_arr = $_REQUEST;
+$get_stat_arr = (array) $_REQUEST;
 //$curr_date =  date('d.m.Y',time());
 
 /*file_put_contents(
