@@ -7,8 +7,8 @@
  */
 define('LARAVEL_START', microtime(true));
 
-require_once __DIR__ . './../vendor/autoload.php';
-$app = require_once __DIR__ . './../bootstrap/app.php';
+require_once __DIR__.'/../vendor/autoload.php';
+$app = require_once __DIR__.'/../bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
 $response = $kernel->handle(
@@ -35,7 +35,7 @@ $get_stat_arr = $_REQUEST;
 
 class storeStatistics
 {
-	use \App\Http\TicketBags\StoreStatistic;
+	use App\Http\TicketBags\StoreStatistic;
 }
 $storeStatistic = new storeStatistics($service,$get_stat_arr);
 $storeStatistic->store();
