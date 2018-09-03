@@ -8,15 +8,12 @@
 
 //print_r($_SERVER['REQUEST_METHOD']);
 //header('Access-Control-Allow-Origin: *');
-//header('Pragma: no-cache');
+header('Pragma: no-cache');
 //header('Content-type: text/plain');
-/*
-class storeStatistics
-{
-	use \App\Http\TicketBags\StoreStatistic;
-}*/
+
+
 echo 'Data received'.PHP_EOL;
-/*
+
 $service = $_REQUEST['service']??'Unknown';
 if (isset($_REQUEST['service'])){unset($_REQUEST['service']);}
 $get_stat_arr = $_REQUEST;
@@ -26,9 +23,13 @@ $get_stat_arr = $_REQUEST;
 	sprintf('./../storage/stats/%2$s_%1$s.stat.csv',$curr_date,$service),
 	implode(';',$obj).PHP_EOL,FILE_APPEND|LOCK_EX
 );*/
-/*
+
+class storeStatistics
+{
+	use \App\Http\TicketBags\StoreStatistic;
+}
 $storeStatistic = new storeStatistics($service,$get_stat_arr);
 $storeStatistic->store();
-*/
+
 //echo ob_get_length();
 //print_r(get_headers($_SERVER['HTTP_REFERER'],1));
