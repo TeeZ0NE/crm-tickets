@@ -5,7 +5,7 @@
  * Date: 22.08.18
  * Time: 12:25
  */
-
+require __DIR__ . './../vendor/autoload.php';
 //print_r($_SERVER['REQUEST_METHOD']);
 //header('Access-Control-Allow-Origin: *');
 header('Pragma: no-cache');
