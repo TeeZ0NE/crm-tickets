@@ -35,7 +35,7 @@ $get_stat_arr = $_REQUEST;
 
 class storeStatistics
 {
-	use App\Http\TicketBags\StoreStatistic;
+	use \App\Http\TicketBags\StoreStatistic;
 }
 $storeStatistic = new storeStatistics($service,$get_stat_arr);
 $storeStatistic->store();
