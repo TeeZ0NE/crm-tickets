@@ -5,6 +5,8 @@
  * Date: 22.08.18
  * Time: 12:25
  */
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
 define('LARAVEL_START', microtime(true));
 
 require_once __DIR__.'/../vendor/autoload.php';
