@@ -1,43 +1,39 @@
-$('form').on('submit', function (e) {
-	e.preventDefault();
-	var service = 'tophosting';
-	var action_url = "http://91.235.128.132/store_stat.php";
-	var name = $('#name').text();
-	var ticketid = $('#ticket-id').text();
-	var subject = $('.subject span').text();
-	// var input_name = $('input[name="user_name"]').val();
-	/*time 4 request*/
-	var time = 0;
-	var d = new Date();
-	var d_h = ('0'+d.getHours()).slice(-2);
-	var d_m = ('0'+d.getMinutes()).slice(-2);
-	var d_s = ('0'+d.getSeconds()).slice(-2);
-	var lastreply = d.toLocaleDateString('uk-ua') + '.' + d_h + ':' + d_m + ':' + d_s;
-	data = {
-		lastreply: lastreply,
-		time: time,
-		innerticketid: null,
-		subject: subject,
-		name: name,
-		ticketid: ticketid
-	};
-	data = "service="+service+"&" + $.param(data);
-	/* or if need other fields on the form */
-	// $(this).serialize() + $.param(data)
-	$.ajax({
-		crossDomain: true,
-		url: action_url,
-		data: data,
-		async: true,
-		method: "post",
-		headers: {
-			"Access-Control-Allow-Origin": "*"
-		},
-	}).done(function (data) {
-		console.info("done", data);
-	}).fail(function () {
-		console.error("doesn't send");
+$(function () {
+	$('#frmAddTicketReply .pull-left').append('<div class="input-group"><span class="input-group-addon" id="time-input-addon" style="color:red">Введи время!</span><input type="number" class="form-control YSsSx2Wdbn" placeholder="Время" aria-describedby="time-input-addon" min="1" value="1"></div>');
+	$('#btnPostReply').on('click', function (event) {
+		event.preventDefault();
+		var service = 'foxer1';
+		var action_url = 'https://adminarea.secom.com.ua/store_stat.php';
+		var name = $('#watch-ticket').data('adminFullName');
+		var ticketid = $('#watch-ticket').data('ticketId');
+		var subject = ($('#currentSubject').val()).trim();
+		/*time 4 request*/
+		var time = $('.YSsSx2Wdbn').val();
+		var d = new Date();
+		var d_h = ('0' + d.getHours()).slice(-2);
+		var d_m = ('0' + d.getMinutes()).slice(-2);
+		var d_s = ('0' + d.getSeconds()).slice(-2);
+		var lastreply = d.toLocaleDateString('uk-ua') + ' ' + d_h + ':' + d_m + ':' + d_s;
+		var data = {
+			lastreply: lastreply,
+			time_uses: time,
+			subject: subject,
+			admin: name,
+			ticketid: ticketid
+		};
+		data = 'service=' + service + '&' + $.param(data);
+		var xhr = new XMLHttpRequest();
+		if (xhr) {
+			xhr.open('POST', action_url, true);
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			// 			xhr.setRequestHeader('Access-Control-Allow-Origin','*');
+			xhr.send(data);
+			xhr.onreadystatechange = function () { //Вызывает функцию при смене состояния.
+				if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+					console.info(xhr.responseText);
+				}
+			}
+		}
+		$(this).parent().submit();
 	});
-	//TODO:: uncomment me 4 sending form
-	// $(this).parent().submit();*/
 });

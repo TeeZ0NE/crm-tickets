@@ -32,6 +32,7 @@ trait StoreStatistic
 		$service_m = new Service();
 		$ticket_m = new Ticket();
 		$adminNik_m = new AdminNik();
+		# service must be created before else it occurs error
 		$service_id = $service_m->getServiceId($this->service);
 		foreach ($this->recurseGetArr() as $val) {
 			if (array_key_exists('ticketid', $val) && (int)$val['ticketid'] > 0) {

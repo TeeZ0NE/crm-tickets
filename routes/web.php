@@ -40,6 +40,8 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 		Route::get('/','Boss\ServicesController@index')->name('services.index');
 		Route::put('/{service}','Boss\ServicesController@update')->name('services.update');
 		Route::delete('/{service}','Boss\ServicesController@destroy')->name('services.destroy');
+		Route::get('create','Boss\ServicesController@serviceCreate')->name('services.new');
+		Route::post('create','Boss\ServicesController@create')->name('services.create');
 	});
 	Route::get('/logs','Boss\LogController')->name('logs');
 });

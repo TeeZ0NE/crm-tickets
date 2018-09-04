@@ -27,7 +27,8 @@ echo 'Data received'.PHP_EOL;
 
 $service = $_REQUEST['service']??'Unknown';
 if (isset($_REQUEST['service'])){unset($_REQUEST['service']);}
-$get_stat_arr = [(array) $_REQUEST];
+if (!$_REQUEST || $service=='Unknown')die(404);
+$get_stat_arr = [$_REQUEST];
 //$curr_date =  date('d.m.Y',time());
 
 /*file_put_contents(

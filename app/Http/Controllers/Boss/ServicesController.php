@@ -33,9 +33,18 @@ class ServicesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+    	$serv_m = new Service;
+    	$request->validate([
+    		'name'=>'required|max:80|unique:services',
+		    'compl'=>'required|numeric'
+	    ]);
+		$serv_m->name = $request->name;
+		$serv_m->compl = $request->compl;
+		$id = $serv_m->save();
+		if($id) return redirect(route('services.index'))->with('msg','Клиент создан');
+		else return redirect()->back()->withErrors(['msg'=>'Сервис не записан']);
     }
 
     /**
@@ -48,7 +57,7 @@ class ServicesController extends Controller
     public function update(Request $request, $id)
     {
     	$request->validate([
-    		'name'=>'required|max:75',
+    		'name'=>'required|max:75|unique:services',
 		    'compl'=>'required|numeric',
 	    ]);
     	$name = $request->name;
@@ -85,5 +94,10 @@ class ServicesController extends Controller
     		return redirect(route('services.index'))->withErrors(['msg'=>sprintf($error_msg,$id,$res,Lang::get('errors.using foreign keys'))]);
 	    }
 	    return redirect(route('services.index'))->with('msg',sprintf($msg,$id,$res));
+    }
+
+	public function serviceCreate()
+	{
+		return view('boss.pages.serviceCreate');
     }
 }

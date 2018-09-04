@@ -28,7 +28,7 @@
 						Клиенты
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						{{--<a class="dropdown-item" href="{{route('services.create')}}"><i class="far fa-save"></i> Create</a>--}}
+						<a class="dropdown-item" href="{{route('services.new')}}"><i class="far fa-save"></i> Создать</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{{route('services.index')}}"><i class="fas fa-list"></i> Все</a>
 					</div>
