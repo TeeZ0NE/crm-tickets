@@ -24,7 +24,7 @@ class WhmcsLite{
 class MotherDemonLiteTest extends TestCase
 {
 //	use RefreshDatabase;
-	private $service='secom';
+	private $service;
 	private $whmcs;
 
 	public function setUp()
@@ -34,7 +34,7 @@ class MotherDemonLiteTest extends TestCase
 		$this->whmcs=new WhmcsLite($this->service);
 	}
 	/**
-	 * @test
+	 * @test-
 	 */
 	public function getServiceName()
 	{
@@ -51,7 +51,7 @@ class MotherDemonLiteTest extends TestCase
 	}
 
 	/**
-	 * @test
+	 * @test-
 	 */
 	public function checkGetTicketsFromService():array
 	{
@@ -60,7 +60,7 @@ class MotherDemonLiteTest extends TestCase
 		return $tickets[0];
 	}
 	/**
-	 * @test
+	 * @test-
 	 * @depends checkGetTicketsFromService
 	 */
 	public function ticketsArrHasKey($tickets)
@@ -72,7 +72,7 @@ class MotherDemonLiteTest extends TestCase
 		$this->assertArrayHasKey('lastreply',$tickets);
 	}
 	/**
-	 * @test
+	 * @test-
 	 * @depends checkGetTicketsFromService
 	 */
 	public function checkGetTicketid($ticket):int
@@ -82,7 +82,7 @@ class MotherDemonLiteTest extends TestCase
 		return $ticketid;
 	}
 	/**
-	 * @test
+	 * @test-
 	 * @depends getServiceName
 	 */
 	public function checkGetServiceId($service):int
@@ -97,7 +97,7 @@ class MotherDemonLiteTest extends TestCase
 	}
 
 	/**
-	 * @test
+	 * @test-
 	 * @depends checkGetTicketsFromService
 	 */
 	public function checkGetStatusId($ticket):int
@@ -109,7 +109,7 @@ class MotherDemonLiteTest extends TestCase
 
 	/**
 	 * @param $ticket
-	 * @test
+	 * @test-
 	 * @depends checkGetTicketsFromService
 	 */
 	public function checkGetSubject($ticket):string
@@ -122,7 +122,7 @@ class MotherDemonLiteTest extends TestCase
 	}
 
 	/**
-	 * @test
+	 * @test-
 	 * @depends checkGetTicketsFromService
 	 */
 	public function checkGetPriorityId($ticket) :int
@@ -136,7 +136,7 @@ class MotherDemonLiteTest extends TestCase
 	}
 
 	/**
-	 * @test
+	 * @test-
 	 * @depends checkGetTicketsFromService
 	 * @param array $ticket
 	 */
@@ -147,7 +147,7 @@ class MotherDemonLiteTest extends TestCase
 		return $lastreply;
 	}
 	/**
-	 * @test
+	 * @test-
 	 * @depends checkGetTicketid
 	 * @depends checkGetServiceId
 	 * @param int $ticketid
@@ -186,8 +186,8 @@ class MotherDemonLiteTest extends TestCase
 		$this->assertEquals(6,$des);
 	}
 
-	/**-
-	 * @test
+	/**
+	 * @test-
 	 * @depends checkGetTicketid
 	 * @depends checkGetServiceId
 	 * @depends checkGetSubject
@@ -206,7 +206,7 @@ class MotherDemonLiteTest extends TestCase
 		$this->assertInternalType('int',$ticket_id);
 	}
 	/**
-	 * @test
+	 * @test-
 	 * @depends checkTicketExist
 	 */
 	public function checkGetLastreplyFromDb($ticket_id)
@@ -217,7 +217,7 @@ class MotherDemonLiteTest extends TestCase
 	}
 
 	/**
-	 * @test
+	 * @test-
 	 * @depends checkTicketExist
 	 * @depends checkGetLastreply
 	 */
@@ -243,7 +243,7 @@ class MotherDemonLiteTest extends TestCase
 	}
 
 	/**
-	 * @test
+	 * @test-
 	 * @depends checkGetServiceId
 	 */
 	public function checkGetInnerTicketsIds($service_id)
@@ -254,7 +254,7 @@ class MotherDemonLiteTest extends TestCase
 //		return $inner_ids;
 	}
 	/**
-	 * @test
+	 * @test-
 	 * @depends checkGetTicketsFromService
 	 */
 	public function checkGetOuterTicketsIds($tickets)
@@ -288,7 +288,7 @@ class MotherDemonLiteTest extends TestCase
 		$this->assertInternalType('int',$res);
 	}
 	/**
-	 * @test
+	 * @test-
 	 * @depends checkTicketExist
 	 * @depends checkGetStatusId
 	 * @depends checkGetPriorityId
@@ -300,6 +300,17 @@ class MotherDemonLiteTest extends TestCase
 	{
 	$res = $this->whmcs->UpdateTicket($ticket_id,$status_id,$priority_id,$lastreply,$is_admin);
 		$this->assertTrue($res);
+	}
+
+	/**
+	 * @test-
+	 */
+	public function checkGetLastreplier()
+	{
+		$ticket_id=7;
+		$lastreplier_id = $this->whmcs->getLastreplierId($ticket_id);
+		$this->assertEquals(1,$lastreplier_id);
+		return $lastreplier_id;
 	}
 }
 
