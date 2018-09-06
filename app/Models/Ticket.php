@@ -293,4 +293,17 @@ class Ticket extends Model
 	{
 		return $this::where('user_assign_id', $user_id)->update(['user_assign_id' => Null]);
 	}
+
+	/**
+	 * check ticket as closed
+	 *
+	 * ticket is absent in incoming array then switch to closed
+	 * @param int $ticketid
+	 * @param int $service_id
+	 * @return mixed
+	 */
+	public function closeTicket(int $ticketid, int $service_id)
+	{
+		return $this::where(['ticketid'=>$ticketid,'service_id'=>$service_id])->update(['is_closed'=>1]);
+	}
 }
