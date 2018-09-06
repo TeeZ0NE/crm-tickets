@@ -19,10 +19,11 @@ trait StoreStatistic
 	private $get_stat_arr;
 	private $service;
 
-	public function __construct(&$service, &$get_stat_arr)
+//	public function __construct(&$service, &$get_stat_arr)
+		public function __construct()
 	{
-		$this->get_stat_arr = $get_stat_arr;
-		$this->service = $service;
+//		$this->get_stat_arr = $get_stat_arr;
+//		$this->service = $service;
 	}
 
 	public function store(): void
