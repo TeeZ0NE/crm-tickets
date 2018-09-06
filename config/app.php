@@ -215,4 +215,5 @@ return [
 	    'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 "version"=>'v2.0.0',
+	'faker_locale'=>'en',
 ];
