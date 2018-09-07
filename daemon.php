@@ -14,36 +14,24 @@ $response = $kernel->handle(
 
 use App\Http\TicketBags\Whmcsapi;
 
-class WhmcsDaemon
+class WhmcsDaemonLite
 {
-	use \App\Http\TicketBags\MotherWhmcsDaemon;
+	use \App\Http\TicketBags\MotherWhmcsDaemonLite;
 }
-
 # take array of services and loop it to take data
-/*
+
 $whmcs_services = (array)config('services_arr.whmcs_services');
 foreach ($whmcs_services as $whmcs_service){
-	$WhmcsDaemon = new WhmcsDaemon($whmcs_service);
-	$tickets = $WhmcsDaemon->getTicketsFromService();
-	if ($tickets==Null)continue;
-	$WhmcsDaemon->storeData($tickets);
+	$WhmcsLite = new WhmcsDaemonLite($whmcs_service);
+	$WhmcsLite->getandStoreDataFromTicket();
 }
-*/
+# For debugging use public method getTicketsFromService;
 
-$service = 'secom';
-printf("sirvice %s\n",$service);
+/*$service = 'secom';
 $secom = new Whmcsapi($service);
 print_r($secom->getListTikets());
 //print_r($secom->getTiket());
 
-//$adminvps = new Whmcsapi('adminvps');
-//print_r($adminvps->getListTikets());
-
-//$hostiman = new Whmcsapi('hostiman');
-//print_r($hostiman->getListTikets());
-//
-//$uahosting = new Whmcsapi('ua-hosting');
-//print_r($uahosting->getListTikets());
 
 /*
 # test ISPManager
