@@ -85,7 +85,7 @@ class Ticket extends Model
 
 	public function getTicketId(int $ticketid, int $service_id, array $values = [])
 	{
-		$ticket_m = $this->firstOrCreate(['service_id' => $service_id, 'ticketid' => $ticketid], $values);
+		$ticket_m = $this->UpdateOrCreate(['service_id' => $service_id, 'ticketid' => $ticketid], $values);
 		return $ticket_m->id;
 	}
 
