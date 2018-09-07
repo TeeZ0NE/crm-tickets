@@ -54,13 +54,12 @@ trait MotherWhmcsDaemonLite
 		$msg = '==Get tickets from %5s==';
 		$err_msg = '==Get tickets error from %s with error msg %s==';
 		try {
-			//todo: debug Log::info(sprintf($msg,$this->service));
 			# try 2 get tickets if error read message
 			$tickets = (array)array_get($this->whmcs->getListTikets(), 'tickets.ticket');
 			if ($tickets == null) throw new Exception($this->whmcs->getListTikets()['message']);
 			return $tickets;
 		} catch (Exception $e) {
-			//todo: debug Log::error(sprintf($err_msg,$this->service,$e->getMessage()));
+			Log::error(sprintf($err_msg,$this->service,$e->getMessage()));
 			# return Null if response Error or Empty tickets array
 			return Null;
 		}

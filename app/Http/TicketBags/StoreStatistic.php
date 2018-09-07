@@ -12,6 +12,7 @@ use App\Models\{
 	Priority, Service, Status, SysadminActivity, Ticket, AdminNik
 };
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 trait StoreStatistic
 {
