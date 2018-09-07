@@ -9,7 +9,7 @@
 namespace App\Http\TicketBags;
 
 use App\Models\{
-	Service, SysadminActivity, Ticket, AdminNik
+	Priority, Service, Status, SysadminActivity, Ticket, AdminNik
 };
 use Carbon\Carbon;
 
@@ -19,50 +19,49 @@ trait StoreStatistic
 	private $get_stat_arr;
 	private $service;
 
-//	public function __construct(&$service, &$get_stat_arr)
-		public function __construct()
+	public function __construct(string $service, array &$get_stat_arr)
 	{
-//		$this->get_stat_arr = $get_stat_arr;
-//		$this->service = $service;
+		$this->get_stat_arr = $get_stat_arr;
+		$this->service = $service;
 	}
 
 	public function store(): void
 	{
-		//todo:: debug
-//		print_r($this->get_stat_arr);
-		$service_m = new Service();
-		$ticket_m = new Ticket();
-		$adminNik_m = new AdminNik();
 		# service must be created before else it occurs error
-		$service_id = $service_m->getServiceId($this->service);
+		$service_id = $this->getServiceId($this->service);
 		foreach ($this->recurseGetArr() as $val) {
-			if (array_key_exists('ticketid', $val) && (int)$val['ticketid'] > 0) {
-				$lastreply = Carbon::createFromTimeString($val['lastreply']);
-				$nik_id = $adminNik_m->getAdminNikId($val['admin'], $service_id);
-				$ticket_id = $ticket_m->getTicketId((int)$val['ticketid'], $service_id, [
+			$ticketid = $this->getTicketIdFromRequest($val['ticketid']);
+			if (array_key_exists('ticketid', $val) && $ticketid > 0) {
+				$lastreply = $this->getLastreply($val['lastreply']);
+				$nik_id = $this->getAdminNikId($val['admin'], $service_id);
+				$values = [
 					'last_replier_nik_id' => $nik_id,
 					'lastreply' => $lastreply,
-					'subject' => $val['subject'],
-				]);
-						$this->storeAdminActivities($ticket_id, $nik_id, $lastreply, (int)$val['time_uses']);
+					'subject' => $this->getSubject($val['subject']),
+					'last_is_admin' => 1,
+					'priority_id'=>$this->getPriorityDefault(),
+					'status_id'=>$this->getStatusDefault(),
+				];
+				$ticket_id = $this->storeTicketAndGetId($ticketid,$service_id,$values);
+				$this->storeAdminActivities($ticket_id, $nik_id, $lastreply, $this->getTimeUses($val['time_uses']));
 			} # ticketid not found
 			else continue;
 		}
 	}
 
-	private function storeAdminActivities(int $ticket_id, int $nik_id,$lastreply ,int $time_uses=0 )
+	function storeAdminActivities(int $ticket_id, int $nik_id, $lastreply, int $time_uses = 0)
 	{
 		$sysadmnin_act_m = new SysadminActivity();
-		$sysadmnin_act_m::firstOrCreate([
-			'sysadmin_niks_id'=> $nik_id,
-			'ticket_id'=>$ticket_id,
-			'lastreply' =>$lastreply,
-		],[
-			'time_uses'=>$time_uses
+		$res = $sysadmnin_act_m::firstOrCreate([
+			'sysadmin_niks_id' => $nik_id,
+			'ticket_id' => $ticket_id,
+			'lastreply' => $lastreply,
+		], [
+			'time_uses' => $time_uses
 		]);
 		//todo update ticket with lastreply
-			Ticket::find($ticket_id)->update(['last_replier_nik_id'=>$nik_id, 'lastreply'=>$lastreply]);
-
+//		Ticket::find($ticket_id)->update(['last_replier_nik_id' => $nik_id, 'lastreply' => $lastreply]);
+		return $res->id;
 	}
 
 	private function recurseGetArr()
@@ -70,5 +69,59 @@ trait StoreStatistic
 		foreach ($this->get_stat_arr as $arr) {
 			yield $arr;
 		}
+	}
+
+	function getServiceId(string $service): int
+	{
+		$service_m = new Service;
+		$service_id = $service_m->getServiceId($service);
+		return $service_id;
+	}
+
+	function getAdminNikId(string $admin_nik, int $service_id): int
+	{
+		$adminNik_m = new AdminNik();
+		$admin_nik_id = $adminNik_m->getAdminNikId($admin_nik, $service_id);
+		return $admin_nik_id;
+	}
+
+	function getTicketIdFromRequest($ticketid_req)
+	{
+		$ticketid = (int)$ticketid_req;
+		return $ticketid;
+	}
+
+	function getLastreply(string $lastreply_request)
+	{
+		$lastreply = Carbon::createFromTimeString($lastreply_request);
+		return $lastreply;
+	}
+
+	function getTimeUses(string $timeFromRequest):int{
+		$time_uses = (int)$timeFromRequest;
+		return $time_uses;
+	}
+
+	function getSubject(string $subjectFromRequest):string{
+		$subjTrimmed = trim($subjectFromRequest);
+		$subject = (empty($subjTrimmed))?"No subject":$subjTrimmed;
+		return $subject;
+	}
+
+	function storeTicketandGetId(int $ticketid,int $service_id, array $values){
+		$ticket_m = new Ticket();
+		$ticket_id = $ticket_m->getTicketId($ticketid,$service_id,$values);
+		echo $ticket_id;
+		return $ticket_id;
+	}
+	function getPriorityDefault($priority='n\a'):int{
+		$priority_m = new Priority();
+		$priority_id = $priority_m::firstOrCreate(['priority'=>$priority]);
+		return $priority_id->id;
+	}
+	function getStatusDefault($status='in progress'){
+		$status_m = new Status();
+		$status_id = $status_m::firstOrCreate(['name'=>$status])->id;
+		return $status_id;
 	}
 }
