@@ -96,7 +96,7 @@ trait MotherWhmcsDaemonLite
 	 *
 	 * @return void
 	 */
-	function getDataFromTicket(): void
+	function getandStoreDataFromTicket(): void
 	{
 		foreach ($this->recurseTickets() as $ticket) {
 			$ticketid = $this->getTicketid($ticket);
