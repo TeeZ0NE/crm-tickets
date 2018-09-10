@@ -119,7 +119,7 @@ AND (sact.lastreply between  DATE_FORMAT('2018-07-01' ,'%Y-%m-%d') AND DATE_FORM
 AND services.id=1;
 -- /get rate without summing
 
-SELECT id from tickets WHERE service_id=3 LIMIT 1;
+SELECT id from tickets WHERE service_id=1 LIMIT 1;
 
 SELECT t.id FROM tickets AS t
 WHERE t.is_closed=0 AND t.last_replier_nik_id=0 AND t.user_assign_id is NULL;
@@ -168,3 +168,5 @@ SELECT * FROM users
 LEFT JOIN `like` as l ON l.id_3=id_1
 WHERE l.id_3 IS NULL; 
 DROP DATABASE test;
+
+INSERT INTO sysadmin_niks(service_id,admin_nik,user_id) VALUES(1,'Boryan',2);

@@ -1,0 +1,19 @@
+<?php
+
+namespace Tests\Unit;
+
+use Tests\TestCase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class Example extends TestCase
+{
+    /**
+     * A basic test example.
+     *
+     * @return void
+     */
+    public function ptestBasicTest()
+    {
+        $this->assertTrue(true);
+    }
+}

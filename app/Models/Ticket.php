@@ -85,7 +85,7 @@ class Ticket extends Model
 
 	public function getTicketId(int $ticketid, int $service_id, array $values = [])
 	{
-		$ticket_m = $this->firstOrCreate(['service_id' => $service_id, 'ticketid' => $ticketid], $values);
+		$ticket_m = $this->UpdateOrCreate(['service_id' => $service_id, 'ticketid' => $ticketid], $values);
 		return $ticket_m->id;
 	}
 
@@ -292,5 +292,18 @@ class Ticket extends Model
 	public function setNullUserAssignId(int $user_id)
 	{
 		return $this::where('user_assign_id', $user_id)->update(['user_assign_id' => Null]);
+	}
+
+	/**
+	 * check ticket as closed
+	 *
+	 * ticket is absent in incoming array then switch to closed
+	 * @param int $ticketid
+	 * @param int $service_id
+	 * @return mixed
+	 */
+	public function closeTicket(int $ticketid, int $service_id)
+	{
+		return $this::where(['ticketid'=>$ticketid,'service_id'=>$service_id])->update(['is_closed'=>1]);
 	}
 }

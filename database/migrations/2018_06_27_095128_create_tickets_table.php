@@ -17,7 +17,7 @@ class CreateTicketsTable extends Migration
 	        $table->increments('id');
 	        $table->unsignedMediumInteger('ticketid')->index()->comment('outer ticket\'s id');
 	        $table->string('subject')->charset('utf8')->collation('utf8_unicode_ci')->comment('subject from out');
-	        $table->unsignedTinyInteger('service_id')->comment('secom etc');
+	        $table->unsignedTinyInteger('service_id')->index()->comment('secom etc');
 	        $table->unsignedTinyInteger('status_id')->nullable()->comment('status_id');
 	        $table->unsignedTinyInteger('priority_id')->nullable()->comment('priority');
 	        $table->dateTime('lastreply')->comment('Is comming from out');
