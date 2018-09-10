@@ -23,10 +23,10 @@
 											@csrf
 											<div class="input-group">
 												<div class="input-group-prepend">
-													<span class="input-group-text">Клиент, сложность</span>
+													<span class="input-group-text"><b>{{$service->name}}</b>: линк, сложность</span>
 												</div>
 												<input type="text" aria-label="name" class="form-control"
-												       value="{{$service->name}}" name="name" disabled>
+												       value="{{$service->href_link}}" name="href_link">
 												<input type="number" aria-label="compl" class="form-control"
 												       value="{{$service->compl}}" step=".1" name="compl">
 												<button type="submit"  class="store-service btn btn-info">

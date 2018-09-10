@@ -61,8 +61,9 @@ class ServicesController extends Controller
 	    ]);
     	$name = $request->name?? '';
     	$compl=$request->compl;
+    	$href_link = $request->href_link;
     	$service_m = new Service();
-    	$res = $service_m->find($id)->update(['compl'=>$compl]);
+    	$res = $service_m->find($id)->update(['compl'=>$compl,'href_link'=>$href_link]);
         if($res){
 	        Log::info(sprintf('Service %2$s with id %1$d updated',$id,$name));
         	return redirect(route('services.index'))->with('msg',sprintf("update id %d %s compl %.1f", $id,$name,$compl));

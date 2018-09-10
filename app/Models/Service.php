@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Service extends Model
 {
     public $timestamps = False;
-    protected $fillable = ['name','compl'];
+    protected $fillable = ['name','compl','href_link'];
 
 	/**
 	 * getting all services Ids

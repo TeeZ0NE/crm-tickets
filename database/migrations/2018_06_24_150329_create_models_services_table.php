@@ -17,6 +17,7 @@ class CreateModelsServicesTable extends Migration
             $table->tinyIncrements('id');
             $table->string('name',80)->unique()->comment('service name like Secom');
             $table->unsignedDecimal('compl',2,1)->default(1);
+            $table->string('href_link')->charset('utf8')->default('#')->comment('a link href');
         });
     }
 
