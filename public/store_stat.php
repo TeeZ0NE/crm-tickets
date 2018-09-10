@@ -42,6 +42,7 @@ class storeStatistics
 }
 $storeStatistic = new storeStatistics($service,$get_stat_arr);
 $storeStatistic->store();
-print_r($get_stat_arr);
+echo "catch";
+//print_r($get_stat_arr);
 //echo ob_get_length();
 //print_r(get_headers($_SERVER['HTTP_REFERER'],1));

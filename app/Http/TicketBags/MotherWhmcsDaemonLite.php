@@ -105,12 +105,13 @@ trait MotherWhmcsDaemonLite
 			$lastreply = $this->getLastreply($ticket);
 			$service_id = $this->getServiceId($this->service);
 			$ticket_id = $this->ticketExist($ticketid, $service_id);
+			$is_customer = $this->isCustomerReply($ticket);
 			$this->setOuterTicketsIds($ticketid);
 
 			if ($ticket_id) {
 				$this->updateTicket(
 					$ticket_id, $status_id, $priority_id, $lastreply,
-					$this->isAdmin($lastreply, $this->getLastreplyFromDb($ticket_id), $this->getIsAdminFromDb($ticket_id)));
+					$this->isAdmin($lastreply, $this->getLastreplyFromDb($ticket_id), $this->getIsAdminFromDb($ticket_id)),$is_customer);
 			} else {
 				$this->storeNewTicket($ticketid, $service_id, $subject, $status_id, $priority_id, $lastreply);
 			}
@@ -279,13 +280,16 @@ trait MotherWhmcsDaemonLite
 	 * @param string $lastreply
 	 * @param string $getLastreplyFromDb
 	 * @param bool $is_admin_db
+	 * @param bool $is_customer last reply status
 	 * @return int
 	 */
-	private function isAdmin(string $lastreply, string $getLastreplyFromDb, bool $is_admin_db): int
+	private function isAdmin(string $lastreply, string $getLastreplyFromDb, bool $is_admin_db, bool $is_customer): int
 	{
 		if (Carbon::parse($getLastreplyFromDb)->
 			between(Carbon::parse($lastreply)->subMinute(), Carbon::parse($lastreply)->addMinute())
-			&& $is_admin_db) $is_admin = 1;
+			&& $is_admin_db && !$is_customer) {
+			$is_admin = 1;
+		}
 		else $is_admin = 0;
 		return $is_admin;
 	}
@@ -376,5 +380,19 @@ trait MotherWhmcsDaemonLite
 	{
 		$lastreplier_nik_id = Ticket::find($ticket_id)->last_replier_nik_id;
 		return $lastreplier_nik_id;
+	}
+
+	/**
+	 * Check status (-es) customer
+	 *
+	 * if it in customer statuses then customer reply
+	 * @param array $ticket
+	 * @return bool
+	 */
+	private function isCustomerReply(array $ticket):bool
+	{
+		$statuses=['customer-reply'];
+		$is_customer =in_array(strtolower($ticket['status']),$statuses);
+		return $is_customer;
 	}
 }
