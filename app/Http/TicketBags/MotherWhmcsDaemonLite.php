@@ -111,7 +111,7 @@ trait MotherWhmcsDaemonLite
 			if ($ticket_id) {
 				$this->updateTicket(
 					$ticket_id, $status_id, $priority_id, $lastreply,
-					$this->isAdmin($lastreply, $this->getLastreplyFromDb($ticket_id), $this->getIsAdminFromDb($ticket_id)),$is_customer);
+					$this->isAdmin($lastreply, $this->getLastreplyFromDb($ticket_id), $this->getIsAdminFromDb($ticket_id),$is_customer));
 			} else {
 				$this->storeNewTicket($ticketid, $service_id, $subject, $status_id, $priority_id, $lastreply);
 			}
