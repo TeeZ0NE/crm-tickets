@@ -57,17 +57,15 @@ class ServicesController extends Controller
     public function update(Request $request, $id)
     {
     	$request->validate([
-    		'name'=>'required|max:75|unique:services',
 		    'compl'=>'required|numeric',
 	    ]);
-    	$name = $request->name;
+    	$name = $request->name?? '';
     	$compl=$request->compl;
     	$service_m = new Service();
-    	$res = $service_m->find($id)->update(['name'=>$name,'compl'=>$compl]);
-        printf("update id %d name %s compl %.1f", $id,$name,$compl);
+    	$res = $service_m->find($id)->update(['compl'=>$compl]);
         if($res){
 	        Log::info(sprintf('Service %2$s with id %1$d updated',$id,$name));
-        	return redirect(route('services.index'))->with('msg',sprintf("update id %d name %s compl %.1f", $id,$name,$compl));
+        	return redirect(route('services.index'))->with('msg',sprintf("update id %d %s compl %.1f", $id,$name,$compl));
         }
 	    Log::error(sprintf('Service %2$s with id %1$d doesn\'t update',$id,$name));
 	    return redirect()->back()->withErrors('msg',sprintf("Error updating id %d name %s compl %.1f", $id,$name,$compl));
