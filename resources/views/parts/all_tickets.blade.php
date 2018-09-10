@@ -26,8 +26,9 @@
 				@foreach($openTickets as $openTicket)
 					@php
 						$lastreply_class = setClass4lastreply($openTicket, $deadlineList,$maxDeadline);
+					echo $lastreply_class;
 					@endphp
-					<tr class="align-middle {{$lastreply_class or ''}}">
+					<tr class="align-middle {{$lastreply_class}}">
 						@php
 							$is_new = '';
 							$waitingTime = $Carbon::createFromTimeStamp(strtotime($openTicket->lastreply))->diffForHumans();
@@ -43,13 +44,13 @@
 						<td>{{$i++}}</td>
 						<td>{{$waitingTime}}</td>
 						<td>{{$openTicket->getService->name}}</td>
-						<td>{{$openTicket->ticketid}}</td>
+						<td><a href="{{$openTicket->getService->href_link}}{{$openTicket->ticketid}}" target="_blank" class="btn btn-info">{{$openTicket->ticketid}}</a></td>
 						<td>{{$openTicket->subject}}</td>
-						<td>{!! $lastReplier or __('site.unknown') !!}@if((bool)$is_new)<br><u>{{$is_new}}</u>@endif</td>
+						<td>{!! $lastReplier !!}@if((bool)$is_new)<br><u>{{$is_new}}</u>@endif</td>
 						<td>{{$openTicket->lastreply}}</td>
-						<td>{{$openTicket->getUserAssignedTicket['name'] or ''}}</td>
-						<td>{{$openTicket->getPriority->priority or __('site.unknown')}}</td>
-						<td>{{$openTicket->getStatus->name or __('site.unknown')}}</td>
+						<td>{{$openTicket->getUserAssignedTicket['name']}}</td>
+						<td>{{$openTicket->getPriority->priority}}</td>
+						<td>{{$openTicket->getStatus->name}}</td>
 						@isset($deadline_cb)
 						<td>
 							<form action="{{route('boss.ticket.update',$openTicket->id)}}" method="post">

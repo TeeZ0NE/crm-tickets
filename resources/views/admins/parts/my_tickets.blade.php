@@ -32,12 +32,12 @@
 						@endphp
 						<td>{{$waitingTime}}</td>
 						<td>{{$showMyTicket->getService->name}}</td>
-						<td>{{$showMyTicket->ticketid}}</td>
+						<td><a href="{{$showMyTicket->getService->href_link}}" target="_blank" class="btn btn-info">{{$showMyTicket->ticketid}}</a></td>
 						<td>{{$showMyTicket->subject}}</td>
-						<td>{{$lastReplier or __('site.unknown')}}</td>
+						<td>{{$lastReplier}}</td>
 						<td>{{$showMyTicket->lastreply}}</td>
-						<td>{{$showMyTicket->getPriority->priority or __('site.unknown')}}</td>
-						<td>{{$showMyTicket->getStatus->name or __('site.unknown')}}</td>
+						<td>{{$showMyTicket->getPriority->priority}}</td>
+						<td>{{$showMyTicket->getStatus->name}}</td>
 						<td><form action="{{route('boss.ticket.update',$showMyTicket->id)}}" method="post">
 								@csrf
 								@method('PUT')
