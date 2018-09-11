@@ -26,7 +26,6 @@
 				@foreach($openTickets as $openTicket)
 					@php
 						$lastreply_class = setClass4lastreply($openTicket, $deadlineList,$maxDeadline);
-					echo $lastreply_class;
 					@endphp
 					<tr class="align-middle {{$lastreply_class}}">
 						@php
