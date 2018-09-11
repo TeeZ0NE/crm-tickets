@@ -35,13 +35,15 @@ class IndexController extends Controller
 		$dlc = new DLC();
 		$maxDeadline = $dlc->explodeTime($deadline_m->getMaxDeadline());
 		$serviceTicketCounts = [];
-		if (count(Service::all())) {
-			foreach (Service::all() as $service) {
+		$service_all = Service::all();
+		if (count($service_all)) {
+			foreach ($service_all as $service) {
 				$serviceTicketCounts[$service->name] = [
 					'summary_tickets' => $ticket_m->getSummaryCountTickets($service->id),
 					'open_tickets' => $ticket_m->getCountOpenTickets($service->id),
 					'yesterday' => $ticket_m->getAllTicketsFromYesterday($service->id)->count(),
 					'start_month' => $ticket_m->getAllTicketsFromMonth($service->id)->count(),
+					'is_available'=>$service->is_available
 				];
 			}
 			return view('boss.pages.home')->with([

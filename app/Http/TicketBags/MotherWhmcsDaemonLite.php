@@ -59,6 +59,7 @@ trait MotherWhmcsDaemonLite
 			if ($tickets == null) throw new Exception($this->whmcs->getListTikets()['message']);
 			return $tickets;
 		} catch (Exception $e) {
+			$this->setServiceAvailable(false);
 			Log::error(sprintf($err_msg,$this->service,$e->getMessage()));
 			# return Null if response Error or Empty tickets array
 			return Null;
@@ -103,17 +104,17 @@ trait MotherWhmcsDaemonLite
 			$subject = $this->getSubject($ticket);
 			$priority_id = $this->getPriorityId($ticket);
 			$lastreply = $this->getLastreply($ticket);
-			$service_id = $this->getServiceId($this->service);
-			$ticket_id = $this->ticketExist($ticketid, $service_id);
+			$ticket_id = $this->ticketExist($ticketid, $this->service_id);
 			$is_customer = $this->isCustomerReply($ticket);
 			$this->setOuterTicketsIds($ticketid);
+			$this->setServiceAvailable(true);
 
 			if ($ticket_id) {
 				$this->updateTicket(
 					$ticket_id, $status_id, $priority_id, $lastreply,
 					$this->isAdmin($lastreply, $this->getLastreplyFromDb($ticket_id), $this->getIsAdminFromDb($ticket_id),$is_customer));
 			} else {
-				$this->storeNewTicket($ticketid, $service_id, $subject, $status_id, $priority_id, $lastreply);
+				$this->storeNewTicket($ticketid, $this->service_id, $subject, $status_id, $priority_id, $lastreply);
 			}
 		}
 		# check existing ticket in DB
@@ -394,5 +395,15 @@ trait MotherWhmcsDaemonLite
 		$statuses=['customer-reply'];
 		$is_customer =in_array(strtolower($ticket['status']),$statuses);
 		return $is_customer;
+	}
+
+	/**
+	 * Set available service
+	 *
+	 * @param bool $is_available
+	 */
+	private function setServiceAvailable(bool $is_available){
+		$service_m = new Service();
+		$service_m::find($this->service_id)->update(['is_available'=>$is_available]);
 	}
 }
