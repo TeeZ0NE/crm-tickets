@@ -29,12 +29,6 @@ $service = $_REQUEST['service']??'Unknown';
 if (isset($_REQUEST['service'])){unset($_REQUEST['service']);}
 if (!$_REQUEST || $service=='Unknown')die(404);
 $get_stat_arr = [$_REQUEST];
-//$curr_date =  date('d.m.Y',time());
-
-/*file_put_contents(
-	sprintf('./../storage/stats/%2$s_%1$s.stat.csv',$curr_date,$service),
-	implode(';',$obj).PHP_EOL,FILE_APPEND|LOCK_EX
-);*/
 
 class storeStatistics
 {
