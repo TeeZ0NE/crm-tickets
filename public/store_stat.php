@@ -18,12 +18,12 @@ $response = $kernel->handle(
 );
 
 //print_r($_SERVER['REQUEST_METHOD']);
-header('Access-Control-Allow-Origin: *');
+//header('Access-Control-Allow-Origin: *');
 header('Pragma: no-cache');
 //header('Content-type: text/plain');
 
 
-echo 'Data received'.PHP_EOL;
+echo 'Data received';
 
 $service = $_REQUEST['service']??'Unknown';
 if (isset($_REQUEST['service'])){unset($_REQUEST['service']);}
@@ -40,10 +40,9 @@ $storeStatistic->store();
 
 # todo: log'n statistic 4 first time
 $curr_date =  date('d.m.Y',time());
-$res = file_put_contents(
+file_put_contents(
 sprintf('./../storage/stats/%2$s_%1$s.stat.csv',$curr_date,$service),
-	implode(';',$get_stat_arr).PHP_EOL,FILE_APPEND|LOCK_EX
+	implode(';',$get_stat_arr[0]).PHP_EOL,FILE_APPEND|LOCK_EX
 );
-echo ($res)?'yes':'no';
 //echo ob_get_length();
 //print_r(get_headers($_SERVER['HTTP_REFERER'],1));
