@@ -52,10 +52,10 @@
 						<a href="{{$newTicket->getService->href_link}}{{$newTicket->ticketid}}" target="_blank" class="btn btn-info">{{$newTicket->ticketid}}</a>
 					</td>
 					<td>{{$newTicket->subject}}</td>
-					<td>{{$lastReplier or __('site.unknown') }}</td>
+					<td>{{$lastReplier}}</td>
 					<td>{{$newTicket->lastreply}}</td>
-					<td class="align-middle">{{$newTicket->getPriority->priority or __('site.unknown')}}</td>
-					<td class="align-middle">{{$newTicket->getStatus->name or __('site.unknown')}}</td>
+					<td class="align-middle">{{$newTicket->getPriority->priority}}</td>
+					<td class="align-middle">{{$newTicket->getStatus->name}}</td>
 				</tr>
 			@endforeach
 			</tbody>

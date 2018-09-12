@@ -45,7 +45,7 @@
 						   class="btn btn-info">{{$newTicket->ticketid}}</a>
 					</td>
 					<td>{{$newTicket->subject}}</td>
-					<td>{{$lastReplier or __('site.unknown')}}</td>
+					<td>{{$lastReplier}}</td>
 					<td>{{$newTicket->lastreply}}</td>
 					<td>{{$newTicket->getPriority->priority}}</td>
 					<td>{{$newTicket->getStatus->name}}</td>
