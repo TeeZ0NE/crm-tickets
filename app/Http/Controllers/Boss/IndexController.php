@@ -8,10 +8,12 @@ use App\Models\{Ticket,  Service, Deadline};
 use Carbon\Carbon;
 use App\Http\Controllers\Boss\DeadlineController as DLC;
 //use Illuminate\Support\Facades\Session;
+use App\Http\Libs\Statistic;
 
 
 class IndexController extends Controller
 {
+	use Statistic;
 
 	/**
 	 * Create a new controller instance.
@@ -34,10 +36,10 @@ class IndexController extends Controller
 		$deadline_m = new Deadline();
 		$dlc = new DLC();
 		$maxDeadline = $dlc->explodeTime($deadline_m->getMaxDeadline());
-		$serviceTicketCounts = [];
+		/*$serviceTicketCounts = [];*/
 		$service_all = Service::all();
 		if (count($service_all)) {
-			foreach ($service_all as $service) {
+			/*foreach ($service_all as $service) {
 				$serviceTicketCounts[$service->name] = [
 					'summary_tickets' => $ticket_m->getSummaryCountTickets($service->id),
 					'open_tickets' => $ticket_m->getCountOpenTickets($service->id),
@@ -45,9 +47,9 @@ class IndexController extends Controller
 					'start_month' => $ticket_m->getAllTicketsFromMonth($service->id)->count(),
 					'is_available'=>$service->is_available
 				];
-			}
+			}*/
 			return view('boss.pages.home')->with([
-					'ticketCounts' => $serviceTicketCounts,
+					'ticketCounts' => $this->getStatisticFromServices(),
 					'openTickets' => $ticket_m->getOpenTickets(),
 					'newTickets' => $ticket_m->getNewTickets(),
 					'Carbon'=>new Carbon(),

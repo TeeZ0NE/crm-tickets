@@ -46,6 +46,7 @@ class HomeController extends Controller
 	        'this_month'=>Carbon::now()->startOfMonth(),
 	        'deadlineList'=>$dlc->getSummaryArrMinutes(),
 	        'maxDeadline'=>$maxDeadline,
+	        'serviceCountOpenTickets'=>$this->getStatisticFromServices(false),
         ]);
     }
 

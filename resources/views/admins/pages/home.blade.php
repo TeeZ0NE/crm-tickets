@@ -10,6 +10,7 @@
 				</div>
 			</div>
 			<div class="col-md-8 col-lg-9">
+				@include('admins.parts.service_open_tickets')
 				@include('admins.parts.new_tickets')
 				@include('admins.parts.my_tickets')
 				@include('parts.all_tickets')

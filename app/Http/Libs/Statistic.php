@@ -62,4 +62,31 @@ trait Statistic
 		$ticket_m = new Ticket();
 		return empty($ticket_m->select('id')->where('service_id',$service_id)->first());
 	}
+
+	private function getStatisticFromServices(bool $all=true)
+	{
+		$serviceTicketCounts = [];
+		$ticket_m = new Ticket();
+		$service_all = Service::all();
+		$summary_tickets=$open_tickets=$yesterday=$start_month=$is_available = 0;
+		if (count($service_all)) {
+			foreach ($service_all as $service) {
+				if($all){
+					$summary_tickets = $ticket_m->getSummaryCountTickets($service->id);
+					$yesterday = $ticket_m->getAllTicketsFromYesterday($service->id)->count();
+					$start_month = $ticket_m->getAllTicketsFromMonth($service->id)->count();
+					$is_available = $service->is_available;
+				}
+				$open_tickets = $ticket_m->getCountOpenTickets($service->id);
+				$serviceTicketCounts[$service->name] = [
+					'summary_tickets' =>$summary_tickets,
+					'open_tickets' => $open_tickets,
+					'yesterday' =>$yesterday,
+					'start_month' =>$start_month,
+					'is_available' => $is_available
+				];
+			}
+		}
+		return $serviceTicketCounts;
+	}
 }
