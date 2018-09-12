@@ -48,7 +48,9 @@
 						@endif
 					</td>
 					<td class="align-middle">{{$newTicket->getService->name}}</td>
-					<td class="align-middle">{{$newTicket->ticketid}}</td>
+					<td class="align-middle">
+						<a href="{{$newTicket->getService->href_link}}{{$newTicket->ticketid}}" target="_blank" class="btn btn-info">{{$newTicket->ticketid}}</a>
+					</td>
 					<td>{{$newTicket->subject}}</td>
 					<td>{{$lastReplier or __('site.unknown') }}</td>
 					<td>{{$newTicket->lastreply}}</td>
