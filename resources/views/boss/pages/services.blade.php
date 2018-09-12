@@ -28,7 +28,7 @@
 												<input type="text" aria-label="name" class="form-control"
 												       value="{{$service->href_link}}" name="href_link">
 												<input type="number" aria-label="compl" class="form-control"
-												       value="{{$service->compl}}" step=".1" name="compl">
+												       value="{{$service->compl}}" step=".1" name="compl" max="9.9" min="0">
 												<button type="submit"  class="store-service btn btn-info">
 													<i class="fas fa-save"></i>
 												</button>

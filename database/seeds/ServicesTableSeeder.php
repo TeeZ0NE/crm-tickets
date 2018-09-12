@@ -15,8 +15,8 @@ class ServicesTableSeeder extends Seeder
 		$services = [
 			'secom' => 'https://secom.com.ua/billing/admin/supporttickets.php?action=viewticket&id=',
 			'adminvps' => 'https://my.adminvps.ru/admi/supporttickets.php?action=view&id=',
-			'hostiman' => 'https://cp.hostiman.ru/admins/supporttickets.php?action=view&id=',
-			'ua-hosting' => 'https://billing.ua-hosting.company/admins/supporttickets.php?action=view&id=',
+			'hostiman' => 'https://cp.hostiman.ru/admin/supporttickets.php?action=view&id=',
+			'ua-hosting' => 'https://billing.ua-hosting.company/admin/supporttickets.php?action=view&id=',
 			'skt' => 'https://skt.ru/manager/billmgr?func=desktop&startpage=tickets&startform=tickets.edit&elid=',
 			'coopertino' => 'https://coopertino.ru:1500/billmgr?func=desktop&startpage=tickets&startform=tickets.edit&elid='
 		];

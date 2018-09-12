@@ -38,7 +38,7 @@ class ServicesController extends Controller
     	$serv_m = new Service;
     	$request->validate([
     		'name'=>'required|max:80|unique:services',
-		    'compl'=>'required|numeric'
+		    'compl'=>'required|numeric|max:9.9|min:0'
 	    ]);
 		$serv_m->name = $request->name;
 		$serv_m->compl = $request->compl;
@@ -57,7 +57,7 @@ class ServicesController extends Controller
     public function update(Request $request, $id)
     {
     	$request->validate([
-		    'compl'=>'required|numeric',
+		    'compl'=>'required|numeric|max:9.9|min:0',
 	    ]);
     	$name = $request->name?? '';
     	$compl=$request->compl;

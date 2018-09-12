@@ -14,8 +14,8 @@
 			<tbody>
 			@if(isset($ticketCounts))
 				@foreach($ticketCounts as $service => $value)
-					<tr class="@empty($value['is_available'])lastreply-max @endempty text-center">
-						<td class="text-left">{{$service}}</td>
+					<tr class="text-center">
+						<td @if(!$value['is_available'])class="lastreply-max text-left" @else class="text-left" @endif>{{$service}}</td>
 						<td>{{$value['open_tickets']}}</td>
 						<td>{{$value['summary_tickets']}}</td>
 						<td>{{$value['yesterday']}}</td>

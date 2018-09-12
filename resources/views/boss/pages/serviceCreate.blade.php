@@ -16,7 +16,7 @@
 								<input type="text" aria-label="name" class="form-control"
 								       value="{{old('name')}}" name="name">
 								<input type="number" aria-label="compl" class="form-control"
-								       value="@php echo old('compl')??1.0; @endphp" step=".1" name="compl">
+								       value="@php echo old('compl')??1.0; @endphp" step=".1" name="compl" max="9.9" min="0">
 								<button type="submit" class="store-service btn btn-info">
 									<i class="fas fa-save"></i>
 								</button>
