@@ -15,7 +15,9 @@
 			@if(isset($ticketCounts))
 				@foreach($ticketCounts as $service => $value)
 					<tr class="text-center">
-						<td @if(!$value['is_available'])class="lastreply-max text-left" @else class="text-left" @endif>{{$service}}</td>
+						<td @if(!$value['is_available'])class="lastreply-max text-left" @else class="text-left" @endif>
+							<a href="{{$value['home_link']}}" target="_blank" class="btn btn-outline-dark btn-sm">{{$service}}</a>
+						</td>
 						<td>{{$value['open_tickets']}}</td>
 						<td>{{$value['summary_tickets']}}</td>
 						<td>{{$value['yesterday']}}</td>
