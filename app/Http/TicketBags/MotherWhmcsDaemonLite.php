@@ -112,7 +112,8 @@ trait MotherWhmcsDaemonLite
 			if ($ticket_id) {
 				$this->updateTicket(
 					$ticket_id, $status_id, $priority_id, $lastreply,
-					$this->isAdmin($lastreply, $this->getLastreplyFromDb($ticket_id), $this->getIsAdminFromDb($ticket_id),$is_customer));
+//					$this->isAdmin($lastreply, $this->getLastreplyFromDb($ticket_id), $this->getIsAdminFromDb($ticket_id),$is_customer));
+					$this->isAdmin($this->getIsAdminFromDb($ticket_id),$is_customer));
 			} else {
 				$this->storeNewTicket($ticketid, $this->service_id, $subject, $status_id, $priority_id, $lastreply);
 			}
@@ -278,21 +279,23 @@ trait MotherWhmcsDaemonLite
 	/**
 	 * checking does last reply make admin
 	 *
-	 * @param string $lastreply
-	 * @param string $getLastreplyFromDb
 	 * @param bool $is_admin_db
 	 * @param bool $is_customer last reply status
 	 * @return int
 	 */
-	private function isAdmin(string $lastreply, string $getLastreplyFromDb, bool $is_admin_db, bool $is_customer): int
+//	private function isAdmin(string $lastreply, string $getLastreplyFromDb, bool $is_admin_db, bool $is_customer): int
+	private function isAdmin(bool $is_admin_db,bool $is_customer): int
 	{
-		if (Carbon::parse($getLastreplyFromDb)->
-			between(Carbon::parse($lastreply)->subMinute(), Carbon::parse($lastreply)->addMinute())
-			&& $is_admin_db && !$is_customer) {
+		$is_admin=(!$is_customer && $is_admin_db)?1:0;
+		if ($is_customer) return 0;
+		elseif ($is_admin_db) return 1;
+		return 0;
+		/*if (
+			/*Carbon::parse($getLastreplyFromDb)->
+			between(Carbon::parse($lastreply)->subMinute(), Carbon::parse($lastreply)->addMinute())&& $is_admin_db &&
+			!$is_customer) {
 			$is_admin = 1;
-		}
-		else $is_admin = 0;
-		return $is_admin;
+		}*/
 	}
 
 	/**
