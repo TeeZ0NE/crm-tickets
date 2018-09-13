@@ -85,4 +85,12 @@ class User extends Model implements Authenticatable,CanResetPasswordContract
 		return $this::with(['getServices', 'getNiks'])->orderBy('name')->get();
 	}
 
+	/**
+	 * get active admin
+	 * @return mixed
+	 */
+	public function getActiveAdmins()
+	{
+		return $this::where('active',1)->orderBy('name')->get();
+	}
 }

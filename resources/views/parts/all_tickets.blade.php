@@ -15,7 +15,7 @@
 				<th>{{__('site.priority')}}</th>
 				<th>{{__('site.status')}}</th>
 				@isset($deadline_cb)
-				<th>{{__('site.deadline')}}</th>
+					<th>{{__('site.deadline')}}</th>
 				@endisset
 			</tr>
 			</thead>
@@ -43,22 +43,48 @@
 						<td>{{$i++}}</td>
 						<td>{{$waitingTime}}</td>
 						<td>{{$openTicket->getService->name}}</td>
-						<td><a href="{{$openTicket->getService->href_link}}{{$openTicket->ticketid}}" target="_blank" class="btn btn-info">{{$openTicket->ticketid}}</a></td>
+						<td><a href="{{$openTicket->getService->href_link}}{{$openTicket->ticketid}}" target="_blank"
+						       class="btn btn-info">{{$openTicket->ticketid}}</a></td>
 						<td>{{$openTicket->subject}}</td>
 						<td>{!! $lastReplier !!}@if((bool)$is_new)<br><u>{{$is_new}}</u>@endif</td>
 						<td>{{$openTicket->lastreply}}</td>
-						<td>{{$openTicket->getUserAssignedTicket['name']}}</td>
+						<td>
+							@if(isset($deadline_cb))
+								<form action="{{route('admin.assign',['ticket_id'=>$openTicket->id])}}"
+								      method="POST" class="form-inline justify-content-center">
+									@csrf
+									@method('POST')
+									<div class="form-group">
+										<select class="custom-select custom-select-sm" id="admins" name="user_id">
+											<option>-</option>
+											@foreach($active_admins as $admin)
+												<option value="{{$admin->id}}"
+												        @if($admin->id == $openTicket->getUserAssignedTicket['id']) selected @endif>
+													{{$admin->name}}
+												</option>
+											@endforeach
+										</select>
+										<button type="submit" class="btn btn-primary btn-sm"><i
+													class="far fa-save"></i></button>
+									</div>
+								</form>
+
+							@else
+								{{$openTicket->getUserAssignedTicket['name']}}
+							@endif
+						</td>
 						<td>{{$openTicket->getPriority->priority}}</td>
 						<td>{{$openTicket->getStatus->name}}</td>
 						@isset($deadline_cb)
-						<td>
-							<form action="{{route('boss.ticket.update',$openTicket->id)}}" method="post">
-								@csrf
-								@method('PUT')
-								<input type="checkbox" name="has_deadline" class="submit" @if($openTicket->has_deadline)checked @endif>
-							</form>
-						</td>
-							@endisset
+							<td>
+								<form action="{{route('boss.ticket.update',$openTicket->id)}}" method="post">
+									@csrf
+									@method('PUT')
+									<input type="checkbox" name="has_deadline" class="submit"
+									       @if($openTicket->has_deadline)checked @endif>
+								</form>
+							</td>
+						@endisset
 					</tr>
 				@endforeach
 			@endif
@@ -68,4 +94,4 @@
 </div>
 @push('js-scripts')
 	<script type="text/javascript" src="{{asset('js/submitOnCheckbox.min.js')}}"></script>
- @endpush
+@endpush

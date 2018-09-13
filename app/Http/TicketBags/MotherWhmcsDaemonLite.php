@@ -286,7 +286,7 @@ trait MotherWhmcsDaemonLite
 //	private function isAdmin(string $lastreply, string $getLastreplyFromDb, bool $is_admin_db, bool $is_customer): int
 	private function isAdmin(bool $is_admin_db,bool $is_customer): int
 	{
-		$is_admin=(!$is_customer && $is_admin_db)?1:0;
+//		$is_admin=(!$is_customer && $is_admin_db)?1:0;
 		if ($is_customer) return 0;
 		elseif ($is_admin_db) return 1;
 		return 0;
