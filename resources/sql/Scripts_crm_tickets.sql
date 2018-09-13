@@ -132,6 +132,8 @@ SELECT * from tickets USE INDEX(ticket_open);
 
 DROP DATABASE crm_tickets_db;
 CREATE DATABASE crm_tickets_db;
+GRANT ALL PRIVILEGES ON crm_tickets_db.* TO 'boss'@'localhost';
+flush PRIVILEGES;
 UPDATE tickets SET user_assign_id=NULL where user_assign_id=9;
 
 
