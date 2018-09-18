@@ -23,7 +23,7 @@ header('Pragma: no-cache');
 //header('Content-type: text/plain');
 
 
-echo 'Data received';
+echo 'Data received'.PHP_EOL;
 
 $service = $_REQUEST['service']??'Unknown';
 if (isset($_REQUEST['service'])){unset($_REQUEST['service']);}
