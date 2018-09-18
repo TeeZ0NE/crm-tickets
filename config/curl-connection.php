@@ -26,9 +26,9 @@ return [
 //        'identifier' => '',
 //        'secret' => '',
     ],
-   'skt' => [
-        'url' => 'https://skt.ru/manager/billmgr?authinfo=techmonitoring:BaEC3LMGci&out=xml&func=tickets&a&sok=ok',
-        'identifier' => '',
-        'secret' => '',
+   'skt.ru' => [
+        'url' => 'https://my.skt.ru/billmgr?authinfo=%2$s:%3$s&out=%1$s&func=ticket',
+        'identifier' => 'r.wayne',
+        'secret' => 'eC%!nhp96g',
     ],
 ];
