@@ -9,12 +9,10 @@
 namespace App\Http\TicketBags;
 
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
 use App\Models\{
-	AdminNik, Priority, Service, SysadminActivity, Ticket, Status
+	AdminNik, Priority, Service, Ticket, Status
 };
 use Exception;
-use App\Http\TicketBags\Whmcsapi;
 
 
 trait MotherWhmcsDaemonLite
@@ -51,15 +49,21 @@ trait MotherWhmcsDaemonLite
 	 */
 	function getTicketsFromService()
 	{
-		$msg = '==Get tickets from %5s==';
-		$err_msg = '==Get tickets error from %s with error msg %s==';
+//		$msg = '==Get tickets from %5s==';
+		$err_msg = '==Get tickets error (or empty) from %s with msg %s==';
 		try {
 			# try 2 get tickets if error read message
-			$tickets = (array)array_get($this->whmcs->getListTikets(), 'tickets.ticket');
-			if ($tickets == null) throw new Exception($this->whmcs->getListTikets()['message']);
-			return $tickets;
+			$getListTickets = $this->whmcs->getListTikets();
+			if(!empty($getListTickets) && $this->is_key_totalresults_exists($getListTickets)){
+				$this->setServiceAvailable(true);
+				$tickets = (array)array_get($getListTickets, 'tickets.ticket');
+				if ($tickets == null) throw new Exception($getListTickets['message']??$getListTickets['totalresults']);
+				return $tickets;
+			}
+			else{
+				$this->setServiceAvailable(false);
+			}
 		} catch (Exception $e) {
-			$this->setServiceAvailable(false);
 			Log::error(sprintf($err_msg,$this->service,$e->getMessage()));
 			# return Null if response Error or Empty tickets array
 			return Null;
@@ -357,11 +361,21 @@ trait MotherWhmcsDaemonLite
 		}
 	}
 
+	/**
+	 * get user id which assign ticket
+	 * @param int $ticket_id
+	 * @return mixed
+	 */
 	private function getUserAssignId(int $ticket_id)
 	{
 		return Ticket::find($ticket_id)->user_assign_id;
 	}
 
+	/**
+	 * Check is user active
+	 * @param int $last_replier_nik_id
+	 * @return array
+	 */
 	private function isLastReplierActive(int $last_replier_nik_id)
 	{
 		# if user active assign to him his ticket
@@ -370,6 +384,12 @@ trait MotherWhmcsDaemonLite
 
 	}
 
+	/**
+	 * assign user 2 ticket
+	 *
+	 * @param int $ticket_id
+	 * @param int $user_id
+	 */
 	private function setUserAssignId(int $ticket_id, int $user_id)
 	{
 		Ticket::find($ticket_id)->update(['user_assign_id' => $user_id]);
@@ -408,5 +428,14 @@ trait MotherWhmcsDaemonLite
 	private function setServiceAvailable(bool $is_available){
 		$service_m = new Service();
 		$service_m::find($this->service_id)->update(['is_available'=>$is_available]);
+	}
+
+	/**
+	 * Is total results key exists
+	 * @param array $tickets
+	 * @return bool
+	 */
+	private function is_key_totalresults_exists(array $tickets){
+		return key_exists('totalresults',$tickets);
 	}
 }
