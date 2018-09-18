@@ -78,7 +78,7 @@ trait Statistic
 					$is_available = $service->is_available;
 				}
 				$open_tickets = $ticket_m->getCountOpenTickets($service->id);
-				preg_match("/https?:\/\/[\w\.\/]+/", $service->href_link, $link_arr);
+				preg_match("/https?:\/\/[-\w\.\/]+/", $service->href_link, $link_arr);
 				$serviceTicketCounts[$service->name] = [
 					'summary_tickets' =>$summary_tickets,
 					'open_tickets' => $open_tickets,
