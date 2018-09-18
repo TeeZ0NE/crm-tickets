@@ -18,4 +18,9 @@ class Status extends Model
 	{
 		return $this->attributes['name']=strtolower($value);
     }
+
+	public function getStatusId(string $status):int
+	{
+		return $this::firstOrCreate(['name'=>$status])->id;
+    }
 }

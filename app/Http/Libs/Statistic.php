@@ -85,7 +85,7 @@ trait Statistic
 					'yesterday' =>$yesterday,
 					'start_month' =>$start_month,
 					'is_available' => $is_available,
-					'home_link'=>$link_arr[0],
+					'home_link'=>$link_arr[0]??'#',
 				];
 			}
 		}
