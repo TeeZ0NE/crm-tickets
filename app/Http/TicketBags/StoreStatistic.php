@@ -44,7 +44,7 @@ trait StoreStatistic
 					'status_id'=>$this->getStatusDefault(),
 				];
 				$ticket_id = $this->storeTicketAndGetId($ticketid,$service_id,$values);
-				$this->storeAdminActivities($ticket_id, $nik_id, $lastreply, $this->getTimeUses($val['time_uses']));
+				$this->storeAdminActivities($ticket_id, $nik_id, $lastreply, $this->getTimeUses($val['time_uses']??0));
 			} # ticketid not found
 			else continue;
 		}
