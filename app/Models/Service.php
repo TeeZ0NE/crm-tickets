@@ -20,7 +20,7 @@ class Service extends Model
 
 	public function getServiceId(string $service):int
 	{
-		return $this->where('name',$service)->first()->id;
+		return $this::firstOrCreate(['name'=>$service])->id;
     }
 
 	public function getCompl(int $service_id):float
