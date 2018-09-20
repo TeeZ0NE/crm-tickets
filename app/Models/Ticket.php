@@ -68,24 +68,26 @@ class Ticket extends Model
 	/**
 	 * get inner id from DB
 	 *
+	 * if exist return onw ID else 0 as new ticket
+	 *
 	 * @param int $tid
 	 * @param int $service_id
 	 * @return int
 	 */
 	public function getTicketIdFromDb(int $tid, int $service_id): int
 	{
-		$id = 0;
 		try {
-			$id = $this::where([['ticketid', '=', $tid], ['service_id', '=', $service_id]])->firstOrFail()->id;
+			$id = $this->where([['ticketid', '=', $tid], ['service_id', '=', $service_id]])->firstOrFail()->id;
 		} catch (ModelNotFoundException $mnf) {
-			Log::error("Error getting ID from DB where ticketid is $tid and service_id is $service_id");
+			$id=0;
+			//Log::error("Error getating ID from DB where ticketid is $tid and service_id is $service_id");
 		}
 		return $id;
 	}
 
 	public function getTicketId(int $ticketid, int $service_id, array $values = [])
 	{
-		$ticket_m = $this->UpdateOrCreate(['service_id' => $service_id, 'ticketid' => $ticketid], $values);
+		$ticket_m = Ticket::UpdateOrCreate(['service_id' => $service_id, 'ticketid' => $ticketid], $values);
 		return $ticket_m->id;
 	}
 
@@ -188,7 +190,15 @@ class Ticket extends Model
 	{
 		return $this->hasOne(User::class, 'id', 'user_assign_id');
 	}
-
+	/**
+	 * get user id which assign ticket
+	 * @param int $ticket_id
+	 * @return int
+	 */
+	public function getUserAssignId(int $ticket_id)
+	{
+		return $this::find($ticket_id)->user_assign_id;
+	}
 
 	/**
 	 * get open tickets
@@ -305,5 +315,79 @@ class Ticket extends Model
 	public function closeTicket(int $ticketid, int $service_id)
 	{
 		return $this::where(['ticketid'=>$ticketid,'service_id'=>$service_id])->update(['is_closed'=>1]);
+	}
+
+	/**
+	 * Save new ticket
+	 *
+	 * @param int $ticketid
+	 * @param int $service_id
+	 * @param string $subject
+	 * @param int $status_id
+	 * @param int $priority_id
+	 * @param $lastreply
+	 * @return int ticket_id
+	 */
+	public function storeNewTicket(int $ticketid, int $service_id, string $subject, int $status_id, int $priority_id, $lastreply): int
+	{
+		$ticket_m = new Ticket();
+		$ticket_m->ticketid = $ticketid;
+		$ticket_m->service_id = $service_id;
+		$ticket_m->subject = $subject;
+		$ticket_m->status_id = $status_id;
+		$ticket_m->priority_id = $priority_id;
+		$ticket_m->lastreply = $lastreply;
+		$ticket_m->save();
+		return $ticket_m->id;
+	}
+
+	/**
+	 * Update ticket
+	 *
+	 * @param int $ticket_id
+	 * @param int $status_id
+	 * @param int $priority_id
+	 * @param string $lastreply
+	 * @param int $is_admin
+	 * @return void
+	 */
+	public function updateTicket(int $ticket_id, int $status_id, int $priority_id, string $lastreply, int $is_admin)
+	{
+		$this::find($ticket_id)->update([
+			'status_id' => $status_id,
+			'priority_id' => $priority_id,
+			'lastreply' => $lastreply,
+			'last_is_admin' => $is_admin,
+			'is_closed' => 0,
+		]);
+	}
+	/**
+	 * get is last reply admin
+	 *
+	 * @param int $ticket_id
+	 * @return int
+	 */
+	public function getIsAdminFromDb(int $ticket_id): int
+	{
+		return $this::find($ticket_id)->last_is_admin;
+	}
+	/**
+	 * Get last replier 4 curr ticket
+	 * @param int $ticket_id
+	 * @return int lastreplier_nik_id
+	 */
+	public function getLastreplierId(int $ticket_id): int
+	{
+		$lastreplier_nik_id = Ticket::find($ticket_id)->last_replier_nik_id;
+		return $lastreplier_nik_id;
+	}
+	public function setUserAssignId(int $ticket_id, int $user_id)
+	{
+		Ticket::find($ticket_id)->update(['user_assign_id'=>$user_id]);
+	}
+
+	public function getLastreply(int $ticket_id)
+	{
+		return $this::find($ticket_id)->lastreply;
 	}
 }

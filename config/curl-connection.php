@@ -26,9 +26,10 @@ return [
 //        'identifier' => '',
 //        'secret' => '',
     ],
-   'skt.ru' => [
+   'skt' => [
         'url' => 'https://my.skt.ru/billmgr?authinfo=%2$s:%3$s&out=%1$s&func=ticket',
         'identifier' => 'r.wayne',
         'secret' => 'eC%!nhp96g',
+	   'home'=>'skt.ru',
     ],
 ];

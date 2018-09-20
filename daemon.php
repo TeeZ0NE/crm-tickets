@@ -13,25 +13,31 @@ $response = $kernel->handle(
 
 
 use App\Http\TicketBags\Whmcsapi;
+use App\Http\TicketBags\Billmgr;
 
 class WhmcsDaemonLite
 {
 	use \App\Http\TicketBags\MotherWhmcsDaemonLite;
 }
-# take array of services and loop it to take data
+class BillManager{
+	use \App\Http\TicketBags\Billmgr;
+}
 
+# take array of services and loop it to take data
 $whmcs_services = (array)config('services_arr.whmcs_services');
 foreach ($whmcs_services as $whmcs_service){
 	$WhmcsLite = new WhmcsDaemonLite($whmcs_service);
 	$WhmcsLite->getandStoreDataFromTicket();
 }
 # For debugging use public method getTicketsFromService;
-
-/*$service = 'secom';
+$billMgr = new BillManager('skt');
+$billMgr->getAndStoreDataFromTicket();
+/*
+$service = 'hostiman';
 $secom = new Whmcsapi($service);
 print_r($secom->getListTikets());
 //print_r($secom->getTiket());
-
+*/
 
 /*
 # test ISPManager
@@ -57,6 +63,9 @@ return $data;
 }
 $elem = json_decode(getData($url),true);
 //var_export($elem->doc->elem[0]->name['$']);
-var_export($elem['doc']['elem'][0]);
+//var_export($elem['doc']['elem'][0]);
 //var_export(file_get_contents($url));
-*/
+print_r($elem);*/
+
+
+
