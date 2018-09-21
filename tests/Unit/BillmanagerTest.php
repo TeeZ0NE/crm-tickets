@@ -81,7 +81,7 @@ class BillmanagerTest extends TestCase
 	 */
 	public function check_get_ticketid($tickets)
 	{
-		$this->assertEquals(2752,$this->billMgr->getTicketid($tickets[0]));
+		$this->assertEquals(2750,$this->billMgr->getTicketid($tickets[0]));
 	}
 	/**
 	 * @test
@@ -97,7 +97,7 @@ class BillmanagerTest extends TestCase
 	 */
 	public function check_get_subject($tickets)
 	{
-		$this->assertEquals('eeeeeeeeeeeeeeeeeeeeeeee',$this->billMgr->getSubject($tickets[0]));
+		$this->assertEquals('test, dont close',$this->billMgr->getSubject($tickets[0]));
 	}
 	/**
 	 * @test
@@ -120,8 +120,8 @@ class BillmanagerTest extends TestCase
 		$this->assertThat(
 			$lastreply,
 			$this->logicalOr(
-				$this->equalTo('2018-09-20 17:06:00'),
-				$this->equalTo('2018-09-20 17:05:00')
+				$this->equalTo('2018-09-19 11:10:00'),
+				$this->equalTo('2018-09-19 11:11:00')
 			)
 		);
 //		$this->assertEquals($lastreply,(string)$this->billMgr->getLastreply($tickets[0]));
