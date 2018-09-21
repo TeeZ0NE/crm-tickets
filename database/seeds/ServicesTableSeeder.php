@@ -17,8 +17,8 @@ class ServicesTableSeeder extends Seeder
 			'adminvps' => 'https://my.adminvps.ru/admi/supporttickets.php?action=view&id=',
 			'hostiman' => 'https://cp.hostiman.ru/admin/supporttickets.php?action=view&id=',
 			'ua-hosting' => 'https://billing.ua-hosting.company/admin/supporttickets.php?action=view&id=',
-			'skt.ru' => 'https://skt.ru/manager/billmgr?func=desktop&startpage=tickets&startform=tickets.edit&elid=',
-			'coopertino' => 'https://coopertino.ru:1500/billmgr?func=desktop&startpage=tickets&startform=tickets.edit&elid='
+			'skt.ru' => 'https://my.skt.ru/manager/billmgr?startpage=tickets&func=desktop&startform=tickets.edit&elid=',
+			'coopertino' => 'https://my.coopertino.ru/billmgr?func=desktop&startpage=tickets&startform=tickets.edit&elid='
 		];
 		foreach ($services as $service => $link) {
 			$service_m = new Service();
