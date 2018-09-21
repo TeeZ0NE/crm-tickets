@@ -27,7 +27,11 @@ trait Billmgr
 		$format = 'json';
 		$this->url = sprintf(config('curl-connection.'.$service.'.url'), $format, $user, $pass);
 		#todo: bugfix with dot notation
-		$this->service = ($service=='skt')?config('curl-connection.'.$service.'.home'):$service;
+		switch ($service){
+			case 'skt':
+			case 'coopertino':$this->service = config('curl-connection.'.$service.'.home'); break;
+			default: $this->service=$service;
+		}
 		$this->setService_id();
 		$this->setData();
 		$this->setTickets();
