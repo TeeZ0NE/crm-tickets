@@ -14,7 +14,7 @@ trait Billmgr
 	use TicketLibs;
 
 	private $url = '';
-	public $data;
+	private $data;
 
 	/**
 	 * Billmgr constructor.
@@ -25,7 +25,6 @@ trait Billmgr
 		$user = config('curl-connection.'.$service.'.identifier');//'r.wayne';//'techmonitoring';
 		$pass = config('curl-connection.'.$service.'.secret');//'eC%!nhp96g'; //'BaEC3LMGci';
 		$format = 'json';
-//		$this->url = sprintf('https://my.skt.ru/billmgr?authinfo=%2$s:%3$s&out=%1$s&func=ticket', $format, $user, $pass);
 		$this->url = sprintf(config('curl-connection.'.$service.'.url'), $format, $user, $pass);
 		#todo: bugfix with dot notation
 		$this->service = ($service=='skt')?config('curl-connection.'.$service.'.home'):$service;
@@ -39,7 +38,7 @@ trait Billmgr
 	 *
 	 * @return array
 	 */
-	function getData()
+	private function getData()
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_URL, $this->url);
@@ -52,12 +51,11 @@ trait Billmgr
 		return $data;
 	}
 
-	function setData(){
+	private function setData(){
 		$this->data = $this->getData();
 	}
 
-
-	function getTicketsFromService()
+	protected function getTicketsFromService()
 	{
 		$tickets = (isset($this->data['doc']['elem']))?$this->data['doc']['elem']:null;
 		return $tickets;
@@ -92,7 +90,7 @@ trait Billmgr
 				$ticket_m->updateTicket($ticket_id,$status_id,$priority_id,$lastreply,$is_admin);
 			}
 			else{
-//				# store new ticket
+				# store new ticket
 				$lastreply = $this->getLastreply($ticket);
 				$ticket_m->storeNewTicket($ticketid,$this->service_id,$subject,$status_id,$priority_id,$lastreply);
 			}
@@ -120,6 +118,7 @@ trait Billmgr
 		$priority_id = $priority_m->getPriorityId($priority);
 		return $priority_id;
 	}
+
 	public function getLastreply(array $ticket):string
 	{
 		$Carbon = new Carbon();
@@ -133,7 +132,7 @@ trait Billmgr
 	}
 
 
-	public function isCustomerReply(array $ticket): bool
+	protected function isCustomerReply(array $ticket): bool
 	{
 		$Carbon = new Carbon();
 		$ticket_m = new Ticket();
@@ -147,7 +146,7 @@ trait Billmgr
 		return $is_customer;
 	}
 
-	function is_service_available(array $tickets=[]): bool
+	protected function is_service_available(array $tickets=[]): bool
 	{
 		return !empty($tickets);
 	}

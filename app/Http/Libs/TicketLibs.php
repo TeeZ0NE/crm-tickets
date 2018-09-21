@@ -14,10 +14,10 @@ use App\Models\{
 
 trait TicketLibs
 {
-	public $outerTicketsIds = [];
-	public $service;
-	public $service_id;
-	public $tickets;
+	private $outerTicketsIds = [];
+	private $service;
+	private $service_id;
+	private $tickets;
 
 	/**
 	 * Check is user active
@@ -78,7 +78,7 @@ trait TicketLibs
 	 *
 	 * @return array
 	 */
-	public function getOuterTicketsIds(): array
+	private function getOuterTicketsIds(): array
 	{
 		return $this->outerTicketsIds;
 	}
@@ -100,6 +100,7 @@ trait TicketLibs
 	/**
 	 * Close absent tickets in db
 	 *
+	 * use setOuterTicketsIds(int $ticketid) method instead
 	 * @param  int $service_id
 	 * @return void
 	 */
@@ -117,15 +118,15 @@ trait TicketLibs
 	 *
 	 * @return array|null
 	 */
-	abstract function getTicketsFromService();
+	abstract protected function getTicketsFromService();
 
 
-	function setTickets()
+	private function setTickets()
 	{
 		$this->tickets = $this->getTicketsFromService();
 	}
 
-	function setService_id()
+	private function setService_id()
 	{
 		$service_m = new Service();
 		$this->service_id = $service_m->getServiceId($this->service);
@@ -148,7 +149,7 @@ trait TicketLibs
 	 *
 	 * @return void
 	 */
-	abstract public function getAndStoreDataFromTicket();
+	abstract function getAndStoreDataFromTicket();
 
 	/**
 	 * Get attribute ticketid
@@ -156,7 +157,7 @@ trait TicketLibs
 	 * @param array $ticket
 	 * @return int
 	 */
-	abstract public function getTicketid(array $ticket): int;
+	abstract function getTicketid(array $ticket): int;
 
 	/**
 	 * Get attribute status
@@ -164,7 +165,7 @@ trait TicketLibs
 	 * @param array $ticket
 	 * @return string
 	 */
-	abstract public function getSubject(array $ticket): string;
+	abstract function getSubject(array $ticket): string;
 
 	/**
 	 * get attribute lastreply
@@ -192,7 +193,7 @@ trait TicketLibs
 	 * @param array $ticket
 	 * @return bool
 	 */
-	abstract public function isCustomerReply(array $ticket = []): bool;
+	abstract protected function isCustomerReply(array $ticket = []): bool;
 
 	/**
 	 * Is total results key exists

@@ -31,6 +31,7 @@ class Service extends Model
 	public function getServiceName(int $service_id){
 		return $this->find($service_id)->name;
 	}
+
 	/**
 	 * Set available service
 	 *

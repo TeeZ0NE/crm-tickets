@@ -37,7 +37,7 @@ trait MotherWhmcsDaemonLite
 		unset($this->tickets);
 	}
 
-	function getTicketsFromService()
+	protected function getTicketsFromService()
 	{
 		$service_m = new Service();
 //		$msg = '==Get tickets from %5s==';
@@ -54,10 +54,11 @@ trait MotherWhmcsDaemonLite
 				$service_m->setServiceAvailable($this->service_id, false);
 			}
 		} catch (Exception $e) {
-			Log::error(sprintf($err_msg, $this->service, $e->getMessage()));
+			Log::warning(sprintf($err_msg, $this->service, $e->getMessage()));
 			# return Null if response Error or Empty tickets array
 			return Null;
 		}
+		return null;
 	}
 
 	public function getandStoreDataFromTicket(): void
@@ -80,7 +81,6 @@ trait MotherWhmcsDaemonLite
 			if ($ticket_id) {
 				$this->updateTicket(
 					$ticket_id, $status_id, $priority_id, $lastreply,
-//					$this->isAdmin($lastreply, $this->getLastreplyFromDb($ticket_id), $this->getIsAdminFromDb($ticket_id),$is_customer));
 					$this->isAdmin($ticket_m->getIsAdminFromDb($ticket_id), $is_customer)
 				);
 			} else {
@@ -109,7 +109,6 @@ trait MotherWhmcsDaemonLite
 		return $lastreply;
 	}
 
-//	private function isAdmin(string $lastreply, string $getLastreplyFromDb, bool $is_admin_db, bool $is_customer): int
 	protected function isAdmin(bool $is_admin_db, bool $is_customer): int
 	{
 		$des = 0;
@@ -132,11 +131,6 @@ trait MotherWhmcsDaemonLite
 		return $is_customer;
 	}
 
-	/**
-	 * Is total results key exists
-	 * @param array $tickets
-	 * @return bool
-	 */
 	protected function is_service_available(array $tickets): bool
 	{
 		return key_exists('totalresults', $tickets);
