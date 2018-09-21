@@ -25,14 +25,13 @@
 				@endphp
 				<tr @isset($lastreply_class) class="{{$lastreply_class}}" @endisset>
 					@php
-						$waitingTime = $Carbon::createFromTimeStamp(strtotime($newTicket->lastreply))->diffForHumans();
-							if($newTicket->last_is_admin):
-								foreach($newTicket->getAdmin as $admin):
-								$lastReplier =$admin->name;
-								endforeach;
-							else:
-								$lastReplier = $newTicket->getService['name']." client";
-							endif;
+						$lastReplier = $newTicket->getService['name']." client";
+							$waitingTime = $Carbon::createFromTimeStamp(strtotime($newTicket->lastreply))->diffForHumans();
+								if($newTicket->last_is_admin):
+									foreach($newTicket->getAdmin as $admin):
+									$lastReplier =$admin->name;
+									endforeach;
+								endif;
 					@endphp
 					<td>{{$waitingTime}}</td>
 					<td class="align-middle text-center">
