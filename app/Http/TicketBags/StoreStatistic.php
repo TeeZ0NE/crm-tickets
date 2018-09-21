@@ -167,7 +167,6 @@ trait StoreStatistic
 	private function storeTicketandGetId(int $ticketid,int $service_id, array $values){
 		$ticket_m = new Ticket();
 		$ticket_id = $ticket_m->getTicketId($ticketid,$service_id,$values);
-		echo $ticket_id;
 		return $ticket_id;
 	}
 

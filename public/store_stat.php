@@ -7,16 +7,22 @@
  */
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
+
 define('LARAVEL_START', microtime(true));
-
-require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
+$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+$compiledPath = __DIR__.'/storage/framework/compiled.php';
+if (file_exists($compiledPath))
+{
+	require $compiledPath;
+}
+/*
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-
 $response = $kernel->handle(
 	$request = Illuminate\Http\Request::capture()
 );
-
+*/
 //print_r($_SERVER['REQUEST_METHOD']);
 //header('Access-Control-Allow-Origin: *');
 header('Pragma: no-cache');
@@ -36,9 +42,7 @@ class storeStatistics
 }
 $storeStatistic = new storeStatistics($service,$get_stat_arr);
 $storeStatistic->store();
-//echo "catch";
 
-# todo: log'n statistic 4 first time
 $curr_date =  date('d.m.Y',time());
 file_put_contents(
 sprintf('./../storage/stats/%2$s_%1$s.stat.csv',$curr_date,$service),

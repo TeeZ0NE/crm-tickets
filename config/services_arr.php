@@ -8,4 +8,5 @@
 return array(
 	'path'=>'\App\Http\TicketBags\\',
 	'whmcs_services'=>array('secom','adminvps','hostiman','ua-hosting'),
+	'billmgr_services'=>['skt','coopertino'],
 );

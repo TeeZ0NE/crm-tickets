@@ -52,12 +52,14 @@ trait Billmgr
 	}
 
 	private function setData(){
-		$this->data = $this->getData();
+		$data = $this->getData();
+		if(empty($data)) Log::error(sprintf('Service %s not available',$this->service));
+		$this->data = $data??[];
 	}
 
 	protected function getTicketsFromService()
 	{
-		$tickets = (isset($this->data['doc']['elem']))?$this->data['doc']['elem']:null;
+		$tickets = (isset($this->data['doc']['elem']))?$this->data['doc']['elem']:[];
 		return $tickets;
 	}
 
