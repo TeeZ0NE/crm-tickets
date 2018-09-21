@@ -30,5 +30,5 @@ $('.b-button[data-name="ok_message"]').on('click', function () {
 			}
 		}
 	}
-	return false;
+	// return false;
 });

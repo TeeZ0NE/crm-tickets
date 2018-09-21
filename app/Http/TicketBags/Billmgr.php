@@ -162,7 +162,7 @@ trait Billmgr
 	{
 		$Carbon = new Carbon();
 		$lastreply_c = $Carbon::parse($lastreply);
-		$is_admin = ($Carbon::parse($lastreply_from_db)->gt($lastreply_c) or !$is_customer && $is_admin_db && !$last_replier_nik_id)?1:0;
+		$is_admin = (($Carbon::parse($lastreply_from_db)->gt($lastreply_c) || !$is_customer) && $is_admin_db && $last_replier_nik_id)?1:0;
 		return $is_admin;
 	}
 }
