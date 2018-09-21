@@ -1,4 +1,4 @@
-$('.b-button[data-name="ok_message"]').on('click', function () {
+$('.b-button[data-name="ok_message"]','.b-button[data-name="ok"]').on('click', function () {
 	var reg = /https?:\/\/(?:www.)?(?:\w+\.)?([-a-zа-я_\d.]+)\//i;
 	var res = reg.exec(window.location.href);
 	var service = res[1];
