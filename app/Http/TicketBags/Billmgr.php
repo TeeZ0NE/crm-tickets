@@ -85,6 +85,7 @@ trait Billmgr
 				$is_admin = $this->isAdmin(
 					$ticket_m->getIsAdminFromDb($ticket_id),
 					$this->isCustomerReply($ticket),
+					$ticket_m->getLastreplierId($ticket_id),
 					$this->getLastreply($ticket),
 					$ticket_m->getLastreply($ticket_id)
 				);
@@ -157,11 +158,11 @@ trait Billmgr
 		return !empty($tickets);
 	}
 
-	protected function isAdmin(bool $is_admin_db, bool $is_customer, $lastreply, $lastreply_from_db): int
+	protected function isAdmin(bool $is_admin_db, bool $is_customer, $last_replier_nik_id,$lastreply, $lastreply_from_db): int
 	{
 		$Carbon = new Carbon();
 		$lastreply_c = $Carbon::parse($lastreply);
-		$is_admin = ($Carbon::parse($lastreply_from_db)->gt($lastreply_c) or !$is_customer && $is_admin_db)?1:0;
+		$is_admin = ($Carbon::parse($lastreply_from_db)->gt($lastreply_c) or !$is_customer && $is_admin_db && !$last_replier_nik_id)?1:0;
 		return $is_admin;
 	}
 }

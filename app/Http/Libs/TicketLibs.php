@@ -180,11 +180,12 @@ trait TicketLibs
 	 *
 	 * @param bool $is_admin_db
 	 * @param bool $is_customer last reply status
+	 * @param int $last_replier_nik_id
 	 * @param string|object $lastreply
 	 * @param string|object $lastreply_from_db
 	 * @return int
 	 */
-	abstract protected function isAdmin(bool $is_admin_db, bool $is_customer, $lastreply='',$lastreply_from_db=''): int;
+	abstract protected function isAdmin(bool $is_admin_db, bool $is_customer, int $last_replier_nik_id=0,$lastreply='',$lastreply_from_db=''): int;
 
 	/**
 	 * Check status (-es) customer
