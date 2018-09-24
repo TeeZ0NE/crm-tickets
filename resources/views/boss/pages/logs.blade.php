@@ -5,7 +5,7 @@
 		<div class="row">
 			<div class="col-md-12 mb-md-2 mb-lg-3">
 				<div class="card">
-					<h5 class="card-header">Логи с сервера</h5>
+					<h5 class="card-header">Логи с сервера. <a href="{{route('logs_truncate')}}" title="Удалить" class="float-right text-danger" onclick="return confirm('Удалить содержимое файла логов?');"><i class="far fa-trash-alt"></i></a></h5>
 					<div class="card-body">
 						<pre>{{$logs}}</pre>
 					</div>

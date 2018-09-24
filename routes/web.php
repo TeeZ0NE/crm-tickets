@@ -44,7 +44,11 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 		Route::get('create','Boss\ServicesController@serviceCreate')->name('services.new');
 		Route::post('create','Boss\ServicesController@create')->name('services.create');
 	});
-	Route::get('/logs','Boss\LogController')->name('logs');
+	Route::group(['prefix'=>'logs'],function(){
+		Route::get('/','Boss\LogController@index')->name('logs');
+		Route::get('/clear','Boss\LogController@truncate_log')->name('logs_truncate');
+	});
+
 });
 Route::resource('/boss/admins', 'Boss\RealAdminController')->middleware('purify');
 Route::resource('/boss/deadline','Boss\DeadlineController')->middleware('purify');
