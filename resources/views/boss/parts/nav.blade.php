@@ -29,6 +29,7 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="{{route('services.new')}}"><i class="far fa-save"></i> Создать</a>
+						<a class="dropdown-item" href="{{route('services.statistic')}}"><i class="fas fa-chart-line"></i> Статистика</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{{route('services.index')}}"><i class="fas fa-list"></i> Все</a>
 					</div>
