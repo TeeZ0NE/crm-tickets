@@ -12,36 +12,56 @@
 			<!-- Left Side Of Navbar -->
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+					   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Администраторы
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="{{route('admins.create')}}"><i class="far fa-save"></i> Новый</a>
-						<a class="dropdown-item" href="{{route('admins.nicks')}}"><i class="fas fa-link"></i> Связать</a>
+						<a class="dropdown-item" href="{{route('admins.nicks')}}"><i class="fas fa-link"></i>
+							Связать</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{{route('admins.index')}}"><i class="fas fa-list"></i> Все</a>
 					</div>
 				</li>
 				<li class="nav-item"><a class="nav-link" href="{{route('admins.statistics')}}">Статистика</a></li>
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+					   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						Клиенты
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="{{route('services.new')}}"><i class="far fa-save"></i> Создать</a>
-						<a class="dropdown-item" href="{{route('services.statistic')}}"><i class="fas fa-chart-line"></i> Статистика</a>
+						<a class="dropdown-item disabled" href="{{route('services.new')}}"><i class="far fa-save"></i>
+							Создать</a>
+						<a class="dropdown-item" href="{{route('services.statistic')}}"><i
+									class="fas fa-chart-line"></i> Статистика</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{{route('services.index')}}"><i class="fas fa-list"></i> Все</a>
 					</div>
 				</li>
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+					   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						DeadLines
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="{{route('deadline.create')}}"><i class="far fa-save"></i> Create</a>
+						<a class="dropdown-item" href="{{route('deadline.create')}}"><i class="far fa-save"></i> Создать</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="{{route('deadline.index')}}"><i class="fas fa-list"></i> Все</a>
+					</div>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+					   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						E-mails
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+						<a class="dropdown-item" href="{{route('emails.create')}}"><i class="far fa-save"></i>
+							Создать</a>
+						<a class="dropdown-item" href="#"><i
+									class="fas fa-chart-line"></i> Sending list</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="{{route('emails.index')}}"><i class="fas fa-list"></i> Все</a>
 					</div>
 				</li>
 				<li class="nav-item"><a class="nav-link" href="{{route('logs')}}">Логи</a></li>

@@ -170,12 +170,7 @@ trait Statistic
 	 */
 	private function setVariable($service, $interval='today')
 	{
-		switch (gettype($service)){
-			case 'int':
-			case 'integer':$this->service_id = $service; break;
-			case 'string':$this->service_id=$this->getService_id($service);break;
-			default: $this->service_id=1;
-		}
+		$this->service_id = is_numeric($service)?$service:$this->service_id=$this->getService_id($service);
 		$this->service = $this->getServiceName($this->service_id);
 		$this->interval = $interval;
 	}

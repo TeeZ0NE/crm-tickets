@@ -19,13 +19,16 @@
 									@endforeach
 								</select>
 								<select class="custom-select ml-2 mr-2" id="interval" name="interval">
-									<option value="today" @if($interval=='today')selected @endif>Сегодня</option>
+									@foreach($intervals as $interval_fe)
+										<option value="{{$interval_fe->url_attr}}" @if($interval_fe->url_attr==$interval) selected @endif>{{$interval_fe->name}}</option>
+										@endforeach
+									{{--<option value="today" @if($interval=='today')selected @endif>Сегодня</option>
 									<option value="yesterday" @if($interval=='yesterday')selected @endif>Вчера</option>
 									<option value="start_of_month" @if($interval=='start_of_month')selected @endif>С
 										начала текущего месяца
 									</option>
 									<option value="month" @if($interval=='month')selected @endif>За прошлый месяц
-									</option>
+									</option>--}}
 								</select>
 								<button type="submit" class="btn btn-primary">Получить</button>
 							</div>
@@ -35,6 +38,16 @@
 			</div>
 		</div>
 		@isset($statistics)
+			<div class="row">
+				<div class="col-md-12 mb-md-2 mb-lg-3">
+					<div class="card">
+						<h5 class="card-header">Отправить email</h5>
+						<div class="card-body">
+							@include('boss.parts.emailList')
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-md-12 mb-md-2 mb-lg-3">
 					<div class="card">

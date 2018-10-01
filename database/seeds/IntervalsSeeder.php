@@ -12,7 +12,7 @@ class IntervalsSeeder extends Seeder
      */
     public function run()
     {
-        $intervals = ['today'=>'За сегодня','yesterday'=>'За вчера','start_of_month'=>'С начала месяца','За прошлый месяц'=>'prev_month'];
+        $intervals = ['today'=>'За сегодня','yesterday'=>'За вчера','start_of_month'=>'С начала месяца','prev_month'=>'За прошлый месяц'];
         foreach ($intervals as $interval=>$val){
         	$interval_m = new Interval();
         	$interval_m->name = $val;

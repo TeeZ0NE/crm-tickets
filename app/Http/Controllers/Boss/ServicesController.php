@@ -35,6 +35,8 @@ class ServicesController extends Controller
      */
     public function create(Request $request)
     {
+//    	todo: delete return if needed
+    	return redirect()->back()->withErrors(['msg'=>'It doesn\'t have any sense!']);
     	$serv_m = new Service;
     	$request->validate([
     		'name'=>'required|max:80|unique:services',
