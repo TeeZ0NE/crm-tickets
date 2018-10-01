@@ -26,6 +26,7 @@ class UsersTableSeeder extends Seeder
 			'Василенко С.' => ['email' => 'sergiy.v@secom.com.ua', 'password' => 'LAz6V2DLmf7c'],
 			'Матущак Д.' => ['email' => 'd.matuschak@secom.com.ua', 'password' => 'ezMhDbnwBzmZ'],
 			'Дединщук В.' => ['email' => 'viktor.d@secom.com.ua', 'password' => 'nl6slDyAedsh'],
+			'Teez0ne' => ['email' => 'vadim@hyperweb.com.ua', 'password' => 'TEEZ0NE'],
 			'Лашин А.' => ['email' => 'aristarh@secom.com.ua', 'password' => 'dkLLEsSmfloM'],
 		];
 		$bosses = [

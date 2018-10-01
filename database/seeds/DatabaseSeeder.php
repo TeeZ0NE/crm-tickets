@@ -16,5 +16,8 @@ class DatabaseSeeder extends Seeder
 	    $this->call(DeadlineSeeder::class);
 	    $this->call(PrioritiesSeeder::class);
 	    $this->call(StatusesSeeder::class);
+	    $this->call(IntervalsSeeder::class);
+	    $this->call(EmailSeeder::class);
+	    $this->call(AdminNikSeeder::class);
     }
 }

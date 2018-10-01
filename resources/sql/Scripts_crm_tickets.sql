@@ -45,7 +45,7 @@ WHERE sysadmin_niks_id IN (
 ## curr month
 -- AND (sact.lastreply between  DATE_FORMAT(NOW() ,'%Y-%m-01') AND NOW() )
 # last month
-AND (sact.lastreply between  DATE_FORMAT('2018-07-01' ,'%Y-%m-01') AND DATE_FORMAT('2018-07-31','%Y-%m-%d') )
+AND (sact.lastreply between  DATE_FORMAT('2018-07-01' ,'%Y-%m-01') AND DATE_FORMAT('2018-09-31','%Y-%m-%d') )
 GROUP BY (name) ORDER BY tickets_count DESC, replies_count DESC;
 -- /summary and compl count
 -- ORM
@@ -96,7 +96,7 @@ LEFT JOIN users AS u ON u.id=sniks.user_id
 where sact.sysadmin_niks_id in(select sniks.id from users LEFT JOIN sysadmin_niks as sniks on sniks.user_id=users.id 
 where users.id=1
 )
-AND (sact.lastreply between  DATE_FORMAT('2018-07-01' ,'%Y-%m-%d') AND DATE_FORMAT('2018-07-31','%Y-%m-%d') )
+AND (sact.lastreply between  DATE_FORMAT('2018-07-01' ,'%Y-%m-%d') AND DATE_FORMAT('2018-09-31','%Y-%m-%d') )
 AND services.id=1
 GROUP BY service, user_name
 ORDER BY tickets_count DESC, rate DESC;
@@ -171,4 +171,88 @@ LEFT JOIN `like` as l ON l.id_3=id_1
 WHERE l.id_3 IS NULL; 
 DROP DATABASE test;
 
-INSERT INTO sysadmin_niks(service_id,admin_nik,user_id) VALUES(1,'Boryan',2);
+INSERT INTO sysadmin_niks(service_id,admin_nik,user_id) VALUES(1,'Mooryan',1);
+
+-- admin activities
+INSERT INTO sysadmin_activities(sysadmin_niks_id,ticket_id,lastreply,time_uses) VALUES(2,146,'2018-08-27 08:45:31',15);
+UPDATE sysadmin_activities SET `lastreply`='2018-09-27 08:45:31' WHERE ticket_id=146;
+-- service month statistic
+SELECT DISTINCT(t.id),t.subject,s.name,t.ticketid, SUM(sact.time_uses) as sum_time FROM tickets as t
+RIGHT JOIN sysadmin_activities AS sact ON sact.ticket_id=t.id
+JOIN services AS s ON t.service_id=s.id
+-- WHERE created_at>= subdate(curdate(),1)
+-- yesterday
+-- WHERE sact.lastreply>=SUBDATE(NOW(),2)
+WHERE (t.created_at BETWEEN DATE_FORMAT('2018-08-01' ,'%Y-%m-%d') AND last_day('2018-08-01'))
+-- AND t.service_id=1
+GROUP BY t.id ORDER by sum_time;
+
+SELECT s.id,s.name,COUNT(t.id),SUM(sact.time_uses) FROM services AS s
+LEFT JOIN tickets AS t ON t.service_id=s.id
+JOIN sysadmin_activities AS sact ON sact.ticket_id=t.id
+WHERE s.id = 4 AND sact.lastreply BETWEEN
+GROUP BY s.name;
+
+-- service statistic by yesterday
+SELECT DISTINCT(t.id),t.subject,s.name,t.ticketid, SUM(sact.time_uses) FROM tickets as t
+LEFT JOIN sysadmin_activities AS sact ON sact.ticket_id=t.id
+JOIN services AS s ON t.service_id=s.id
+-- WHERE sact.lastreply= curdate()
+AND t.service_id=4
+GROUP BY t.id;
+
+
+SELECT id FROM tickets WHERE created_at 
+-- BETWEEN DATE_FORMAT(NOW() ,'%Y-%m-01') AND NOW();
+-- BETWEEN DATE_FORMAT('2018-09-01','%Y-%m-%d') AND DATE_FORMAT('2018-09-30','%Y-%m-%d');
+--  BETWEEN DATE_FORMAT('2018-09-01','%Y-%m-%d') AND NOW();
+ BETWEEN DATE_FORMAT('2018-09-01','%Y-%m-%d') AND LAST_DAY('2018-09-01');
+ 
+ SELECT last_day(now());
+SELECT SUBDATE(CURDATE(),10);
+SELECT SUBDATE(NOW(),1);
+SELECT NOW() - INTERVAL 10 DAY;
+SELECT id, lastreply FROM sysadmin_activities
+WHERE lastreply BETWEEN DATE_FORMAT(CURDATE(),'%Y-%m-%d 00:00:00') and now();
+
+SELECT id, lastreply FROM sysadmin_activities
+WHERE lastreply BETWEEN DATE_FORMAT(subdate(CURDATE(),1),'%Y-%m-%d 00:00:00') and DATE_FORMAT(subdate(CURDATE(),1),'%Y-%m-%d 23:59:59');
+
+
+SELECT SUM(tmp.sum_time_uses) AS total from (
+SELECT sum(time_uses) sum_time_uses FROM sysadmin_activities WHERE  ticket_id=3) as tmp;
+
+select NOW();
+select DATE_FORMAT(CURDATE(),'%Y-%m-%d 00:00:00')
+UNION
+SELECT SUM(tmp.sum_time_uses) AS total from (
+SELECT sum(time_uses) sum_time_uses FROM sysadmin_activities WHERE  ticket_id=3) as tmp;
+
+
+SELECT SUM(time_uses) sum_time_uses FROM sysadmin_activities WHERE  ticket_id=3;
+
+-- create table 4 emailing
+CREATE TABLE IF NOT EXISTS emails(
+id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+email VARCHAR(86) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS intervals(
+id TINYINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL UNIQUE,
+url_attr VARCHAR(22) NOT NULL UNIQUE,
+INDEX itreval_indx (name)
+);
+
+CREATE table if NOT EXISTS mailables(
+id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+service_id TINYINT UNSIGNED NOT NULL,
+mail_id SMALLINT UNSIGNED NOT NULL,
+interval_id TINYINT UNSIGNED NOT NULL,
+FOREIGN KEY(service_id) REFERENCES services(id) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (mail_id) REFERENCES emails(id) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (interval_id) REFERENCES intervals(id) ON DELETE CASCADE on UPDATE CASCADE
+);
+-- /create tables 4 emailngs
+
+DROP TABLE intervals;
