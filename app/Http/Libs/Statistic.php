@@ -8,9 +8,13 @@
 
 namespace App\Http\Libs;
 use App\Models\{SysadminActivity,Service, Ticket};
+use Carbon\CarbonInterval;
 
 trait Statistic
 {
+	private $service;
+	private $service_id;
+	private $interval;
 	/**
 	 * @return \Generator
 	 */
@@ -90,5 +94,89 @@ trait Statistic
 			}
 		}
 		return $serviceTicketCounts;
+	}
+	/**
+	 * Forming statistic 4 service
+	 *
+	 * Applicable set of one an interval String:
+	 * 'today', 'yesterday','start_of_month', 'month'
+	 *
+	 * @param int $service_id
+	 * @param string $interval
+	 * @return \Illuminate\Support\Collection|object|string
+	 */
+	private function formStatistic(int $service_id, string $interval){
+		$service_m = new Service();
+		$notthig_found_msg = 'Ничего не найдено';
+		switch ($interval){
+			case 'yesterday': $statistics_db = $service_m->getStatisticYesterday($service_id); break;
+			case 'today': $statistics_db=$service_m->getStatisticToday($service_id);break;
+			case 'start_of_month': $statistics_db=$service_m->getStatisticStartOfMonth($service_id);break;
+			case 'month':$statistics_db=$service_m->getStatisticPrevMonth($service_id);break;
+			default: $statistics_db=collect();
+		}
+		$statistics = ($statistics_db->isEmpty())?$notthig_found_msg:$statistics_db;
+		return $statistics;
+	}
+
+	/**
+	 * Forming summary statistic
+	 *
+	 * @param int $service_id
+	 * @param string $interval
+	 * @return \Illuminate\Database\Eloquent\Model|null|object|string|static
+	 */
+	private function formSummaryStatistic(int $service_id, string $interval){
+		$service_m = new Service();
+		switch ($interval){
+			case 'yesterday': $statistics_db = $service_m->getCountTicketsAndSumTimeYesterday($service_id); break;
+			case 'today': $statistics_db=$service_m->getCountTicketsAndSumTimetoday($service_id);break;
+			case 'start_of_month':$statistics_db=$service_m->getCountTicketsAndSumTimeStartOfMonth($service_id);break;
+			case 'month':$statistics_db=$service_m->getCountTicketsAndSumTimePrevMonth($service_id);break;
+			default: $statistics_db=null;
+		}
+		$statistics = $statistics_db?:$statistics_db;
+		return $statistics;
+	}
+
+	/**
+	 * Compose summary text 4 humans
+	 *
+	 * @param object|string $summary
+	 * @return string
+	 */
+	private function total4humans($summary)
+	{
+		return isset($summary->sum_time)
+			?CarbonInterval::fromString($summary->sum_time.'m')->cascade()->forHumans()
+			:'0';
+	}
+
+	private function getService_id(string $service)
+	{
+		$service_m = new Service();
+		return $service_m->getServiceId($service);
+	}
+
+	private function getServiceName(int $service_id)
+	{
+		$service_m = new Service();
+		return $service_m->getServiceName($service_id);
+	}
+
+	/**
+	 * @param int|string $service
+	 * @param string $interval
+	 */
+	private function setVariable($service, $interval='today')
+	{
+		switch (gettype($service)){
+			case 'int':
+			case 'integer':$this->service_id = $service; break;
+			case 'string':$this->service_id=$this->getService_id($service);break;
+			default: $this->service_id=1;
+		}
+		$this->service = $this->getServiceName($this->service_id);
+		$this->interval = $interval;
 	}
 }

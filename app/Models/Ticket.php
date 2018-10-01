@@ -252,7 +252,10 @@ class Ticket extends Model
 	 */
 	public function getAllTicketsFromYesterday(int $service_id)
 	{
-		return $this::where([['created_at', '>=', Carbon::now()->yesterday()], ['service_id', $service_id]])->get();
+//		return $this::where([['created_at', '>=', Carbon::now()->yesterday()], ['service_id', $service_id]])->get();
+		return $this::where('service_id', $service_id)->
+		whereBetween('created_at',[Carbon::now()->yesterday()->startOfDay(),Carbon::now()->yesterday()->endOfDay()])->
+		get();
 	}
 
 	/**

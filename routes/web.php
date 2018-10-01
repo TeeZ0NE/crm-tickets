@@ -10,6 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 use Illuminate\Support\Facades\Auth;
 
 # boss login
@@ -31,28 +32,30 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 	Route::put('ticket/{id}', 'Boss\TicketController@update')->name('boss.ticket.update');
 	Route::get('/nicks', 'Boss\RealAdminController@nicks')->name('admins.nicks');
 	Route::post('/bind-nicks', 'Boss\RealAdminController@bindNiks')->name('admins.bindNiks');
-	Route::post('assign-ticket/{ticket_id}','Boss\RealAdminController@assignTicket2Admin')->name('admin.assign');
-	Route::put('/deactivate/{user_id}','Boss\RealAdminController@deactivate')->name('admin.deactivate');
-	Route::group(['prefix'=>'admins'], function(){
+	Route::post('assign-ticket/{ticket_id}', 'Boss\RealAdminController@assignTicket2Admin')->name('admin.assign');
+	Route::put('/deactivate/{user_id}', 'Boss\RealAdminController@deactivate')->name('admin.deactivate');
+	Route::group(['prefix' => 'admins'], function () {
 		Route::get('/statistics', 'Boss\StatisticController@index')->name('admins.statistics');
 		Route::get('/statistics-submonth/', 'Boss\StatisticController@getStatisticsSubMonth')->name('admins.statistics_subMonths');
 	});
-	Route::group(['prefix'=>'services'], function(){
-		Route::get('/','Boss\ServicesController@index')->name('services.index');
-		Route::put('/{service}','Boss\ServicesController@update')->name('services.update');
-		Route::delete('/{service}','Boss\ServicesController@destroy')->name('services.destroy');
-		Route::get('create','Boss\ServicesController@serviceCreate')->name('services.new');
-		Route::post('create','Boss\ServicesController@create')->name('services.create');
+	Route::group(['prefix' => 'services'], function () {
+		Route::get('/', 'Boss\ServicesController@index')->name('services.index');
+		Route::put('/{service}', 'Boss\ServicesController@update')->name('services.update');
+		Route::delete('/{service}', 'Boss\ServicesController@destroy')->name('services.destroy');
+		Route::get('create', 'Boss\ServicesController@serviceCreate')->name('services.new');
+		Route::post('create', 'Boss\ServicesController@create')->name('services.create');
+		Route::get('statistic', 'Boss\ServicesStatisticController@index')->name('services.statistic');
+		Route::get('getstatistic', 'Boss\ServicesStatisticController@getStatistic')->name('services.getStatistic');
 	});
-	Route::group(['prefix'=>'logs'],function(){
-		Route::get('/','Boss\LogController@index')->name('logs');
-		Route::get('/clear','Boss\LogController@truncate_log')->name('logs_truncate');
+	Route::group(['prefix' => 'logs'], function () {
+		Route::get('/', 'Boss\LogController@index')->name('logs');
+		Route::get('/clear', 'Boss\LogController@truncate_log')->name('logs_truncate');
 	});
 
 });
 Route::resource('/boss/admins', 'Boss\RealAdminController')->middleware('purify');
-Route::resource('/boss/deadline','Boss\DeadlineController')->middleware('purify');
-Route::get('/', function(){
+Route::resource('/boss/deadline', 'Boss\DeadlineController')->middleware('purify');
+Route::get('/', function () {
 	if (Auth::check()) {
 		if (Auth::guard('boss')->check()) {
 			return redirect(route('boss.home'));
@@ -62,15 +65,18 @@ Route::get('/', function(){
 	return view('auth.login');
 });
 Auth::routes();
-Route::match(['get','post'], 'register', function () {
+Route::match(['get', 'post'], 'register', function () {
 	return view('errors.403');
 })->name('register');
-Route::group(['middleware' => ['purify','auth']], function () {
+Route::group(['middleware' => ['purify', 'auth']], function () {
 	Route::get('/home', 'Admin\HomeController@index')->name('home');
-	Route::get('/statistic','Admin\HomeController@statistic')->name('admins.statistic');
+	Route::get('/statistic', 'Admin\HomeController@statistic')->name('admins.statistic');
 	Route::post('admin/{id}/assign-ticket/{ticket_id}', 'Admin\TicketsController@assignTicket')->name('admin.assign-ticket');
 //	Route::get('admin/{id}/assign-ticket/{ticket_id}',function(){
 //		return redirect(404);
 //	});
+});
+Route::get('testmail/service={service}&interval={interval}',function($service,$interval){
+	return new App\Mail\ServiceStatistic($service,$interval);
 });
 
