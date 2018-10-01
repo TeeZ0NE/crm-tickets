@@ -1,4 +1,27 @@
 <?php
+
+return array(
+	"driver" => "smtp",
+	"host" => "smtp.ukr.net",
+	"port" => 2525,
+	"encryption"=>"ssl",
+	"from" => array(
+		"address" => "endnet@ukr.net",
+		"name" => "Admin admin-area"
+	),
+	"username" => "endnet@ukr.net",
+	"password" => "RU5ETkVUQFVLUi5ORVQ=",
+	"sendmail" => "/usr/sbin/sendmail -bs",
+	"pretend" => false,
+	'markdown' => [
+		'theme' => 'default1',
+
+		'paths' => [
+			resource_path('views/vendor/mail'),
+		],
+	],
+);
+/* mailtrap
 return array(
 	"driver" => "smtp",
 	"host" => "smtp.mailtrap.io",
@@ -12,3 +35,4 @@ return array(
 	"sendmail" => "/usr/sbin/sendmail -bs",
 	"pretend" => false
 );
+*/
