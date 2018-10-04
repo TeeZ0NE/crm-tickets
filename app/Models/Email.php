@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class Email extends Model
 {
 	public $timestamps = False;
-	protected $fillable = ['email'];
+	protected $fillable = ['email','is_main'];
 
 	public function setEmailAttribute($value)
 	{
@@ -39,9 +39,9 @@ class Email extends Model
 		return $mail_list;
 	}
 
-	public function updateEmail(int $id, string $email)
+	public function updateEmail(int $id, string $email, int $is_main)
 	{
-		return $this->find($id)->update(['email'=>$email]);
+		return $this->find($id)->update(['email'=>$email,'is_main'=>$is_main]);
 	}
 
 	public function destroyEmail(int $id)

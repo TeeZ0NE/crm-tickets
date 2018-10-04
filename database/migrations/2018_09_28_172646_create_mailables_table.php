@@ -19,7 +19,7 @@ class CreateMailablesTable extends Migration
             $table->unsignedSmallInteger('mail_id');
             $table->unsignedTinyInteger('interval_id');
             $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreign('mail_id')->references('id')->on('emails')->onDelete('cascade')->onUpdate('cascade');
+//            $table->foreign('mail_id')->references('id')->on('emails')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('interval_id')->references('id')->on('intervals')->onDelete('cascade')->onUpdate('cascade');
         });
     }

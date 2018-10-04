@@ -57,11 +57,12 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="{{route('emails.create')}}"><i class="far fa-save"></i>
-							Создать</a>
-						<a class="dropdown-item" href="#"><i
-									class="fas fa-chart-line"></i> Sending list</a>
+							Добавить e-mail</a>
+						<a class="dropdown-item" href="{{route('email-lists.create')}}"><i
+									class="fas fa-building"></i> Создать список рассылки</a>
 						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="{{route('emails.index')}}"><i class="fas fa-list"></i> Все</a>
+						<a class="dropdown-item" href="{{route('emails.index')}}"><i class="fas fa-list"></i> Все адреса</a>
+						<a class="dropdown-item" href="{{route('email-lists.index')}}"><i class="fas fa-list"></i> Списки рассылки</a>
 					</div>
 				</li>
 				<li class="nav-item"><a class="nav-link" href="{{route('logs')}}">Логи</a></li>

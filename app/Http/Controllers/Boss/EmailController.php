@@ -83,11 +83,12 @@ class EmailController extends Controller
 	public function update(Request $request, $id)
 	{
 		$request->validate([
-			'email'=>'required|unique:emails|max:86'
+			'email'=>'required|max:86'
 		]);
 		$email_m = new Email();
 		$email = $request->email;
-		$updated = $email_m->updateEmail($id,$email);
+		$is_main = $request->is_main?1:0;;
+		$updated = $email_m->updateEmail($id,$email,$is_main);
 		if($updated)
 		return redirect(route('emails.index'))->with('msg',sprintf('e-mail with id %d updated to %s',$id,$email));
 		return redirect(route('emails.index'))->withErrors(['msg'=>sprintf('E-mail with id %d doesn\'t updated',$id)]);

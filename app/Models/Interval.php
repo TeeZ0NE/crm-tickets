@@ -23,4 +23,14 @@ class Interval extends Model
 	{
 		return $this::all();
 	}
+
+	public function getIntervalId(string $interval)
+	{
+		return $this->where('url_attr',$interval)->first()->id;
+	}
+
+	public function getIntervalFromId(int $interval_id)
+	{
+		return $this->find($interval_id)->url_attr;
+	}
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEmailsTable extends Migration
+class CreateMailLists extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateEmailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('emails', function (Blueprint $table) {
-            $table->smallIncrements('id');
-            $table->string('email',86);
-            $table->boolean('is_main')->default(0);
-        });
+	    Schema::create('mail_lists', function (Blueprint $table) {
+
+	    });
     }
 
     /**
@@ -27,6 +25,6 @@ class CreateEmailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('emails');
+        //
     }
 }

@@ -13,6 +13,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+
 # boss login
 Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 	Route::get('/', 'Boss\Auth\LoginController@showLoginForm')->name('boss.login');
@@ -38,7 +39,7 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 		Route::get('/statistics', 'Boss\StatisticController@index')->name('admins.statistics');
 		Route::get('/statistics-submonth/', 'Boss\StatisticController@getStatisticsSubMonth')->name('admins.statistics_subMonths');
 	});
-	Route::group(['prefix' => 'services', 'middleware'=>['auth:boss']], function () {
+	Route::group(['prefix' => 'services', 'middleware' => ['auth:boss']], function () {
 		Route::get('/', 'Boss\ServicesController@index')->name('services.index');
 		Route::put('/{service}', 'Boss\ServicesController@update')->name('services.update');
 		Route::delete('/{service}', 'Boss\ServicesController@destroy')->name('services.destroy');
@@ -46,7 +47,7 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 		Route::post('create', 'Boss\ServicesController@create')->name('services.create');
 		Route::get('statistic', 'Boss\ServicesStatisticController@index')->name('services.statistic');
 		Route::get('getstatistic', 'Boss\ServicesStatisticController@getStatistic')->name('services.getStatistic');
-		Route::post('getstatistic/service={service}&interval={interval}','Boss\ServicesStatisticController@sendStatisticViaEmail')->name('services.sendStatistic');
+		Route::post('getstatistic/service={service}&interval={interval}', 'Boss\ServicesStatisticController@sendStatisticViaEmail')->name('services.sendStatistic');
 	});
 	Route::group(['prefix' => 'logs'], function () {
 		Route::get('/', 'Boss\LogController@index')->name('logs');
@@ -56,7 +57,8 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 });
 Route::resource('/boss/admins', 'Boss\RealAdminController')->middleware('purify');
 Route::resource('/boss/deadline', 'Boss\DeadlineController')->middleware('purify');
-Route::resource('/boss/emails','Boss\EmailController')->middleware(['purify','auth:boss']);
+Route::resource('/boss/email-lists', 'Boss\MailableController')->middleware(['purify', 'auth:boss']);
+Route::resource('/boss/emails', 'Boss\EmailController')->middleware(['purify', 'auth:boss']);
 Route::get('/', function () {
 	if (Auth::check()) {
 		if (Auth::guard('boss')->check()) {

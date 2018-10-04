@@ -10,7 +10,7 @@ return array(
 		"name" => "Admin admin-area"
 	),
 	"username" => "endnet@ukr.net",
-	"password" => "RU5ETkVUQFVLUi5ORVQ=",
+	"password" => "ZW5kbmV0QHVrci5uZXQ=",
 	"sendmail" => "/usr/sbin/sendmail -bs",
 	"pretend" => false,
 	'markdown' => [

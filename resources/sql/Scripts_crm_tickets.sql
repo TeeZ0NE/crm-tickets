@@ -234,7 +234,8 @@ SELECT SUM(time_uses) sum_time_uses FROM sysadmin_activities WHERE  ticket_id=3;
 -- create table 4 emailing
 CREATE TABLE IF NOT EXISTS emails(
 id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-email VARCHAR(86) NOT NULL UNIQUE
+email VARCHAR(86) NOT NULL UNIQUE,
+is_main TINYINT(1) UNSIGNED DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS intervals(
@@ -245,14 +246,50 @@ INDEX itreval_indx (name)
 );
 
 CREATE table if NOT EXISTS mailables(
-id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
 service_id TINYINT UNSIGNED NOT NULL,
-mail_id SMALLINT UNSIGNED NOT NULL,
 interval_id TINYINT UNSIGNED NOT NULL,
 FOREIGN KEY(service_id) REFERENCES services(id) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (mail_id) REFERENCES emails(id) ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (interval_id) REFERENCES intervals(id) ON DELETE CASCADE on UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS mail_lists(
+id SMALLINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+mailable_id SMALLINT UNSIGNED NOT NULL,
+email_id SMALLINT UNSIGNED NOT NULL,
+FOREIGN KEY(email_id) REFERENCES emails(id) ON UPDATE CASCADE on DELETE CASCADE,
+FOREIGN KEY (mailable_id) REFERENCES mailables(id) on DELETE CASCADE ON UPDATE CASCADE
 );
 -- /create tables 4 emailngs
 
 DROP TABLE intervals;
+
+INSERT INTO mailables (service_id,mail_id,interval_id) VALUES (1,2,1);
+
+SELECT * FROM intervals;
+
+SELECT DISTINCT(s.name) as sname,
+e.email
+FROM mailables AS m
+INNER JOIN services as s ON m.service_id=s.id
+JOIN intervals as i on m.interval_id=i.id
+JOIN emails as e on m.mail_id=e.id
+where s.id=1
+GROUP BY sname;
+
+ALTER TABLE emails ADD is_main TINYINT(1) UNSIGNED DEFAULT 0;
+
+SELECT s.name, e.email, i.name
+FROM mailables AS m
+LEFT JOIN services AS s ON s.id=m.service_id
+LEFT JOIN emails AS e ON e.id=m.mail_id
+LEFT JOIN intervals AS i ON i.id=m.interval_id;
+
+SELECT service_id,interval_id FROM mailables
+GROUP BY service_id,interval_id ORDER BY service_id;
+
+SELECT mail_id FROM mailables
+WHERE service_id = 1 AND interval_id=1;
+
+INSERT INTO mailables(service_id,interval_id) VALUES(1,1),(1,2),(2,3);
+INSERT INTO mail_lists(mailable_id,email_id) VALUES(1,1),(1,2),(3,1);

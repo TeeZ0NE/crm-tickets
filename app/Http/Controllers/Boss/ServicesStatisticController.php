@@ -50,7 +50,7 @@ class ServicesStatisticController extends Controller
 		$service_m = new Service();
 		$summary = $this->formSummaryStatistic($this->service_id, $this->interval);
 		return view('boss.pages.serviceStatistic')->with([
-			'emailList' => $this->getEmails(),
+			'emails' => $this->getEmails(),
 			'interval' => $this->interval,
 			'intervals'=> $interval_m->getAllIntervals(),
 			'service_id' => $this->service_id,

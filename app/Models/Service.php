@@ -81,6 +81,7 @@ class Service extends Model
 		groupby('s.name')->
 		first();
 	}
+
 	public function getStatisticToday(int $service_id)
 	{
 		return DB::table('tickets as t')->
@@ -93,6 +94,7 @@ class Service extends Model
 		orderByDesc('sum_time')->
 		get();
 	}
+
 	public function getCountTicketsAndSumTimetoday(int $service_id)
 	{
 		return DB::table('services as s')->
@@ -104,6 +106,7 @@ class Service extends Model
 		groupby('s.name')->
 		first();
 	}
+
 	public function getStatisticStartOfMonth(int $service_id)
 	{
 		return DB::table('tickets as t')->
@@ -116,6 +119,7 @@ class Service extends Model
 		orderByDesc('sum_time')->
 		get();
 	}
+
 	public function getCountTicketsAndSumTimeStartOfMonth(int $service_id)
 	{
 		return DB::table('services as s')->
@@ -127,6 +131,7 @@ class Service extends Model
 		groupby('s.name')->
 		first();
 	}
+
 	public function getStatisticPrevMonth(int $service_id)
 	{
 		return DB::table('tickets as t')->
@@ -139,6 +144,7 @@ class Service extends Model
 		orderByDesc('sum_time')->
 		get();
 	}
+
 	public function getCountTicketsAndSumTimePrevMonth(int $service_id)
 	{
 		return DB::table('services as s')->
@@ -149,5 +155,10 @@ class Service extends Model
 		whereBetween('sact.lastreply',[Carbon::now()->subMonth()->startOfMonth(),Carbon::now()->subMonth()->endOfMonth()])->
 		groupby('s.name')->
 		first();
+	}
+
+	public function getInterval()
+	{
+		return $this->hasManyThrough(Interval::class,Mailable::class,'service_id','id','id','interval_id');
 	}
 }

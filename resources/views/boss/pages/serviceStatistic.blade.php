@@ -10,26 +10,8 @@
 						<form action="{{route('services.getStatistic')}}"
 						      class="justify-content-center form-inline">
 							<div class="form-group">
-								<select class="custom-select" id="service" name="service_id">
-									@foreach($services as $service)
-										<option value="{{$service->id}}"
-										        @if(isset($service_id) and $service->id == $service_id)selected @endif>
-											{{$service->name}}
-										</option>
-									@endforeach
-								</select>
-								<select class="custom-select ml-2 mr-2" id="interval" name="interval">
-									@foreach($intervals as $interval_fe)
-										<option value="{{$interval_fe->url_attr}}" @if($interval_fe->url_attr==$interval) selected @endif>{{$interval_fe->name}}</option>
-										@endforeach
-									{{--<option value="today" @if($interval=='today')selected @endif>Сегодня</option>
-									<option value="yesterday" @if($interval=='yesterday')selected @endif>Вчера</option>
-									<option value="start_of_month" @if($interval=='start_of_month')selected @endif>С
-										начала текущего месяца
-									</option>
-									<option value="month" @if($interval=='month')selected @endif>За прошлый месяц
-									</option>--}}
-								</select>
+								@include('boss.parts.servicesList')
+								@include('boss.parts.intervalsList')
 								<button type="submit" class="btn btn-primary">Получить</button>
 							</div>
 						</form>
@@ -43,7 +25,11 @@
 					<div class="card">
 						<h5 class="card-header">Отправить email</h5>
 						<div class="card-body">
+							<form method="post" class="form-inline justify-content-center" action="{{route('services.sendStatistic',['service_id'=>$service_id,'interval'=>$interval])}}">
+							@csrf()
 							@include('boss.parts.emailList')
+								<button class="btn btn-primary">Отправить на e-mail</button>
+							</form>
 						</div>
 					</div>
 				</div>
