@@ -2,7 +2,7 @@ $(function () {
 	$('#frmAddTicketReply .pull-left').append('<div class="input-group"><span class="input-group-addon" id="time-input-addon" style="color:red">Введи время!</span><input type="number" class="form-control YSsSx2Wdbn" placeholder="Время" aria-describedby="time-input-addon" min="1" value="1"></div>');
 	$('#btnPostReply').on('click', function (event) {
 		event.preventDefault();
-		var reg = /https?:\/\/(?:www.)?([-a-zа-я\_\d]+)\./i;
+		var reg = /https?:\/\/(?:www.|bill(?:ing)?.|my.|cp.)?([-a-zа-я\_\d]+)./i;
 		var res = reg.exec(window.location.href);
 		var service = res[1];
 		var action_url = 'https://adminarea.secom.com.ua/store_stat.php';
