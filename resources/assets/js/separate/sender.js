@@ -1,5 +1,5 @@
 $(function () {
-	$('#frmAddTicketReply .pull-left').append('<div class="input-group"><span class="input-group-addon" id="time-input-addon" style="color:red">Введи время!</span><input type="number" class="form-control YSsSx2Wdbn" placeholder="Время" aria-describedby="time-input-addon" min="1" value="1"></div>');
+	$('#frmAddTicketReply .pull-left').append('<div class="input-group"><span class="input-group-addon" id="time-input-addon" style="color:red">Введи время!</span><input type="number" class="form-control YSsSx2Wdbn" placeholder="Время" aria-describedby="time-input-addon" min="0" value="0"></div>');
 	$('#btnPostReply').on('click', function (event) {
 		event.preventDefault();
 		var reg = /https?:\/\/(?:www.|bill(?:ing)?.|my.|cp.)?([-a-zа-я\_\d]+)./i;

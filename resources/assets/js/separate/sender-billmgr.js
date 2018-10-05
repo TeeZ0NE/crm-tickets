@@ -1,5 +1,6 @@
+$('.l-buttons[data-type="buttons"]').append('<p style="color:green">◼</p>');
 $('.b-button[data-name="ok_message"]','.b-button[data-name="ok"]').on('click', function () {
-	var reg = /https?:\/\/(?:www.)?(?:\w+\.)?([-a-zа-я_\d.]+)\//i;
+	var reg = /https?:\/\/(?:www.|my.)?([-a-zа-я\_\d]+)./i;
 	var res = reg.exec(window.location.href);
 	var service = res[1];
 	var action_url = 'https://adminarea.secom.com.ua/store_stat.php';
