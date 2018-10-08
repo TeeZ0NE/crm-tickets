@@ -31,6 +31,8 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 	Route::post('password/reset', 'Boss\Auth\ResetPasswordController@reset');
 	Route::get('/home', 'Boss\IndexController')->name('boss.home');
 	Route::put('ticket/{id}', 'Boss\TicketController@update')->name('boss.ticket.update');
+	Route::delete('ticket/{id}','Boss\TicketController@destroy')->name('boss.ticket.destroy');
+	Route::get('tickets','Boss\TicketController@index')->name('all_tickets');
 	Route::get('/nicks', 'Boss\RealAdminController@nicks')->name('admins.nicks');
 	Route::post('/bind-nicks', 'Boss\RealAdminController@bindNiks')->name('admins.bindNiks');
 	Route::post('assign-ticket/{ticket_id}', 'Boss\RealAdminController@assignTicket2Admin')->name('admin.assign');
