@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\{
-	Model, ModelNotFoundException
+	Collection, Model, ModelNotFoundException
 };
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -79,7 +79,7 @@ class Ticket extends Model
 		try {
 			$id = $this->where([['ticketid', '=', $tid], ['service_id', '=', $service_id]])->firstOrFail()->id;
 		} catch (ModelNotFoundException $mnf) {
-			$id=0;
+			$id = 0;
 			//Log::error("Error getating ID from DB where ticketid is $tid and service_id is $service_id");
 		}
 		return $id;
@@ -190,6 +190,7 @@ class Ticket extends Model
 	{
 		return $this->hasOne(User::class, 'id', 'user_assign_id');
 	}
+
 	/**
 	 * get user id which assign ticket
 	 * @param int $ticket_id
@@ -254,7 +255,7 @@ class Ticket extends Model
 	{
 //		return $this::where([['created_at', '>=', Carbon::now()->yesterday()], ['service_id', $service_id]])->get();
 		return $this::where('service_id', $service_id)->
-		whereBetween('created_at',[Carbon::now()->yesterday()->startOfDay(),Carbon::now()->yesterday()->endOfDay()])->
+		whereBetween('created_at', [Carbon::now()->yesterday()->startOfDay(), Carbon::now()->yesterday()->endOfDay()])->
 		get();
 	}
 
@@ -289,7 +290,7 @@ class Ticket extends Model
 	public function getOpenTickets4CurrAdmin(int $user_id)
 	{
 		return $this::with(['getStatus', 'getPriority', 'getService', 'getAdmin', 'getUserAssignedTicket'])->
-		where([['is_closed', '=', 0],['user_assign_id','=',$user_id]])->
+		where([['is_closed', '=', 0], ['user_assign_id', '=', $user_id]])->
 		/*WhereHas('getAdmin', function ($f) use ($user_id) {
 			$f->where('user_id', $user_id);
 		})->*/
@@ -317,7 +318,7 @@ class Ticket extends Model
 	 */
 	public function closeTicket(int $ticketid, int $service_id)
 	{
-		return $this::where(['ticketid'=>$ticketid,'service_id'=>$service_id])->update(['is_closed'=>1]);
+		return $this::where(['ticketid' => $ticketid, 'service_id' => $service_id])->update(['is_closed' => 1]);
 	}
 
 	/**
@@ -364,6 +365,7 @@ class Ticket extends Model
 			'is_closed' => 0,
 		]);
 	}
+
 	/**
 	 * get is last reply admin
 	 *
@@ -374,6 +376,7 @@ class Ticket extends Model
 	{
 		return $this::find($ticket_id)->last_is_admin;
 	}
+
 	/**
 	 * Get last replier 4 curr ticket
 	 * @param int $ticket_id
@@ -384,13 +387,34 @@ class Ticket extends Model
 		$lastreplier_nik_id = Ticket::find($ticket_id)->last_replier_nik_id;
 		return $lastreplier_nik_id;
 	}
+
 	public function setUserAssignId(int $ticket_id, int $user_id)
 	{
-		Ticket::find($ticket_id)->update(['user_assign_id'=>$user_id]);
+		Ticket::find($ticket_id)->update(['user_assign_id' => $user_id]);
 	}
 
 	public function getLastreply(int $ticket_id)
 	{
 		return $this::find($ticket_id)->lastreply;
 	}
+
+	/**
+	 * @return Collection
+	 */
+	public function getAllTickets()
+	{
+		return $this::with('getService')->get()->sortBy('service_id');
+	}
+
+	public function ticketDestroy(int $ticket_id): bool
+	{
+		$destroyed = false;
+		try {
+			$destroyed = $this::findOrFail($ticket_id)->delete();
+		} catch (ModelNotFoundException $nf) {
+			Log::error(sprintf('Ticket with id %d not found', $ticket_id));
+		}
+		return $destroyed;
+	}
+
 }

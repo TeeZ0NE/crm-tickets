@@ -214,6 +214,6 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 	    'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
-"version"=>'v1.2.1',
+"version"=>'v1.2.3',
 	'faker_locale'=>'en',
 ];

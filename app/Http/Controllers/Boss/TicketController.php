@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\ModelNotFoundException as MNF;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class TicketController extends Controller
 {
@@ -34,5 +35,24 @@ class TicketController extends Controller
     		Log::error(sprintf($error_msg,$id));
 	    }
     	return redirect()->back()->withErrors(['msg'=>sprintf($error_msg,$id)]);
+    }
+
+	public function destroy($id)
+	{
+		$ticket_m = new Ticket();
+		$destroyed = $ticket_m->ticketDestroy($id);
+		if ($destroyed) {
+			Log::info(sprintf('User %s destroy ticket id %d',Auth::user(),$id));
+			return redirect()->back()->with('msg', sprintf('Ticket with id %d deleted',$id));
+		}
+		return redirect()->back()->withErrors(['msg',sprintf('Ticket id %d doesn\'t delete',$id)]);
+    }
+
+	public function index()
+	{
+		$ticket_m = new Ticket();
+		return view('boss.pages.tickets')->with([
+			'tickets'=>$ticket_m->getAllTickets(),
+		]);
     }
 }
