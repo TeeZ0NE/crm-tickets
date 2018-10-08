@@ -293,3 +293,20 @@ WHERE service_id = 1 AND interval_id=1;
 
 INSERT INTO mailables(service_id,interval_id) VALUES(1,1),(1,2),(2,3);
 INSERT INTO mail_lists(mailable_id,email_id) VALUES(1,1),(1,2),(3,1);
+
+SELECT * FROM tickets USE INDEX(ticket_open);
+
+INSERT INTO sysadmin_activities (sysadmin_niks_id, ticket_id, lastreply, time_uses) VALUES(2,16,'2018-10-09 11:00:21', 103);
+DELETE FROM tickets WHERE id=2;
+
+-- FK
+select CONSTRAINT_NAME
+from INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+where TABLE_NAME = 'sysadmin_niks';
+
+ALTER TABLE sysadmin_niks DROP FOREIGN KEY sysadmin_niks_service_id_foreign;
+
+ALTER TABLE sysadmin_niks ADD CONSTRAINT sysadmin_niks_service_id_foreign
+FOREIGN KEY(service_id) REFERENCES services(id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- /FK

@@ -399,11 +399,12 @@ class Ticket extends Model
 	}
 
 	/**
+	 * @param int $pag_count paginate page count
 	 * @return Collection
 	 */
-	public function getAllTickets()
+	public function getAllTickets(int $pag_count = 10)
 	{
-		return $this::with('getService')->get()->sortBy('service_id');
+		return $this::with('getService')->get()->sortBy('service_id')->paginate($pag_count);
 	}
 
 	public function ticketDestroy(int $ticket_id): bool
