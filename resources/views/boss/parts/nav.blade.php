@@ -35,7 +35,7 @@
 							Создать</a>
 						<a class="dropdown-item" href="{{route('services.statistic')}}"><i
 									class="fas fa-chart-line"></i> Статистика</a>
-				<a class="dropdown-item" href="{{route('all_tickets')}}"><i class="fas fa-ticket-alt"> Тикеты</i></a>
+				<a class="dropdown-item" href="{{route('all_tickets')}}"><i class="fas fa-ticket-alt"></i> Тикеты</a>
 				<div class="dropdown-divider"></div>
 				<a class="dropdown-item" href="{{route('services.index')}}"><i class="fas fa-list"></i> Все</a>
 		</div>
