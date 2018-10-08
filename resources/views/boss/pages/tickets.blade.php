@@ -36,6 +36,7 @@
 							@endforeach
 							</tbody>
 						</table>
+						Всього: {{ $total}} на сторінці: {{ $tickets->count() }}{{$links}}
 					</div>
 				</div>
 			</div>

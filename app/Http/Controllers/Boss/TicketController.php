@@ -51,8 +51,12 @@ class TicketController extends Controller
 	public function index()
 	{
 		$ticket_m = new Ticket();
+		$tickets  = $ticket_m->getAllTickets();
 		return view('boss.pages.tickets')->with([
-			'tickets'=>$ticket_m->getAllTickets(),
+			'tickets'=> $tickets,
+			'total'=>$tickets->total(),
+			'links'=>$tickets->links(),
+
 		]);
     }
 }
