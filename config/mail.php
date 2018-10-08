@@ -1,5 +1,4 @@
 <?php
-
 return
 	array("driver" => "smtp",
 		"host" => "atlas.secom.com.ua",
