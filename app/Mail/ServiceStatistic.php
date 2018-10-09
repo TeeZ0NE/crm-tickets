@@ -36,7 +36,7 @@ class ServiceStatistic extends Mailable
 	{
 		$summary = $this->formSummaryStatistic($this->service_id, $this->interval);
 		return $this->markdown('emails.statisticService')->
-		subject(sprintf('Summary by interval: %s',$this->interval))->
+		subject(sprintf('Summary %s by interval: %s (%s)',$this->service,$this->interval, \Carbon\Carbon::now()))->
 		priority(2)->
 		with([
 			'statistics' => $this->formStatistic($this->service_id, $this->interval),

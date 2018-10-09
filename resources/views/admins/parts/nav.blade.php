@@ -17,9 +17,6 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
 						<a class="dropdown-item" href="{{route('admins.statistic')}}"><i class="fas fa-list-ol"></i> @lang('site.rate')</a>
-						<a class="dropdown-item disabled" href="#">item2</a>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item disabled" href="#">item3</a>
 					</div>
 				</li>
 			</ul>

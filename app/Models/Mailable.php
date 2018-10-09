@@ -14,7 +14,7 @@ class Mailable extends Model
 	 */
 	public function getService()
 	{
-		return $this->belongsTo(Service::class,'service_id')->select(['id','name']);
+		return $this->belongsTo(Service::class,'service_id')->select(['id','name','email']);
 	}
 
 	/**
