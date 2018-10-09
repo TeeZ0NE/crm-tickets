@@ -27,7 +27,6 @@
 						<div class="card-body">
 							<form method="post" class="form-inline justify-content-center" action="{{route('services.sendStatistic',['service_id'=>$service_id,'interval'=>$interval])}}">
 							@csrf()
-							@include('boss.parts.emailList')
 								<button class="btn btn-primary">Отправить на e-mail</button>
 							</form>
 						</div>

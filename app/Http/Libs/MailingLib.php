@@ -15,74 +15,134 @@ use App\Mail\ServiceStatistic;
 
 class MailingLib
 {
-	public $lists;
+	private $lists;
 
 	public function __construct()
 	{
 		$this->setLists();
 	}
+
+	/**
+	 * Get all lists from mailable
+	 *
+	 * @return Collection
+	 */
 	public function getAllLists()
 	{
 		$mailable_m = new Mailable();
 		return $mailable_m->getAllLists();
 	}
 
-	function setLists()
+	/**
+	 * Set lists variable
+	 */
+	private function setLists()
 	{
 		$this->lists = $this->getAllLists();
 	}
+
+	/**
+	 * @param Collection $lists
+	 * @return \Generator
+	 */
 	private function recurseLists(Collection $lists)
 	{
-		foreach ($lists as $list){
+		foreach ($lists as $list) {
 			yield $list;
 		}
 	}
-	
-	function prepareMailing(){
-		if(($this->lists)->isNotEmpty()) {
+
+	/**
+	 * Preparing before send
+	 *
+	 * @return bool|null
+	 */
+	public function prepareMailing()
+	{
+		if (($this->lists)->isNotEmpty()) {
 			foreach ($this->recurseLists($this->lists) as $list) {
-				if($emails = $this->getEmails($list->getEmails)){
-					//todo: check interval range
+				if ($main_email = $this->getEmail($list->getService)) {
 					$interval = $this->getInterval($list->getInterval);
 					$service = $this->getService($list->getService);
-					$this->sendStatistic2Email(compact('emails','interval','service'));
-				}
-				else continue;
+					$bcc = $this->getEmails($list->getEmails);
+					$this->sendStatistic2Email(compact('bcc', 'interval', 'service', 'main_email'));
+				} else continue;
 			}
 			return true;
-		}else return null;
+		} else return null;
 	}
 
-	function hasEmails($emailsObj)
+	/**
+	 * Check existing mail-boxes
+	 *
+	 * @param $emailsObj
+	 * @return bool
+	 */
+	private function hasEmails($emailsObj)
 	{
 		return $emailsObj->isNotEmpty();
 	}
 
-	function getEmails($emailsObj){
-		if ($this->hasEmails($emailsObj)){
-			$main = $bcc = [];
-			foreach ($emailsObj as $email){
-				if($email->is_main and empty($main)) array_push($main,$email->email);
-				else array_push($bcc,$email->email);
+	/**
+	 * Compose bcc 4 sending
+	 *
+	 * @param $emailsObj
+	 * @return array
+	 */
+	private function getEmails($emailsObj)
+	{
+		$bcc = [];
+		if ($this->hasEmails($emailsObj)) {
+			foreach ($emailsObj as $email) {
+				array_push($bcc, $email->email);
 			}
-			if(empty($main)) array_push($main,array_pop($bcc));
-			return compact('main','bcc');
 		}
-		return null;
+		return $bcc;
 	}
 
-	function getInterval($interval){
+	/**
+	 * Getting interval 4 list
+	 *
+	 * @param $interval
+	 * @return mixed
+	 */
+	private function getInterval($interval)
+	{
 		return $interval->url_attr;
 	}
 
-	function getService($service){
+	/**
+	 * Getting service name
+	 *
+	 * @param $service
+	 * @return mixed
+	 */
+	private function getService($service)
+	{
 		return $service->name;
 	}
 
-	function sendStatistic2Email(array $variables){
+	/**
+	 * Get main email
+	 *
+	 * @param $service
+	 * @return mixed
+	 */
+	private function getEmail($service)
+	{
+		return $service->email;
+	}
+
+	/**
+	 * Queue mail
+	 *
+	 * @param array $variables
+	 * @return  void
+	 */
+	private function sendStatistic2Email(array $variables): void
+	{
 		extract($variables);
-		extract($emails);
 		$mail = new Mail();
-		$mail::to($main)->bcc($bcc)->queue(new ServiceStatistic($service, $interval));
+		$mail::to($main_email)->bcc($bcc)->queue(new ServiceStatistic($service, $interval));
 	}
 }

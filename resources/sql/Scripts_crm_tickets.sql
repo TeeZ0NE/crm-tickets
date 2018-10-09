@@ -312,3 +312,10 @@ FOREIGN KEY(service_id) REFERENCES services(id) ON DELETE CASCADE ON UPDATE CASC
 -- /FK
 
 DELETE FROM mailables;
+
+-- remove old mailables posibilities
+ALTER TABLE services ADD email VARCHAR(86) NULL;
+ALTER TABLE emails DROP is_main;
+-- /old mailable posibilities
+
+UPDATE services SET email='endnet@ukr.net' WHERE name='adminvps';

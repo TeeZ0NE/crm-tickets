@@ -9,7 +9,7 @@ use Carbon\Carbon;
 class Service extends Model
 {
 	public $timestamps = False;
-	protected $fillable = ['name', 'compl', 'href_link', 'is_available'];
+	protected $fillable = ['name', 'compl', 'href_link', 'is_available','email'];
 
 	/**
 	 * getting all services Ids

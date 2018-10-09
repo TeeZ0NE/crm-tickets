@@ -21,10 +21,10 @@
 						<a class="dropdown-item" href="{{route('admins.nicks')}}"><i class="fas fa-link"></i>
 							Связать</a>
 						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" href="{{route('admins.statistics')}}">Статистика</a>
 						<a class="dropdown-item" href="{{route('admins.index')}}"><i class="fas fa-list"></i> Все</a>
 					</div>
 				</li>
-				<li class="nav-item"><a class="nav-link" href="{{route('admins.statistics')}}">Статистика</a></li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
 					   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -57,12 +57,9 @@
 				E-mails
 			</a>
 			<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-				<a class="dropdown-item" href="{{route('emails.create')}}"><i class="far fa-save"></i>
-					Добавить e-mail</a>
 				<a class="dropdown-item" href="{{route('email-lists.create')}}"><i
 							class="fas fa-building"></i> Создать список рассылки</a>
 				<div class="dropdown-divider"></div>
-				<a class="dropdown-item" href="{{route('emails.index')}}"><i class="fas fa-list"></i> Все адреса</a>
 				<a class="dropdown-item" href="{{route('email-lists.index')}}"><i class="fas fa-list"></i> Списки
 					рассылки</a>
 			</div>
