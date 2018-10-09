@@ -9,9 +9,8 @@ if (file_exists($compiledPath)) {
 	require $compiledPath;
 }
 
-use Illuminate\Support\Facades\Mail;
-use App\Mail\ServiceStatistic;
-$mail = new Mail();
-$mail::to('vadim@hyperweb.com.ua')->
-send(new ServiceStatistic('ua-hosting', 'start_of_month'));
+use App\Http\Libs\MailingLib;
+
+$ml = new MailingLib();
+$ml->prepareMailing();
 

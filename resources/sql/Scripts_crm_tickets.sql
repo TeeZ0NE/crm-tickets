@@ -310,3 +310,5 @@ ALTER TABLE sysadmin_niks ADD CONSTRAINT sysadmin_niks_service_id_foreign
 FOREIGN KEY(service_id) REFERENCES services(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- /FK
+
+DELETE FROM mailables;
