@@ -101,7 +101,7 @@ class Service extends Model
 	public function getCountTicketsAndSumTimeYesterday(int $service_id)
 	{
 		return DB::table('services as s')->
-		select(DB::raw('s.id, s.name, count(t.id) as tickets_count,sum(sact.time_uses) as sum_time'))->
+		select(DB::raw('s.id, s.name, count(distinct(sact.ticket_id)) as tickets_count,sum(sact.time_uses) as sum_time'))->
 		leftJoin('tickets as t','t.service_id','=','s.id')->
 		join('sysadmin_activities as sact','sact.ticket_id','=','t.id')->
 		where('s.id',$service_id)->
@@ -117,7 +117,7 @@ class Service extends Model
 	public function getStatisticToday(int $service_id)
 	{
 		return DB::table('tickets as t')->
-		select(DB::raw('distinct(t.id),t.subject,s.name,t.ticketid,sum(sact.time_uses) as sum_time'))->
+		select(DB::raw('count(distinct(sact.ticket_id)) as tickets_count,t.subject,s.name,t.ticketid,sum(sact.time_uses) as sum_time'))->
 		rightjoin('sysadmin_activities as sact', 'sact.ticket_id', '=', 't.id')->
 		join('services as s', 't.service_id', '=', 's.id')->
 		where('t.service_id', $service_id)->
@@ -134,7 +134,7 @@ class Service extends Model
 	public function getCountTicketsAndSumTimetoday(int $service_id)
 	{
 		return DB::table('services as s')->
-		select(DB::raw('s.id, s.name, count(t.id) as tickets_count,sum(sact.time_uses) as sum_time'))->
+		select(DB::raw('s.id, s.name, count(distinct(sact.ticket_id)) as tickets_count,sum(sact.time_uses) as sum_time'))->
 		leftJoin('tickets as t','t.service_id','=','s.id')->
 		join('sysadmin_activities as sact','sact.ticket_id','=','t.id')->
 		where('s.id',$service_id)->
@@ -150,7 +150,7 @@ class Service extends Model
 	public function getStatisticStartOfMonth(int $service_id)
 	{
 		return DB::table('tickets as t')->
-		select(DB::raw('distinct(t.id),t.subject,s.name,t.ticketid,sum(sact.time_uses) as sum_time'))->
+		select(DB::raw('count(distinct(sact.ticket_id)) as tickets_count,t.subject,s.name,t.ticketid,sum(sact.time_uses) as sum_time'))->
 		rightjoin('sysadmin_activities as sact', 'sact.ticket_id', '=', 't.id')->
 		join('services as s', 't.service_id', '=', 's.id')->
 		where('t.service_id', $service_id)->
@@ -167,7 +167,7 @@ class Service extends Model
 	public function getCountTicketsAndSumTimeStartOfMonth(int $service_id)
 	{
 		return DB::table('services as s')->
-		select(DB::raw('s.id, s.name, count(distinct(t.id)) as tickets_count,sum(sact.time_uses) as sum_time'))->
+		select(DB::raw('s.id, s.name, count(distinct(sact.ticket_id)) as tickets_count,sum(sact.time_uses) as sum_time'))->
 		leftJoin('tickets as t','t.service_id','=','s.id')->
 		rightjoin('sysadmin_activities as sact','sact.ticket_id','=','t.id')->
 		where('s.id',$service_id)->
@@ -183,7 +183,7 @@ class Service extends Model
 	public function getStatisticPrevMonth(int $service_id)
 	{
 		return DB::table('tickets as t')->
-		select(DB::raw('distinct(t.id),t.subject,s.name,t.ticketid,sum(sact.time_uses) as sum_time'))->
+		select(DB::raw('count(distinct(sact.ticket_id)) as tickets_count,t.subject,s.name,t.ticketid,sum(sact.time_uses) as sum_time'))->
 		rightjoin('sysadmin_activities as sact', 'sact.ticket_id', '=', 't.id')->
 		join('services as s', 't.service_id', '=', 's.id')->
 		where('t.service_id', $service_id)->
@@ -200,7 +200,7 @@ class Service extends Model
 	public function getCountTicketsAndSumTimePrevMonth(int $service_id)
 	{
 		return DB::table('services as s')->
-		select(DB::raw('s.id, s.name, count(distinct(t.id)) as tickets_count,sum(sact.time_uses) as sum_time'))->
+		select(DB::raw('s.id, s.name, count(distinct(sact.ticket_id)) as tickets_count,sum(sact.time_uses) as sum_time'))->
 		leftJoin('tickets as t','t.service_id','=','s.id')->
 		rightjoin('sysadmin_activities as sact','sact.ticket_id','=','t.id')->
 		where('s.id',$service_id)->
