@@ -23,12 +23,13 @@
 											@csrf
 											<div class="input-group">
 												<div class="input-group-prepend">
-													<span class="input-group-text"><b>{{$service->name}}</b>: линк, сложность</span>
+													<span class="input-group-text"><b>{{$service->name}}</b>: линк, сложность, @</span>
 												</div>
 												<input type="text" aria-label="name" class="form-control w-50"
 												       value="{{$service->href_link}}" name="href_link">
 												<input type="number" aria-label="compl" class="form-control"
 												       value="{{$service->compl}}" step=".1" name="compl" max="9.9" min="0">
+												<input type="email" class="form-control" placeholder="email" name="email" aria-label="Email" value="{{$service->email}}">
 												<button type="submit"  class="store-service btn btn-info">
 													<i class="fas fa-save"></i>
 												</button>

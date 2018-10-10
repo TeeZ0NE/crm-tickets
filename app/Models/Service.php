@@ -20,16 +20,34 @@ class Service extends Model
 		return $this->orderBy('id')->pluck('id')->toArray();
 	}
 
+	/**
+	 * Get service id
+	 *
+	 * @param string $service
+	 * @return int
+	 */
 	public function getServiceId(string $service): int
 	{
 		return $this::firstOrCreate(['name' => $service])->id;
 	}
 
+	/**
+	 * Get service complicity
+	 *
+	 * @param int $service_id
+	 * @return float
+	 */
 	public function getCompl(int $service_id): float
 	{
 		return $this->find($service_id)->compl;
 	}
 
+	/**
+	 * Get service name
+	 *
+	 * @param int $service_id
+	 * @return mixed
+	 */
 	public function getServiceName(int $service_id)
 	{
 		return $this->find($service_id)->name;
@@ -47,6 +65,12 @@ class Service extends Model
 		$service_m::find($service_id)->update(['is_available' => $is_available]);
 	}
 
+	/**
+	 * Get yesterday service statistic
+	 *
+	 * @param int $service_id
+	 * @return \Illuminate\Support\Collection
+	 */
 	public function getStatisticYesterday(int $service_id)
 	{
 		return DB::table('tickets as t')->
@@ -70,6 +94,10 @@ class Service extends Model
 		return $this->select('id', 'name')->get();
 	}
 
+	/**
+	 * @param int $service_id
+	 * @return Model|null|object|static
+	 */
 	public function getCountTicketsAndSumTimeYesterday(int $service_id)
 	{
 		return DB::table('services as s')->
@@ -82,6 +110,10 @@ class Service extends Model
 		first();
 	}
 
+	/**
+	 * @param int $service_id
+	 * @return \Illuminate\Support\Collection
+	 */
 	public function getStatisticToday(int $service_id)
 	{
 		return DB::table('tickets as t')->
@@ -95,6 +127,10 @@ class Service extends Model
 		get();
 	}
 
+	/**
+	 * @param int $service_id
+	 * @return Model|null|object|static
+	 */
 	public function getCountTicketsAndSumTimetoday(int $service_id)
 	{
 		return DB::table('services as s')->
@@ -107,6 +143,10 @@ class Service extends Model
 		first();
 	}
 
+	/**
+	 * @param int $service_id
+	 * @return \Illuminate\Support\Collection
+	 */
 	public function getStatisticStartOfMonth(int $service_id)
 	{
 		return DB::table('tickets as t')->
@@ -120,6 +160,10 @@ class Service extends Model
 		get();
 	}
 
+	/**
+	 * @param int $service_id
+	 * @return Model|null|object|static
+	 */
 	public function getCountTicketsAndSumTimeStartOfMonth(int $service_id)
 	{
 		return DB::table('services as s')->
@@ -132,6 +176,10 @@ class Service extends Model
 		first();
 	}
 
+	/**
+	 * @param int $service_id
+	 * @return \Illuminate\Support\Collection
+	 */
 	public function getStatisticPrevMonth(int $service_id)
 	{
 		return DB::table('tickets as t')->
@@ -145,6 +193,10 @@ class Service extends Model
 		get();
 	}
 
+	/**
+	 * @param int $service_id
+	 * @return Model|null|object|static
+	 */
 	public function getCountTicketsAndSumTimePrevMonth(int $service_id)
 	{
 		return DB::table('services as s')->
@@ -157,8 +209,41 @@ class Service extends Model
 		first();
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+	 */
 	public function getInterval()
 	{
 		return $this->hasManyThrough(Interval::class,Mailable::class,'service_id','id','id','interval_id');
+	}
+
+	/**
+	 * Updating service
+	 *
+	 * @param int $id
+	 * @param array $values
+	 * @return boolean
+	 */
+	public function serviceUpdate(int $id, array $values)
+	{
+		return $this::find($id)->update($values);
+	}
+
+	/**
+	 * @param $email
+	 * @return string
+	 */
+	public function setEmailAttribute($email)
+	{
+		return $this->attributes['email'] = strtolower(trim($email));
+	}
+
+	/**
+	 * @param $href_link
+	 * @return string
+	 */
+	public function setHrefLinkAttribute($href_link)
+	{
+		return $this->attributes['href_link'] = strtolower(trim($href_link));
 	}
 }

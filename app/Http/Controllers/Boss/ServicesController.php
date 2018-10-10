@@ -40,7 +40,8 @@ class ServicesController extends Controller
     	$serv_m = new Service;
     	$request->validate([
     		'name'=>'required|max:80|unique:services',
-		    'compl'=>'required|numeric|max:9.9|min:0'
+		    'compl'=>'required|numeric|max:9.9|min:0',
+		    'email'=>'max:86|email'
 	    ]);
 		$serv_m->name = $request->name;
 		$serv_m->compl = $request->compl;
@@ -59,14 +60,17 @@ class ServicesController extends Controller
     public function update(Request $request, $id)
     {
     	$request->validate([
+		    'href_link'=>'required|max:80',
 		    'compl'=>'required|numeric|max:9.9|min:0',
+		    'email'=>'max:86|email'
 	    ]);
     	$name = $request->name?? '';
     	$compl=$request->compl;
     	$href_link = $request->href_link;
+    	$email = $request->email;
     	$service_m = new Service();
-    	$res = $service_m->find($id)->update(['compl'=>$compl,'href_link'=>$href_link]);
-        if($res){
+    	$updated = $service_m->serviceUpdate($id,['compl'=>$compl,'href_link'=>$href_link, 'email'=>$email]);
+        if($updated){
 	        Log::info(sprintf('Service %2$s with id %1$d updated',$id,$name));
         	return redirect(route('services.index'))->with('msg',sprintf("update id %d %s compl %.1f", $id,$name,$compl));
         }
