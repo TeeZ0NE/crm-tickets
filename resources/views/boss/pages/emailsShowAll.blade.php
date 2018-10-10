@@ -23,10 +23,7 @@
 @csrf
 <div class="input-group">
 <div class="input-group-prepend">
-<div class="input-group-text">
-<label class="mr-1 mb-0">Основной</label>
-<input type="checkbox" aria-label="A main mail" name="is_main" @if($email->is_main) checked @endif>
-</div>
+<span class="input-group-text" id="basic-addon1">@</span>
 </div>
 <input type="email" aria-label="e-mail" class="form-control" value="{{$email->email}}" name="email">
 <button type="submit" class="store-email btn btn-info">
