@@ -177,13 +177,13 @@ INSERT INTO sysadmin_niks(service_id,admin_nik,user_id) VALUES(1,'Mooryan',1);
 INSERT INTO sysadmin_activities(sysadmin_niks_id,ticket_id,lastreply,time_uses) VALUES(2,146,'2018-08-27 08:45:31',15);
 UPDATE sysadmin_activities SET `lastreply`='2018-09-27 08:45:31' WHERE ticket_id=146;
 -- service month statistic
-SELECT DISTINCT(t.id),t.subject,s.name,t.ticketid, SUM(sact.time_uses) as sum_time FROM tickets as t
+SELECT DISTINCT(t.id), COUNT(DISTINCT(sact.ticket_id)) as t_count,t.subject,s.name,t.ticketid, SUM(sact.time_uses) as sum_time FROM tickets as t
 RIGHT JOIN sysadmin_activities AS sact ON sact.ticket_id=t.id
 JOIN services AS s ON t.service_id=s.id
 -- WHERE created_at>= subdate(curdate(),1)
 -- yesterday
 -- WHERE sact.lastreply>=SUBDATE(NOW(),2)
-WHERE (t.created_at BETWEEN DATE_FORMAT('2018-08-01' ,'%Y-%m-%d') AND last_day('2018-08-01'))
+WHERE (t.created_at BETWEEN DATE_FORMAT('2018-10-01' ,'%Y-%m-%d') AND last_day('2018-10-01'))
 -- AND t.service_id=1
 GROUP BY t.id ORDER by sum_time;
 
@@ -319,3 +319,11 @@ ALTER TABLE emails DROP is_main;
 -- /old mailable posibilities
 
 UPDATE services SET email='endnet@ukr.net' WHERE name='adminvps';
+
+SELECT t.id, t.ticketid, s.name, t.subject, sact.lastreply, sact.id as sact_id, sact.time_uses, snik.admin_nik, u.name as user_name
+FROM tickets as t
+RIGHT JOIN sysadmin_activities as sact ON sact.ticket_id=t.id
+INNER JOIN sysadmin_niks as snik ON snik.id=sact.sysadmin_niks_id
+LEFT JOIN users as u ON snik.user_id=u.id
+LEFT JOIN services as s ON s.id=t.service_id
+ORDER BY sact.lastreply;

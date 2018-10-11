@@ -15,7 +15,7 @@
 									<div class="input-group-prepend">
 										<span class="input-group-text" id="ticketid-addon">Ticketid</span>
 									</div>
-									<input type="text" class="form-control" placeholder="Ticketid" aria-label="Ticketid" aria-describedby="ticketid-addon" name="ticketid" value="@isset($ticketid){{$ticketid}}@endisset{{old('ticketid')}}">
+									<input type="text" class="form-control" placeholder="Ticketid" aria-label="Ticketid" aria-describedby="ticketid-addon" name="ticketid" value="@isset($ticketid) {{$ticketid}} @endisset">
 								</div>
 								<button type="submit" class="btn btn-primary">Получить</button>
 							</div>
@@ -24,6 +24,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="row">
 			<div class="col-md-12 mb-md-2 mb-lg-3">
 				<div class="card">
@@ -42,16 +43,16 @@
 								<tr>
 									<td class="align-middle">{{$ticket->id}}</td>
 									<td>{{$ticket->getService->name}}</td>
-									<td><a href="{{$ticket->getService->href_link}}{{$ticket->ticketid}}" target="_blank">{{$ticket->ticketid}}</a></td>
+									<td><a href="{{$ticket->getService->href_link}}{{$ticket->ticketid}}">{{$ticket->ticketid}}</a></td>
 									<td>{{$ticket->subject}}</td>
 									<td>
-										<a class="btn btn-primary" href="{{route('ticket.show',['id'=>$ticket->id])}}" title="Show {{$ticket->ticketid}}"><i class="far fa-folder-open"></i></a>
-										<form action="{{route('boss.ticket.destroy',$ticket->id)}}" method="post" class="float-right">
-										@method('DELETE')
-										@csrf
-										<button type="submit" class="btn btn-dark"	onclick="return confirm('Видалення тыкета. Ви впевнені?')" title="Delete {{$ticket->ticketid}}">
-											<i class="fas fa-eraser"></i>
-										</button>
+										<form action="{{route('boss.ticket.destroy',$ticket->id)}}" method="post">
+											@method('DELETE')
+											@csrf
+											<button type="submit" class="btn btn-dark"
+											        onclick="return confirm('Ви впевнені?')"><i
+														class="fas fa-eraser"></i>
+											</button>
 										</form>
 									</td>
 								</tr>

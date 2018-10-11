@@ -8,13 +8,14 @@
 
 namespace App\Http\Libs;
 use App\Models\{SysadminActivity,Service, Ticket};
-use Carbon\CarbonInterval;
+use Carbon\{CarbonInterval,Carbon};
 
 trait Statistic
 {
 	private $service;
 	private $service_id;
 	private $interval;
+	private $interval4humans;
 	/**
 	 * @return \Generator
 	 */
@@ -99,7 +100,7 @@ trait Statistic
 	 * Forming statistic 4 service
 	 *
 	 * Applicable set of one an interval String:
-	 * 'today', 'yesterday','start_of_month', 'month'
+	 * 'today', 'yesterday','start_of_month', 'prev_month'
 	 *
 	 * @param int $service_id
 	 * @param string $interval
@@ -112,7 +113,7 @@ trait Statistic
 			case 'yesterday': $statistics_db = $service_m->getStatisticYesterday($service_id); break;
 			case 'today': $statistics_db=$service_m->getStatisticToday($service_id);break;
 			case 'start_of_month': $statistics_db=$service_m->getStatisticStartOfMonth($service_id);break;
-			case 'month':$statistics_db=$service_m->getStatisticPrevMonth($service_id);break;
+			case 'prev_month':$statistics_db=$service_m->getStatisticPrevMonth($service_id);break;
 			default: $statistics_db=collect();
 		}
 		$statistics = ($statistics_db->isEmpty())?$notthig_found_msg:$statistics_db;
@@ -132,7 +133,7 @@ trait Statistic
 			case 'yesterday': $statistics_db = $service_m->getCountTicketsAndSumTimeYesterday($service_id); break;
 			case 'today': $statistics_db=$service_m->getCountTicketsAndSumTimetoday($service_id);break;
 			case 'start_of_month':$statistics_db=$service_m->getCountTicketsAndSumTimeStartOfMonth($service_id);break;
-			case 'month':$statistics_db=$service_m->getCountTicketsAndSumTimePrevMonth($service_id);break;
+			case 'prev_month':$statistics_db=$service_m->getCountTicketsAndSumTimePrevMonth($service_id);break;
 			default: $statistics_db=null;
 		}
 		$statistics = $statistics_db?:$statistics_db;
@@ -173,5 +174,27 @@ trait Statistic
 		$this->service_id = is_numeric($service)?$service:$this->getService_id($service);
 		$this->service = $this->getServiceName($this->service_id);
 		$this->interval = $interval;
+		$this->interval4humans = $this->getInterval4Human($interval);
+	}
+
+	function getInterval4Human($interval){
+		$msg = '%s - %s';
+		switch ($interval) {
+			case 'yesterday':
+				$interval4humans = sprintf($msg, Carbon::now()->yesterday()->toDateTimeString(),Carbon::now()->yesterday()->endOfDay());
+				break;
+			case 'today':
+				$interval4humans = Carbon::now()->toDateTimeString();
+				break;
+			case 'start_of_month':
+				$interval4humans=sprintf($msg,Carbon::now()->startOfMonth()->toDateTimeString(),Carbon::now()->toDateTimeString());
+				break;
+			case 'prev_month':
+				$interval4humans = sprintf($msg,Carbon::now()->subMonth()->startOfMonth()->toDateTimeString(), Carbon::now()->subMonth()->endOfMonth()->toDateTimeString());
+				break;
+			default:
+				$interval4humans = Carbon::now();
+		}
+		return $interval4humans;
 	}
 }
