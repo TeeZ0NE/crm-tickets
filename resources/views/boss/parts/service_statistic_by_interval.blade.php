@@ -1,9 +1,9 @@
-@isset($sumary->tickets_count)Тикетов: {{$summary->tickets_count}} Время: {{$total4humans}}&nbsp;
+@isset($summary->name)Тикетов: {{$summary->tickets_count}} Время: {{$total4humans}}&nbsp;
 <small>({{$summary->sum_time}} мин.)</small>@endisset
 <table class="table table-striped all-tickets">
 	<thead>
 	<tr class="text-center">
-		<th>ticket id</th>
+		<th>ticketid</th>
 		<th>Тема</th>
 		<th>Время</th>
 	</tr>
