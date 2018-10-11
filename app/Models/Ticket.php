@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\{
 };
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class Ticket extends Model
 {
 	protected $fillable = ['ticketid', 'subject', 'service_id', 'status_id', 'priority_id', 'compl', 'lastreply', 'last_replier_nik_id', 'is_closed', 'has_deadline', 'last_is_admin', 'user_assign_id',];
-
 
 	/**
 	 * get status
@@ -407,6 +407,16 @@ class Ticket extends Model
 		return $this::with('getService')->get()->sortBy('service_id')->paginate($pag_count);
 	}
 
+	public function getServiceTickets(int $service_id, int $pag_count = 10)
+	{
+		return $this::with('getService')->where('service_id', $service_id)->get()->paginate($pag_count);
+	}
+
+	public function getServiceTicket(int $service_id, int $ticketid, int $pag_count = 10)
+	{
+		return $this::with('getService')->where(['service_id' => $service_id, 'ticketid' => $ticketid])->get()->paginate($pag_count);
+	}
+
 	public function ticketDestroy(int $ticket_id): bool
 	{
 		$destroyed = false;
@@ -418,4 +428,16 @@ class Ticket extends Model
 		return $destroyed;
 	}
 
+	public function getTicketAllActivities(int $id)
+	{
+		return DB::table('tickets as t')->
+		select(DB::raw('t.ticketid, s.name, s.href_link,t.subject, sact.lastreply, sact.id as sact_id, sact.time_uses, snik.admin_nik, u.name as user_name'))->
+		RIGHTJOIN('sysadmin_activities as sact', 'sact.ticket_id', '=', 't.id')->
+		JOIN('sysadmin_niks as snik', 'snik.id', '=', 'sact.sysadmin_niks_id')->
+		LEFTJOIN('users as u', 'snik.user_id', '=', 'u.id')->
+		LEFTJOIN('services as s', 's.id', '=', 't.service_id')->
+		where('t.id', $id)->
+		orderBy('sact.lastreply')->
+		get();
+	}
 }

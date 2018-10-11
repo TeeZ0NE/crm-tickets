@@ -71,4 +71,9 @@ class SysadminActivity extends Model
 		GROUPBY('service', 'user_name')->
 		get();
 	}
+
+	public function destroyActivity(int $id)
+	{
+		return $this::find($id)->delete();
+	}
 }

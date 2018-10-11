@@ -32,11 +32,14 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 	Route::get('/home', 'Boss\IndexController')->name('boss.home');
 	Route::put('ticket/{id}', 'Boss\TicketController@update')->name('boss.ticket.update');
 	Route::delete('ticket/{id}','Boss\TicketController@destroy')->name('boss.ticket.destroy');
+	Route::get('ticket/{id}','Boss\TicketController@show')->name('ticket.show');
 	Route::get('tickets','Boss\TicketController@index')->name('all_tickets');
+	Route::get('tickets/search','Boss\TicketController@search')->name('tickets.search');
 	Route::get('/nicks', 'Boss\RealAdminController@nicks')->name('admins.nicks');
 	Route::post('/bind-nicks', 'Boss\RealAdminController@bindNiks')->name('admins.bindNiks');
 	Route::post('assign-ticket/{ticket_id}', 'Boss\RealAdminController@assignTicket2Admin')->name('admin.assign');
 	Route::put('/deactivate/{user_id}', 'Boss\RealAdminController@deactivate')->name('admin.deactivate');
+	Route::delete('admin-activity/{id}','Boss\AdminActivityController')->name('activity.delete');
 	Route::group(['prefix' => 'admins'], function () {
 		Route::get('/statistics', 'Boss\StatisticController@index')->name('admins.statistics');
 		Route::get('/statistics-submonth/', 'Boss\StatisticController@getStatisticsSubMonth')->name('admins.statistics_subMonths');
