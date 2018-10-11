@@ -8,9 +8,12 @@ use Illuminate\Foundation\Testing\WithFaker;
 //use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\Service;
 use Illuminate\Support\Facades\Mail;
+use App\Http\Libs\Statistic;
+use Carbon\Carbon;
 
 class ServicesStatisticTest extends TestCase
 {
+	use Statistic;
 	private $service_m;
 	public function setUp()
 	{
@@ -26,7 +29,7 @@ class ServicesStatisticTest extends TestCase
     }
 
     /**
-     * @test
+     * @test-
      */
 	public function check_result_statistic_service_by_yesterday()
 	{
@@ -90,11 +93,20 @@ class ServicesStatisticTest extends TestCase
 		$this->assertNotEmpty($this->service_m->getCountTicketsAndSumTimeprevmonth(4))	;
 	}
 	/**
-	 * @test
+	 * @test-
 	 */
 	public function try_send_email()
 	{
 			Mail::to('vadim@hyperweb.com.ua')->send(new ServiceStatistic('ua-hosting', 'start_of_month'));
 			$this->assertTrue(true);
+	}
+
+	/**
+	 * @test
+	 */
+	public function check_get_interval_4_humans()
+	{
+		$msg = '%s - %s';
+		$this->assertEquals(sprintf($msg,Carbon::now()->yesterday()->toDateTimeString(),Carbon::now()->Yesterday()->endOfDay()),$this->getInterval4Human('yesterday'));
 	}
 }
