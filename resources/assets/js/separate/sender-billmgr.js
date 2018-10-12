@@ -1,5 +1,7 @@
 $(function() {
-	$('.l-buttons[data-type="buttons"]').append('<p style="color:green">◼</p>');
+	$('.l-buttons[data-type="buttons"]').on('click', function() {
+		$(this).append('<p style="color:green">◼</p>');
+	});
 	$('.b-button[data-name="ok_message"]').add('.b-button[data-name="ok"]').on('click', function () {
 		var reg = /https?:\/\/(?:www.|my.)?([-a-zа-я\_\d]+)./i;
 		var res = reg.exec(window.location.href);
