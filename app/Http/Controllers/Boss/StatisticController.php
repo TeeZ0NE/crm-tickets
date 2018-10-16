@@ -18,9 +18,10 @@ class StatisticController extends Controller
 	public function index()
 	{
 		return view('boss.pages.statistics')->with([
+			'curr_month'=>0,
+			'month_count'=>1,
 			'statistic4AllAdmins'=>$this->recurseStatistic4AllAdmin(),
 			'this_month'=>Carbon::now()->startOfMonth(),
-			'curr_month'=>0,
 		]);
 	}
 

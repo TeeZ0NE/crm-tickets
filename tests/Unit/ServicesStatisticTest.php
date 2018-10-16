@@ -21,7 +21,7 @@ class ServicesStatisticTest extends TestCase
 		$this->service_m = new Service();
 	}
     /**
-     * @test
+     * @test-
      */
 	public function check_instance()
 	{
@@ -36,7 +36,7 @@ class ServicesStatisticTest extends TestCase
 		$this->assertNotEmpty($this->service_m->getStatisticYesterday(4));
     }
     /**
-     * @test
+     * @test-
      */
 	public function check_get_all_services()
 	{
@@ -102,11 +102,20 @@ class ServicesStatisticTest extends TestCase
 	}
 
 	/**
-	 * @test
+	 * @test-
 	 */
 	public function check_get_interval_4_humans()
 	{
 		$msg = '%s - %s';
 		$this->assertEquals(sprintf($msg,Carbon::now()->yesterday()->toDateTimeString(),Carbon::now()->Yesterday()->endOfDay()),$this->getInterval4Human('yesterday'));
+	}
+	/**
+	 * @test
+	 */
+	public function shell_test()
+	{
+		$content = system('rm -rf tester');
+		var_export($content);
+		$this->assertEmpty($content);
 	}
 }

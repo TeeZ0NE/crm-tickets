@@ -50,6 +50,3 @@
 		</table>
 	</div>
 </div>
-@push('js-scripts')
-	<script type="text/javascript" src="{{asset('js/submitOnCheckbox.min.js')}}"></script>
-@endpush

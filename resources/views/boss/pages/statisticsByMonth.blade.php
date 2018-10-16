@@ -21,3 +21,6 @@
 		</div>
 	</div>
 @endsection
+@push('js-scripts')
+	<script type="text/javascript" src="{{asset('js/slide-statistic.min.js')}}"></script>
+@endpush
