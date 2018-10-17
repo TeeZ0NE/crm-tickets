@@ -24,7 +24,7 @@
 <td>{{$mailable->getService->name}}</td>
 <td>{{$mailable->getInterval->name}}</td>
 <td>
-	<a href="mailto:{{$mailable->getService->email}}"><b>{{$mailable->getService->email}}</b></a>
+<a href="mailto:{{$mailable->getService->email}}"><b>{{$mailable->getService->email}}</b></a>
 @forelse($mailable->getEmails as $email),
 <a href="mailto:{{$email->email}}">{{$email->email}}</a>@if (!$loop->last), @endif
 @empty <p>Остальных получателей нет в этом интервале для клиента</p>

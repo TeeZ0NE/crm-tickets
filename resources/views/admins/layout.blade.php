@@ -15,7 +15,7 @@
 <div id="app" class="h-100 position-relative mb-5 pb-5">
 	@if(Auth::check())@include('admins.parts.nav')@endif
 	<main class="py-4">
-			@yield('main_content')
+		@yield('main_content')
 	</main>
 </div>
 <footer class="position-absolute w-100 text-white-50 bg-dark mt-lg-3 p-lg-5 text-center">@include('admins.parts.footer')</footer>

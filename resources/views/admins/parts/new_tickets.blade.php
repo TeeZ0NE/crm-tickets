@@ -48,7 +48,8 @@
 					</td>
 					<td class="align-middle">{{$newTicket->getService->name}}</td>
 					<td class="align-middle">
-						<a href="{{$newTicket->getService->href_link}}{{$newTicket->ticketid}}" target="_blank" class="btn btn-info">{{$newTicket->ticketid}}</a>
+						<a href="{{$newTicket->getService->href_link}}{{$newTicket->ticketid}}" target="_blank"
+						   class="btn btn-info">{{$newTicket->ticketid}}</a>
 					</td>
 					<td>{{$newTicket->subject}}</td>
 					<td>{{$lastReplier}}</td>
