@@ -302,11 +302,11 @@ DELETE FROM tickets WHERE id=2;
 -- FK
 select CONSTRAINT_NAME
 from INFORMATION_SCHEMA.TABLE_CONSTRAINTS
-where TABLE_NAME = 'sysadmin_niks';
+where TABLE_NAME = 'tickets';
 
-ALTER TABLE sysadmin_niks DROP FOREIGN KEY sysadmin_niks_service_id_foreign;
+ALTER TABLE tickets DROP FOREIGN KEY tickets_service_id_foreign;
 
-ALTER TABLE sysadmin_niks ADD CONSTRAINT sysadmin_niks_service_id_foreign
+ALTER TABLE tickets ADD CONSTRAINT tickets_service_id_foreign
 FOREIGN KEY(service_id) REFERENCES services(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- /FK
