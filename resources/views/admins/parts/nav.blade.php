@@ -46,6 +46,9 @@ style="display: none;">
 </form>
 </div>
 </li>
+<li class="nav-item">
+<a class="nav-link btn btn-outline-danger" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt fa-lg"></i></a>
+</li>
 @endguest
 </ul>
 </div>
