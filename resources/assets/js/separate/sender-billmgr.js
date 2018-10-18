@@ -1,13 +1,15 @@
 var wr_content = document.getElementById('wr-content');
+var buttons = '.l-buttons[data-type="buttons"]';
 var observer = new MutationObserver(function (mutations) {
-//       console.info('mut');
 	mutations.forEach(function (mutation) {
-		//console.log(mutation.type);
-		if ($.find('#wr-content textarea[name="message"]').length && $('.lv-29').parent().parent().css('display')!=='none') {
-			$('#wr-content').has('.l-buttons[data-type="buttons"]').find('.l-buttons[data-type="buttons"]').append('<p style="color:green">◼</p>');
-			$('.b-button[data-name="ok_message"]').add('.b-button[data-name="ok"]').on('click', sendData);
+		if ($.find('#wr-content textarea[name="message"]').length && $('.lv-29').parent().parent().css('display') !== 'none') {
+			//       $('#wr-content').has('.l-buttons[data-type="buttons"]').find('.l-buttons[data-type="buttons"]').addClass('square');
+			if (!$('#wr-content').has(buttons).find(buttons).hasClass('square')) {
+				$('.b-button[data-name="ok_message"]').add('.b-button[data-name="ok"]').one('click', sendData);
+				$(buttons).addClass('square').append('<p style="color:green">◼</p>');
+			}
 		}
-	});
+	})
 });
 var config = {
 	attributes: true,

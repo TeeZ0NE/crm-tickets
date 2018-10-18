@@ -32,17 +32,21 @@
 						@endphp
 						<td>{{$waitingTime}}</td>
 						<td>{{$showMyTicket->getService->name}}</td>
-						<td><a href="{{$showMyTicket->getService->href_link}}{{$showMyTicket->ticketid}}" target="_blank" class="btn btn-info">{{$showMyTicket->ticketid}}</a></td>
+						<td><a href="{{$showMyTicket->getService->href_link}}{{$showMyTicket->ticketid}}"
+						       target="_blank" class="btn btn-info">{{$showMyTicket->ticketid}}</a></td>
 						<td>{{$showMyTicket->subject}}</td>
 						<td>{{$lastReplier}}</td>
 						<td>{{$showMyTicket->lastreply}}</td>
 						<td>{{$showMyTicket->getPriority->priority}}</td>
 						<td>{{$showMyTicket->getStatus->name}}</td>
-						<td><form action="{{route('boss.ticket.update',$showMyTicket->id)}}" method="post">
+						<td>
+							<form action="{{route('boss.ticket.update',$showMyTicket->id)}}" method="post">
 								@csrf
 								@method('PUT')
-								<input type="checkbox" name="has_deadline" class="submit" @if($showMyTicket->has_deadline)checked @endif>
-							</form></td>
+								<input type="checkbox" name="has_deadline" class="submit"
+								       @if($showMyTicket->has_deadline)checked @endif>
+							</form>
+						</td>
 					</tr>
 				@endforeach
 			@endif
@@ -50,6 +54,3 @@
 		</table>
 	</div>
 </div>
-@push('js-scripts')
-	<script type="text/javascript" src="{{asset('js/submitOnCheckbox.min.js')}}"></script>
-@endpush

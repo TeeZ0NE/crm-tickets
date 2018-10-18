@@ -327,3 +327,19 @@ INNER JOIN sysadmin_niks as snik ON snik.id=sact.sysadmin_niks_id
 LEFT JOIN users as u ON snik.user_id=u.id
 LEFT JOIN services as s ON s.id=t.service_id
 ORDER BY sact.lastreply;
+
+CREATE USER 'boss'@'localhost' identified BY '1111';
+
+GRANT ALL PRIVILEGES ON crm_tickets_db.* TO "boss"@"localhost";
+flush PRIVILEGES;
+
+select * from `sessions`;
+
+
+
+CREATE USER 'boss2'@'localhost' IDENTIFIED WITH mysql_native_password BY '1111';
+GRANT ALL PRIVILEGES ON crm_tickets_db.* TO 'boss2'@'localhost' WITH GRANT OPTION;
+CREATE USER 'boss2'@'%' IDENTIFIED WITH mysql_native_password BY '1111';
+GRANT ALL PRIVILEGES ON crm_tickets_db.* TO 'boss2'@'%' WITH GRANT OPTION;
+GRANT ALL ON `crm_tickets_db`.* TO 'boss1'@'%' ;
+FLUSH PRIVILEGES ;
