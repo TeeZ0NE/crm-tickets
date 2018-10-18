@@ -22,13 +22,13 @@ return [
 		'secret' => md5('lDGMboTBTqeL2q3F'),
 	],
 	'coopertino' => [
-		'home' => 'coopertino.ru',
+		'home' => 'coopertino',
 		'identifier' => 'r.wayne',
 		'secret' => '7!gL62TS4i',
 		'url' => 'https://my.coopertino.ru:1500/billmgr?authinfo=%2$s:%3$s&out=%1$s&func=ticket',
 	],
 	'skt' => [
-		'home' => 'skt.ru',
+		'home' => 'skt',
 		'identifier' => 'r.wayne',
 		'secret' => 'eC%!nhp96g',
 		'url' => 'https://my.skt.ru/billmgr?authinfo=%2$s:%3$s&out=%1$s&func=ticket',
