@@ -85,8 +85,7 @@ Route::group(['middleware' => ['purify', 'auth']], function () {
 //		return redirect(404);
 //	});
 });
-/*Route::post('testmail/service={service}&interval={interval}',function($service,$interval,Request $request){
-	print_r($request->all());
+/*Route::get('testmail/service={service}&interval={interval}',function($service,$interval,Request $request){
 	return new App\Mail\ServiceStatistic($service,$interval);
 })->name('services.sendStatistic');*/
 
