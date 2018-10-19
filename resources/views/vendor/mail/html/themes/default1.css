@@ -293,5 +293,6 @@ table.all-tickets {
     text-align: center;
 }
 .signature {
-    margin-left: 10px;
+    background-color: #f2f2f2;
+    padding: 20px 100px;
 }
