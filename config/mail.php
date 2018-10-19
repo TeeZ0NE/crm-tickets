@@ -6,7 +6,7 @@ return
 		"encryption" => "ssl",
 		"from" => array(
 			"address" => "admin-area@secom.com.ua",
-			"name" => "Admin admin-area"
+			"name" => "Secom auto report"
 		),
 		"username" => "admin-area@secom.com.ua",
 		"password" => "moqC7Qb2f8616AfZ",

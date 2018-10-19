@@ -1,8 +1,13 @@
-<h2>{{$service}}</h2>
+</div>
+<div class="signature">
+Здравствуйте!<br> 
+Предоставляем Вам отчет, по затраченому времени, на решение тикет запросов компании {{$service}} :  <br>
+</div>
 <div class="table-holder">
 	@include('boss.parts.service_statistic_by_interval')
 </div>
 <div class="signature">
+=====================================================================
 	<h3>ServerCommunications</h3>
 	Сайт: <a href="http://secom.com.ua">Secom</a><br>
 	email: <a href="email:support@secom.com.ua">support@secom.com.ua</a><br>
