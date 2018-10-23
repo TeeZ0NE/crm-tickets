@@ -1,7 +1,7 @@
 </div>
 <div class="signature">
 Здравствуйте!<br> 
-Предоставляем Вам отчет, по затраченому времени, на решение тикет запросов компании {{$service}} :  <br>
+Предоставляем Вам отчет по затраченому времени, на решение тикет запросов компании {{$service}} :  <br>
 </div>
 <div class="table-holder">
 	@include('boss.parts.service_statistic_by_interval')
