@@ -80,7 +80,7 @@ class Service extends Model
 		where('t.service_id', $service_id)->
 		whereBetween('sact.lastreply', [Carbon::now()->yesterday()->startOfDay(), Carbon::now()->Yesterday()->endOfDay()])->
 		groupby('t.id')->
-		orderByDesc('sum_time')->
+		orderBy('t.ticketid')->
 		get();
 	}
 
@@ -123,7 +123,7 @@ class Service extends Model
 		where('t.service_id', $service_id)->
 		whereBetween('sact.lastreply', [Carbon::now()->startOfDay(), Carbon::now()])->
 		groupby('t.id')->
-		orderByDesc('sum_time')->
+		orderBy('t.ticketid')->
 		get();
 	}
 
@@ -156,7 +156,7 @@ class Service extends Model
 		where('t.service_id', $service_id)->
 		whereBetween('sact.lastreply', [Carbon::now()->startOfMonth(), Carbon::now()])->
 		groupby('t.id')->
-		orderByDesc('sum_time')->
+		orderBy('t.ticketid')->
 		get();
 	}
 
@@ -189,7 +189,7 @@ class Service extends Model
 		where('t.service_id', $service_id)->
 		whereBetween('sact.lastreply', [Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()])->
 		groupby('t.id')->
-		orderByDesc('sum_time')->
+		orderBy('t.ticketid')->
 		get();
 	}
 
