@@ -5,21 +5,25 @@ return [
 		'url' => 'https://secom.com.ua/billing/includes/api.php',
 		'identifier' => '1PqGZbYutTZgTnqYZ8TehVKKQRbtMTeU',
 		'secret' => 'XbPhACeqzakJgmlXwJJyxSf73nFzIdv7',
+		'ext_flags'=>[10],
 	],
 	'adminvps' => [
 		'url' => 'https://my.adminvps.ru/includes/api.php',
 		'identifier' => 'FVZXOH8VNAY5jF0scWH71GMakwQJVYDz',
 		'secret' => 'ZfpQgCvDsVAP5igHeWM5xgX1slpzXzmg',
+		'ext_flags'=>[],
 	],
 	'hostiman' => [
 		'url' => 'https://cp.hostiman.ru/includes/api.php',
 		'identifier' => 'golovov',
 		'secret' => 'lks67FGr56f',
+		'ext_flags'=>[],
 	],
 	'ua-hosting' => [
 		'url' => 'https://billing.ua-hosting.company/includes/api.php',
 		'identifier' => 'secom_vi',
 		'secret' => md5('lDGMboTBTqeL2q3F'),
+		'ext_flags'=>[],
 	],
 	'coopertino' => [
 		'home' => 'coopertino',

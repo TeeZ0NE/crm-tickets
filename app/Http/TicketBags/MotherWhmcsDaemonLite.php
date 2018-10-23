@@ -63,7 +63,9 @@ trait MotherWhmcsDaemonLite
 
 	public function getandStoreDataFromTicket(): void
 	{
+		$ext_flags = $this->getExtFlags();
 		foreach ($this->recurseTickets() as $ticket) {
+			if(in_array($ticket['flag'],$ext_flags)) continue;
 			$ticket_m = new Ticket();
 			$service_m = new Service();
 			$status_m = new Status();
@@ -134,5 +136,10 @@ trait MotherWhmcsDaemonLite
 	protected function is_service_available(array $tickets): bool
 	{
 		return key_exists('totalresults', $tickets);
+	}
+
+	protected function getExtFlags():array
+	{
+		return config('curl-connection.'.$this->service.'.ext_flags');
 	}
 }

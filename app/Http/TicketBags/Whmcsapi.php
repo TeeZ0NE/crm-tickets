@@ -64,6 +64,18 @@ class Whmcsapi
         return json_encode($this->arr, false);
     }
 
+	public function getAdmin(string $name)
+	{
+		$tiketfields = array(
+			'username' => $name,
+			'password' => $this->secret,
+			'action' => 'GetAdminDetails',
+			'responsetype' => 'json',
+		);
+
+		return json_decode($this->getWhmcsData($tiketfields, $this->url), true);
+	}
+
     private function getWhmcsData($fields, $url)
     {
         $ch = curl_init();
