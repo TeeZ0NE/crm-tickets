@@ -30,12 +30,13 @@ $whmcs_services = (array)config('services_arr.whmcs_services');
 foreach ($whmcs_services as $whmcs_service){
 	$WhmcsLite = new WhmcsDaemonLite($whmcs_service);
 	$WhmcsLite->getandStoreDataFromTicket();
-
+	flush();
 }
 $billMgr_services = (array)config('services_arr.billmgr_services');
 foreach ($billMgr_services as $billMgr_service){
 	$billMgr = new BillManager($billMgr_service);
 	$billMgr->getAndStoreDataFromTicket();
+	flush();
 }
 
 /*
