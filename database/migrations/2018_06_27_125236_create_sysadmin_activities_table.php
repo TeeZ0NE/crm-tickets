@@ -16,7 +16,7 @@ class CreateSysadminActivitiesTable extends Migration
         Schema::create('sysadmin_activities', function (Blueprint $table) {
         	$table->increments('id');
         	$table->unsignedSmallInteger('sysadmin_niks_id');
-        	$table->unsignedInteger('ticket_id')->comment('outer ticket id');
+        	$table->unsignedInteger('ticket_id')->index()->comment('outer ticket id');
 //        	$table->unsignedMediumInteger('replies')->default(0)->comment('count of replies on this ticket');
         	$table->dateTime('lastreply')->comment('when last reply admins');
 			$table->unsignedSmallInteger('time_uses')->default(0);
