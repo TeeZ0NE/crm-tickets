@@ -99,7 +99,9 @@ class Ticket extends Model
 	 */
 	public function getTidArray(int $service_id): array
 	{
-		return $this->where('service_id', $service_id)->pluck('ticketid', 'id')->toArray();
+		return $this->where('service_id', $service_id)->
+		whereBetween('lastreply', [Carbon::now()->startOfMonth(), Carbon::now()])->
+		pluck('ticketid', 'id')->toArray();
 	}
 
 	/**

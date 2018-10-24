@@ -338,15 +338,16 @@ select * from `sessions`;
 
 
 CREATE USER 'boss2'@'localhost' IDENTIFIED WITH mysql_native_password BY '1111';
-GRANT ALL PRIVILEGES ON crm_tickets_db.* TO 'boss2'@'localhost' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON crm_db_clone.* TO 'boss2'@'localhost' WITH GRANT OPTION;
 CREATE USER 'boss2'@'%' IDENTIFIED WITH mysql_native_password BY '1111';
-GRANT ALL PRIVILEGES ON crm_tickets_db.* TO 'boss2'@'%' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON crm_db_clone.* TO 'boss2'@'%' WITH GRANT OPTION;
+
 GRANT ALL ON `crm_tickets_db`.* TO 'boss1'@'%' ;
 FLUSH PRIVILEGES ;
 
-CREATE DATABASE oauth_db;
-CREATE USER 'oauth_user'@'localhost' identified WITH mysql_native_password BY '111111';
-GRANT ALL PRIVILEGES ON oauth_db.* TO 'oauth_user'@'localhost' WITH GRANT OPTION;
+CREATE DATABASE _db;
+CREATE USER 'boss1'@'localhost' identified WITH mysql_native_password BY '111111';
+GRANT ALL PRIVILEGES ON oauth_db.* TO 'er'@'localhost' WITH GRANT OPTION;
 
 SELECT * FROM transactions
 WHERE date=STR_TO_DATE('20.10.2018','%d.%m.%Y');
@@ -354,3 +355,8 @@ WHERE date=STR_TO_DATE('20.10.2018','%d.%m.%Y');
 select * from `cards` where `user_id` = 26 limit 1;
 
 SHOW DATABASES;
+
+ALTER TABLE sysadmin_niks ADD INDEX (service_id);
+ALTER TABLE sysadmin_activities ADD INDEX (ticket_id);
+
+SELECT COUNT(id) FROM tickets;
