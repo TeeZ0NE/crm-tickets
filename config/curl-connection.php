@@ -5,13 +5,13 @@ return [
 		'url' => 'https://secom.com.ua/billing/includes/api.php',
 		'identifier' => '1PqGZbYutTZgTnqYZ8TehVKKQRbtMTeU',
 		'secret' => 'XbPhACeqzakJgmlXwJJyxSf73nFzIdv7',
-		'ext_flags'=>[10],
+		'ext_flags'=>[],
 	],
 	'adminvps' => [
 		'url' => 'https://my.adminvps.ru/includes/api.php',
 		'identifier' => 'FVZXOH8VNAY5jF0scWH71GMakwQJVYDz',
 		'secret' => 'ZfpQgCvDsVAP5igHeWM5xgX1slpzXzmg',
-		'ext_flags'=>[],
+		'ext_flags'=>[44],
 	],
 	'hostiman' => [
 		'url' => 'https://cp.hostiman.ru/includes/api.php',
