@@ -5,7 +5,7 @@ return [
 		'url' => 'https://secom.com.ua/billing/includes/api.php',
 		'identifier' => '1PqGZbYutTZgTnqYZ8TehVKKQRbtMTeU',
 		'secret' => 'XbPhACeqzakJgmlXwJJyxSf73nFzIdv7',
-		'ext_flags'=>[],
+		'ext_flags'=>[10],
 	],
 	'adminvps' => [
 		'url' => 'https://my.adminvps.ru/includes/api.php',
