@@ -11,12 +11,12 @@ return [
 		'url' => 'https://my.adminvps.ru/includes/api.php',
 		'identifier' => 'FVZXOH8VNAY5jF0scWH71GMakwQJVYDz',
 		'secret' => 'ZfpQgCvDsVAP5igHeWM5xgX1slpzXzmg',
-		'ext_flags'=>[44],
+		'ext_flags'=>[44,55],
 	],
 	'hostiman' => [
 		'url' => 'https://cp.hostiman.ru/includes/api.php',
 		'identifier' => 'golovov',
-		'secret' => 'lks67FGr56f',
+		'secret' => md5('lks67FGr56f'),
 		'ext_flags'=>[],
 	],
 	'ua-hosting' => [
