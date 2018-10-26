@@ -15,6 +15,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Models\{
 	Priority, Service, Status, Ticket
 };
+use Carbon\Carbon;
 
 class WhmcsLite{
 	use MotherWhmcsDaemonLite;
@@ -43,7 +44,7 @@ class MotherDemonLiteTest extends TestCase
 		return $service;
 	}
 	/**
-	 * @test-
+	 * @test
 	 */
 	public function createInstance()
 	{
@@ -311,6 +312,35 @@ class MotherDemonLiteTest extends TestCase
 		$lastreplier_id = $this->whmcs->getLastreplierId($ticket_id);
 		$this->assertEquals(1,$lastreplier_id);
 		return $lastreplier_id;
+	}
+
+	/**
+	 * @test
+	 */
+	public function check_get_ext_flags()
+	{
+		$this->assertEmpty($this->whmcs->getExtFlags());
+	}
+
+	/**
+	 * @test
+	 */
+	public function check_get_date_lastrepl_filter()
+	{
+		$days = 14;
+		$this->assertEquals($days,$this->whmcs->getExtDays());
+		$lastreply = '2018-10-10 16:50:30';
+		$pastDays = Carbon::now()->subDays($days);
+		$lastreply_parse = Carbon::parse($lastreply);
+		$this->assertTrue($lastreply_parse->lt($pastDays));
+	}
+
+	/**
+	 * @test
+	 */
+	public function check_list_of_tickets()
+	{
+		$this->assertEmpty($this->whmcs->getListTicketsFilter());
 	}
 }
 

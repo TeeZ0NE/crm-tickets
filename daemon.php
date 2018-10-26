@@ -23,7 +23,6 @@ class WhmcsDaemonLite
 class BillManager{
 	use \App\Http\TicketBags\Billmgr;
 }
-
 # take array of services and loop it to take data
 # For debugging use public method getTicketsFromService;
 $whmcs_services = (array)config('services_arr.whmcs_services');
@@ -38,8 +37,8 @@ foreach ($billMgr_services as $billMgr_service){
 	$billMgr->getAndStoreDataFromTicket();
 	flush();
 }
-
 /*
+use App\Http\TicketBags\Whmcsapi;
 $service = 'hostiman';
 $secom = new Whmcsapi($service);
 print_r($secom->getListTikets());
