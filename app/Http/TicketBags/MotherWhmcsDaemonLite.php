@@ -8,6 +8,7 @@
 
 namespace App\Http\TicketBags;
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use App\Models\{
 	Priority, Service, Ticket, Status
@@ -65,16 +66,21 @@ trait MotherWhmcsDaemonLite
 	{
 		$ext_flags = $this->getExtFlags();
 		foreach ($this->recurseTickets() as $ticket) {
-			if(in_array($ticket['flag'],$ext_flags)) continue;
+			if (in_array($ticket['flag'], $ext_flags)) continue;
+			$ticketid = $this->getTicketid($ticket);
+			$lastreply = $this->getLastreply($ticket);
+			if ($this->service == 'hostiman' and (
+					in_array($ticketid, $this->getListTicketsFilter())
+					or $this->isLastReplyLessThenNeedle($lastreply)
+				)
+			) continue;
 			$ticket_m = new Ticket();
 			$service_m = new Service();
 			$status_m = new Status();
 			$priority_m = new Priority();
-			$ticketid = $this->getTicketid($ticket);
 			$status_id = $status_m->getStatusId($ticket['status']);
 			$subject = $this->getSubject($ticket);
 			$priority_id = $priority_m->getPriorityId($ticket['priority']);
-			$lastreply = $this->getLastreply($ticket);
 			$ticket_id = $this->getTicketIdFromDb($ticketid, $this->service_id);
 			$is_customer = $this->isCustomerReply($ticket);
 			$this->setOuterTicketsIds($ticketid);
@@ -133,13 +139,50 @@ trait MotherWhmcsDaemonLite
 		return $is_customer;
 	}
 
+	/**
+	 * @param array $tickets
+	 * @return bool
+	 */
 	protected function is_service_available(array $tickets): bool
 	{
 		return key_exists('totalresults', $tickets);
 	}
 
-	protected function getExtFlags():array
+	/**
+	 * External flags in ticket
+	 * @return array
+	 */
+	private function getExtFlags(): array
 	{
-		return config('curl-connection.'.$this->service.'.ext_flags');
+		return config('curl-connection.' . $this->service . '.ext_flags');
+	}
+
+	/**
+	 * @return int|null
+	 */
+	private function getExtDays()
+	{
+		return config('curl-connection.' . $this->service . '.days') ?? null;
+	}
+
+	/**
+	 * @return array
+	 */
+	private function getListTicketsFilter()
+	{
+		return config('curl-connection.' . $this->service . '.ticketids');
+	}
+
+	/**
+	 * Compare 2 dates before then nnedle
+	 *
+	 * @param $lastreply
+	 * @return bool
+	 */
+	private function isLastReplyLessThenNeedle($lastreply): bool
+	{
+		$pastDays = Carbon::now()->subDays($this->getExtDays());
+		$lastreply_parse = Carbon::parse($lastreply);
+		return $lastreply_parse->lt($pastDays);
 	}
 }
