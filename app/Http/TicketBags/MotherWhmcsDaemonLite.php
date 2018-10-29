@@ -113,7 +113,7 @@ trait MotherWhmcsDaemonLite
 
 	public function getLastreply(array $ticket): string
 	{
-		$lastreply = $ticket['lastreply'];
+		$lastreply = Carbon::parse($ticket['lastreply'])->addSeconds($this->getTimeCorrection())->toDateTimeString();
 		return $lastreply;
 	}
 
@@ -184,5 +184,14 @@ trait MotherWhmcsDaemonLite
 		$pastDays = Carbon::now()->subDays($this->getExtDays());
 		$lastreply_parse = Carbon::parse($lastreply);
 		return $lastreply_parse->lt($pastDays);
+	}
+
+	/**
+	 * External flags in ticket
+	 * @return integer
+	 */
+	private function getTimeCorrection(): int
+	{
+		return config('curl-connection.' . $this->service . '.time_correction');
 	}
 }
