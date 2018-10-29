@@ -65,16 +65,19 @@ trait MotherWhmcsDaemonLite
 	public function getandStoreDataFromTicket(): void
 	{
 		$ext_flags = $this->getExtFlags();
+		$ticket_m = new Ticket();
 		foreach ($this->recurseTickets() as $ticket) {
-			if (in_array($ticket['flag'], $ext_flags)) continue;
 			$ticketid = $this->getTicketid($ticket);
+			if (in_array($ticket['flag'], $ext_flags)){
+				$ticket_m->closeTicket($ticketid,$this->service_id);
+				continue;
+			}
 			$lastreply = $this->getLastreply($ticket);
 			if ($this->service == 'hostiman' and (
 					in_array($ticketid, $this->getListTicketsFilter())
 					or $this->isLastReplyLessThenNeedle($lastreply)
 				)
 			) continue;
-			$ticket_m = new Ticket();
 			$service_m = new Service();
 			$status_m = new Status();
 			$priority_m = new Priority();
