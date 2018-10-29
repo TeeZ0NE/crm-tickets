@@ -15,10 +15,10 @@ return [
 	],
 	'hostiman' => [
 		'days'=>7,
-		'ext_flags'=>[],
+		'ext_flags'=>[4,1],
 		'identifier' => 'golovov',
 		'secret' => md5('lks67FGr56f'),
-		'ticketids'=>[],
+		'ticketids'=>[73724,73296,73298,73297],
 		'url' => 'https://cp.hostiman.ru/includes/api.php',
 	],
 	'ua-hosting' => [
