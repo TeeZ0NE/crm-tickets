@@ -37,7 +37,6 @@ Route::group(['prefix' => 'boss', 'middleware' => ['purify']], function () {
 	Route::get('tickets/search','Boss\TicketController@search')->name('tickets.search');
 	Route::get('/nicks', 'Boss\RealAdminController@nicks')->name('admins.nicks');
 	Route::post('/bind-nicks', 'Boss\RealAdminController@bindNiks')->name('admins.bindNiks');
-	Route::post('assign-ticket/{ticket_id}', 'Boss\RealAdminController@assignTicket2Admin')->name('admin.assign');
 	Route::put('/deactivate/{user_id}', 'Boss\RealAdminController@deactivate')->name('admin.deactivate');
 	Route::delete('admin-activity/{id}','Boss\AdminActivityController')->name('activity.delete');
 	Route::group(['prefix' => 'admins'], function () {
@@ -85,6 +84,7 @@ Route::group(['middleware' => ['purify', 'auth']], function () {
 //		return redirect(404);
 //	});
 });
+Route::post('assign-ticket/{ticket_id}', 'ReAssignController')->name('admin.assign');
 /*Route::get('testmail/service={service}&interval={interval}',function($service,$interval,Request $request){
 	return new App\Mail\ServiceStatistic($service,$interval);
 })->name('services.sendStatistic');*/

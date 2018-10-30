@@ -30,6 +30,7 @@ class HomeController extends Controller
     public function index()
     {
 	    $user_id = Auth::id();
+	    $user_m = new User();
 	    User::where('id',$user_id)->update(['active'=>1]);
 	    $ticket_m = new Ticket();
 	    $deadline_m = new Deadline();
@@ -47,6 +48,7 @@ class HomeController extends Controller
 	        'deadlineList'=>$dlc->getSummaryArrMinutes(),
 	        'maxDeadline'=>$maxDeadline,
 	        'serviceCountOpenTickets'=>$this->getStatisticFromServices(false),
+	        'active_admins'=>$user_m->getActiveAdmins(),
         ]);
     }
 
