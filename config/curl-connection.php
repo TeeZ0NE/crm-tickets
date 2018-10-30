@@ -20,7 +20,7 @@ return [
 		'ext_flags'=>[4,1,9],
 		'identifier' => 'golovov',
 		'secret' => md5('lks67FGr56f'),
-		'ticketids'=>[73724,73296,73298,73297],
+		'ticketids'=>[73724,73296,73298,73297,74009],
 		'time_correction'=>-3600,
 		'url' => 'https://cp.hostiman.ru/includes/api.php',
 	],
