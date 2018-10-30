@@ -2,6 +2,7 @@
 
 return [
 	'secom' => [
+		'dept_ids'=>[1,2,3],
 		'ext_flags'=>[],
 		'identifier' => '1PqGZbYutTZgTnqYZ8TehVKKQRbtMTeU',
 		'secret' => 'XbPhACeqzakJgmlXwJJyxSf73nFzIdv7',
@@ -9,6 +10,7 @@ return [
 		'url' => 'https://secom.com.ua/billing/includes/api.php',
 	],
 	'adminvps' => [
+		'dept_ids'=>[2],
 		'ext_flags'=>[44,55],
 		'identifier' => 'FVZXOH8VNAY5jF0scWH71GMakwQJVYDz',
 		'secret' => 'ZfpQgCvDsVAP5igHeWM5xgX1slpzXzmg',
@@ -17,6 +19,7 @@ return [
 	],
 	'hostiman' => [
 		'days'=>7,
+		'dept_ids'=>[2],
 		'ext_flags'=>[4,1,9],
 		'identifier' => 'golovov',
 		'secret' => md5('lks67FGr56f'),
@@ -25,6 +28,7 @@ return [
 		'url' => 'https://cp.hostiman.ru/includes/api.php',
 	],
 	'ua-hosting' => [
+		'dept_ids'=>[2],
 		'ext_flags'=>[],
 		'identifier' => 'secom_vi',
 		'secret' => md5('lDGMboTBTqeL2q3F'),

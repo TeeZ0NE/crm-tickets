@@ -65,11 +65,12 @@ trait MotherWhmcsDaemonLite
 	public function getandStoreDataFromTicket(): void
 	{
 		$ext_flags = $this->getExtFlags();
+		$dept_ids = $this->getdeptids();
 		$ticket_m = new Ticket();
 		foreach ($this->recurseTickets() as $ticket) {
 			$ticketid = $this->getTicketid($ticket);
-			if (in_array($ticket['flag'], $ext_flags)){
-				$ticket_m->closeTicket($ticketid,$this->service_id);
+			if (in_array($ticket['flag'], $ext_flags) or !in_array($ticket['deptid'],$dept_ids)) {
+				$ticket_m->closeTicket($ticketid, $this->service_id);
 				continue;
 			}
 			$lastreply = $this->getLastreply($ticket);
@@ -77,7 +78,10 @@ trait MotherWhmcsDaemonLite
 					in_array($ticketid, $this->getListTicketsFilter())
 					or $this->isLastReplyLessThenNeedle($lastreply)
 				)
-			) continue;
+			) {
+				$ticket_m->closeTicket($ticketid, $this->service_id);
+				continue;
+			}
 			$service_m = new Service();
 			$status_m = new Status();
 			$priority_m = new Priority();
@@ -92,7 +96,7 @@ trait MotherWhmcsDaemonLite
 			if ($ticket_id) {
 				$this->updateTicket(
 					$ticket_id, $status_id, $priority_id, $lastreply,
-					$this->isAdmin($ticket_m->getIsAdminFromDb($ticket_id), $is_customer),$subject
+					$this->isAdmin($ticket_m->getIsAdminFromDb($ticket_id), $is_customer), $subject
 				);
 			} else {
 				$ticket_m->storeNewTicket($ticketid, $this->service_id, $subject, $status_id, $priority_id, $lastreply);
@@ -196,5 +200,14 @@ trait MotherWhmcsDaemonLite
 	private function getTimeCorrection(): int
 	{
 		return config('curl-connection.' . $this->service . '.time_correction');
+	}
+
+	/**
+	 * dept ids in ticket
+	 * @return array
+	 */
+	private function getDeptIds(): array
+	{
+		return config('curl-connection.' . $this->service . '.dept_ids');
 	}
 }
