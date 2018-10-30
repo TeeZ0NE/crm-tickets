@@ -90,7 +90,7 @@ trait Billmgr
 					$status_id = $status_m->getStatusId('in progress');
 				}
 				# update ticket
-				$ticket_m->updateTicket($ticket_id, $status_id, $priority_id, $lastreply, $is_admin);
+				$ticket_m->updateTicket($ticket_id, $status_id, $priority_id, $lastreply, $is_admin, $subject);
 			} else {
 				# store new ticket
 				$lastreply = $this->getLastreply($ticket);
