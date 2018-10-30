@@ -38,13 +38,14 @@ trait TicketLibs
 	 * @param int $status_id
 	 * @param int $priority_id
 	 * @param string|object $lastreply
-	 * @param int $is_admin
+	 * @param int $last_is_admin
+	 * @param string subject
 	 * @return void
 	 */
-	private function updateTicket(int $ticket_id, int $status_id, int $priority_id, $lastreply, int $is_admin)
+	private function updateTicket(int $ticket_id, int $status_id, int $priority_id, $lastreply, int $last_is_admin, string $subject)
 	{
 		$ticket_m = new Ticket();
-		$ticket_m->updateTicket($ticket_id, $status_id, $priority_id, $lastreply, $is_admin);
+		$ticket_m->updateTicket($ticket_id, compact('status_id','last_is_admin','lastreply','priority_id','subject'));
 
 		$isActiveUser = $this->isLastReplierActive($ticket_m->getLastreplierId($ticket_id));
 		if (!$ticket_m->getUserAssignId($ticket_id) && $isActiveUser['active'])

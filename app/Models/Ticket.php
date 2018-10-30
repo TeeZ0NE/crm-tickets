@@ -351,21 +351,12 @@ class Ticket extends Model
 	 * Update ticket
 	 *
 	 * @param int $ticket_id
-	 * @param int $status_id
-	 * @param int $priority_id
-	 * @param string $lastreply
-	 * @param int $is_admin
+	 * @param array $values
 	 * @return void
 	 */
-	public function updateTicket(int $ticket_id, int $status_id, int $priority_id, string $lastreply, int $is_admin)
+	public function updateTicket(int $ticket_id, $values)
 	{
-		$this::find($ticket_id)->update([
-			'status_id' => $status_id,
-			'priority_id' => $priority_id,
-			'lastreply' => $lastreply,
-			'last_is_admin' => $is_admin,
-			'is_closed' => 0,
-		]);
+		$this::find($ticket_id)->update($values);
 	}
 
 	/**
