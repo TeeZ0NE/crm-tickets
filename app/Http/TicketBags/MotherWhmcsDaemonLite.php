@@ -74,8 +74,10 @@ trait MotherWhmcsDaemonLite
 				continue;
 			}
 			$lastreply = $this->getLastreply($ticket);
-			if ($this->service == 'hostiman' and
-				$this->filterWithTidAndDate($ticketid,$lastreply)
+			if ($this->service == 'hostiman' and (
+					in_array($ticketid, $this->getListTicketsFilter())
+					or $this->isLastReplyLessThenNeedle($lastreply)
+				)
 			) {
 				$ticket_m->closeTicket($ticketid, $this->service_id);
 				continue;
@@ -207,26 +209,5 @@ trait MotherWhmcsDaemonLite
 	private function getDeptIds(): array
 	{
 		return config('curl-connection.' . $this->service . '.dept_ids');
-	}
-
-	/**
-	 * Filter with lastreply and ticketids
-	 * @param int $ticketid
-	 * @param string $lastreply
-	 * @return bool
-	 */
-	private function filterWithTidAndDate(int $ticketid, string $lastreply):bool
-	{
-		if(in_array($ticketid, $this->getListTicketsFilter())){
-			printf("\n %d in array",$ticketid);
-			print_r($this->getListTicketsFilter());
-			return true;
-		}
-		if($this->isLastReplyLessThenNeedle($lastreply)){
-			printf("%d date in filter\n",$ticketid);
-			return true;
-		}
-		echo "Not in filter\n";
-		return false;
 	}
 }
