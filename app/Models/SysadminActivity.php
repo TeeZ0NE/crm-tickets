@@ -51,7 +51,6 @@ class SysadminActivity extends Model
 
 	public function getStatistic4Admin(int $service_id, int $user_id, int $subMonth)
 	{
-		$Carbon = new Carbon();
 		return DB::table('sysadmin_activities as sact')->
 		select(DB::raw('services.name as service, COUNT(DISTINCT sact.ticket_id) AS tickets_count,COUNT(sact.lastreply) AS replies_count, u.name as user_name, SUM(sact.time_uses) AS sum_time, COUNT(DISTINCT ticket_id)*compl AS rate'))->
 		RIGHTJOIN('tickets AS t', 'sact.ticket_id', '=', 't.id')->
@@ -64,8 +63,8 @@ class SysadminActivity extends Model
 		})->
 //		whereBetween('sact.lastreply', [Carbon::now()->startOfMonth(), Carbon::now()])->
 		whereBetween('sact.lastreply', [
-			$Carbon->now()->subMonth($subMonth)->startOfMonth()->toDateString(),
-			$Carbon->now()->subMonth($subMonth)->endOfMonth()->toDateString()
+			Carbon::now()->subMonth($subMonth)->startOfMonth()->toDateString(),
+			Carbon::now()->subMonth($subMonth)->endOfMonth()->toDateString()
 		])->
 		where('services.id', $service_id)->
 		GROUPBY('service', 'user_name')->
