@@ -68,6 +68,7 @@ trait StoreStatistic
 		], [
 			'time_uses' => $time_uses
 		]);
+		echo $sysadmnin_act_m->id;
 	}
 
 	/**
