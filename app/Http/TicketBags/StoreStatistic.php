@@ -30,7 +30,6 @@ trait StoreStatistic
 	{
 		# service must be created before else it occurs error
 		$service_id = $this->getServiceId($this->service);
-		echo $service_id;
 		foreach ($this->recurseGetArr() as $val) {
 			$ticketid = $this->getTicketIdFromRequest($val['ticketid']);
 			if (array_key_exists('ticketid', $val) && $ticketid > 0) {
@@ -61,15 +60,16 @@ trait StoreStatistic
 	 */
 	private function storeAdminActivities(int $ticket_id, int $nik_id, $lastreply, int $time_uses = 0):void
 	{
+		echo 'admin activ';
 		$sysadmnin_act_m = new SysadminActivity();
-		$sysadmnin_act_m::firstOrCreate([
+		$res = $sysadmnin_act_m::firstOrCreate([
 			'sysadmin_niks_id' => $nik_id,
 			'ticket_id' => $ticket_id,
 			'lastreply' => $lastreply,
 		], [
 			'time_uses' => $time_uses
 		]);
-		echo $sysadmnin_act_m->id;
+		echo $res->id;
 	}
 
 	/**
