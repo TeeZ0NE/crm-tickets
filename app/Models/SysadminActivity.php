@@ -40,8 +40,8 @@ class SysadminActivity extends Model
 		})->
 //		-- where users.id=2
 		whereBetween('sact.lastreply', [
-			$Carbon->now()->subMonth($subMonth)->startOfMonth()->toDateString(),
-			$Carbon->now()->subMonth($subMonth)->endOfMonth()->toDateString()
+			$Carbon->now()->subMonth($subMonth)->startOfMonth(),
+			$Carbon->now()->subMonth($subMonth)->endOfMonth()
 		])->
 		where('services.id', $service_id)->
 		GROUPBY('service', 'user_name')->
