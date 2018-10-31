@@ -28,9 +28,9 @@ trait StoreStatistic
 
 	public function store(): void
 	{
-		echo "store";
 		# service must be created before else it occurs error
 		$service_id = $this->getServiceId($this->service);
+		echo $service_id;
 		foreach ($this->recurseGetArr() as $val) {
 			$ticketid = $this->getTicketIdFromRequest($val['ticketid']);
 			if (array_key_exists('ticketid', $val) && $ticketid > 0) {
