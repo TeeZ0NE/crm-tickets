@@ -217,8 +217,16 @@ trait MotherWhmcsDaemonLite
 	 */
 	private function filterWithTidAndDate(int $ticketid, string $lastreply):bool
 	{
-		return (in_array($ticketid, $this->getListTicketsFilter())
-			or $this->isLastReplyLessThenNeedle($lastreply)
-		);
+		if(in_array($ticketid, $this->getListTicketsFilter())){
+			printf("\n %d in array",$ticketid);
+			print_r($this->getListTicketsFilter());
+			return true;
+		}
+		if($this->isLastReplyLessThenNeedle($lastreply)){
+			printf("%d date in filter\n",$ticketid);
+			return true;
+		}
+		echo "Not in filter\n";
+		return false;
 	}
 }
